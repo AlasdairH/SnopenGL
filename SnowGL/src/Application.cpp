@@ -1,8 +1,21 @@
-#include <iostream>
+// cstdlib
+
+// external libs
+
+// program
+#include "PCH.h"
+
+#undef main
 
 int main()
 {
-	std::cout << "Hello World!" << std::endl;
+	SnowGL::InitManager::initSDL();
+
+	SnowGL::Window window("SnowGL");
+
+	SnowGL::InitManager::initOpenGL();
+
+	system("PAUSE");
 
 	return 0;
 }
