@@ -1,5 +1,5 @@
-#include "InitManager.h"
 #include "PCH.h"
+#include "InitManager.h"
 
 namespace SnowGL
 {

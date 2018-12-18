@@ -1,5 +1,5 @@
-#include "Window.h"
 #include "PCH.h"
+#include "Window.h"
 
 namespace SnowGL
 {
@@ -37,6 +37,4 @@ namespace SnowGL
 		CONSOLE_MESSAGE("Window resised to: " << m_width << ", " << m_height);
 
 	}
-
-
 }

@@ -1,5 +1,5 @@
-#include "IOUtilities.h"
 #include "PCH.h"
+#include "IOUtilities.h"
 
 namespace SnowGL
 {
@@ -24,5 +24,6 @@ namespace SnowGL
 
 			CONSOLE_WARNING("Loaded File: " << _filepath);
 			return str;
+		}
 	}
 }

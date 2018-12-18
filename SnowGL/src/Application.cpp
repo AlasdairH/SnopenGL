@@ -4,6 +4,8 @@
 
 // program
 #include "PCH.h"
+#include "InitManager.h"
+#include "Window.h"
 
 #undef main
 
@@ -16,6 +18,7 @@ int main()
 	SnowGL::Window window("SnowGL");
 
 	SnowGL::InitManager::initOpenGL();
+	
 
 	glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
 
@@ -37,6 +40,9 @@ int main()
 	
 		window.swapBuffer();
 	}
+	
+
+	std::cout << "Hello World!" << std::endl;
 
 
 	return 0;

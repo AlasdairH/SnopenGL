@@ -4,8 +4,6 @@
 
 
 // external libs
-#include "GL\glew.h"
-#include "SDL\SDL.h"
 
 // program
 #include "PCH.h"

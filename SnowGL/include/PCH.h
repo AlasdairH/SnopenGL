@@ -13,11 +13,11 @@
 // external libs
 #include "SDL/SDL.h"
 #include "GL/glew.h"
+#include "GLM/glm.hpp"
 
 // program
-#include "Window.h"
-#include "InitManager.h"
 #include "IOUtilities.h"
+#include "CompileSettings.h"
 
 #define CONSOLE_MESSAGE(_text) std::cout << "MESSAGE: " << _text << std::endl;
 #define CONSOLE_WARNING(_text) std::cout << "WARNING: " << _text << std::endl;
