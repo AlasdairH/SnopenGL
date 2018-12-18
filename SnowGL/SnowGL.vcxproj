@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\InitManager.cpp" />
+    <ClCompile Include="src\IOUtilities.cpp" />
     <ClCompile Include="src\PCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -178,6 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\InitManager.h" />
+    <ClInclude Include="include\IOUtilities.h" />
     <ClInclude Include="include\PCH.h" />
     <ClInclude Include="include\Window.h" />
   </ItemGroup>

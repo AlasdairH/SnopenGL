@@ -8,7 +8,7 @@ namespace SnowGL
 		m_window = SDL_CreateWindow(_title.c_str(),
 			50, 50,
 			_width, _height,
-			SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+			SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
 		m_renderer = SDL_CreateRenderer(m_window, -1, 0);
 		m_openGLContext = SDL_GL_CreateContext(m_window);
