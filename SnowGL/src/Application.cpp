@@ -7,6 +7,9 @@
 #include "InitManager.h"
 #include "Window.h"
 #include "ShaderProgram.h"
+#include "GPU_Mesh.h"
+#include "Renderer.h"
+#include "Camera.h"
 
 #undef main
 
@@ -22,10 +25,25 @@ int main()
 
 	InitManager::initOpenGL();
 
-	ShaderProgram program("resources/shaders/vert.glsl", "resources/shaders/frag.glsl");
+	Camera camera(1280, 720);
+	camera.transform.translate(glm::vec3(0, 2, 0));
+	camera.updateCameraUniform();
 
+	// create shader
+	ShaderProgram shader("resources/shaders/vert.vert", "resources/shaders/frag.frag");
+
+	// create mesh
 	Mesh mesh;
-	IOUtilities::loadMesh(mesh, "resources/models/mk2.obj");
+	IOUtilities::loadMesh(mesh, "resources/models/deer.obj");
+	GPU_Mesh openGLMesh;
+	openGLMesh.addMesh(mesh);
+
+	// create transform
+	Transform transform;
+	transform.translate(glm::vec3(0, 0, -3));
+	transform.scale(glm::vec3(1, 1, 1));
+
+	Renderer renderer;
 
 	glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
 
@@ -45,6 +63,9 @@ int main()
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
+		transform.rotate(1, glm::vec3(0, 1, 0));
+		renderer.render(openGLMesh, shader, transform);
+
 		window.swapBuffer();
 	}
 	

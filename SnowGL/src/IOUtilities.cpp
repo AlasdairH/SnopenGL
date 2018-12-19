@@ -190,7 +190,7 @@ namespace SnowGL
 		// return the mesh
 
 		//CONSOLE_WARNING("Loaded " << _mesh.vertices.size() << " vertices | " << parsedLines << " lines parsed in " << timer.getDuration() << "s");
-		CONSOLE_WARNING("Loaded " << _mesh.vertices.size() << " vertices | " << parsedLines << " lines parsed");
+		CONSOLE_MESSAGE("Loaded " << _mesh.vertices.size() << " vertices | " << parsedLines << " lines parsed");
 		/*
 		m_isLoaded = true;
 

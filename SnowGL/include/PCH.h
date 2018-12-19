@@ -14,6 +14,7 @@
 #include "SDL/SDL.h"
 #include "GL/glew.h"
 #include "GLM/glm.hpp"
+#include "GLM/ext.hpp"
 
 // program
 #include "IOUtilities.h"

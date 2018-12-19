@@ -1,12 +1,11 @@
 #pragma once
 
 // cstdlib
-#include <vector>
 
 // external libs
-#include "GLM/common.hpp"
 
 // program
+#include "PCH.h"
 
 namespace SnowGL
 {

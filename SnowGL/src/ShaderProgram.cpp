@@ -8,17 +8,19 @@ namespace SnowGL
 		// create the program to store the shaders
 		m_programID = glCreateProgram();
 		CONSOLE_MESSAGE("Created Shader Program with ID " << m_programID);
-
-		m_verified = false;
 	}
 
 	ShaderProgram::ShaderProgram(const std::string & _vert, const std::string & _frag)
 	{
-		Shader vert(SHADER_VERTEX, "resources/shaders/vert.glsl");
-		Shader frag(SHADER_FRAGMENT, "resources/shaders/frag.glsl");
+		m_programID = glCreateProgram();
+
+		Shader vert(SHADER_VERTEX, _vert);
+		Shader frag(SHADER_FRAGMENT, _frag);
 		attachShader(vert);
 		attachShader(frag);
 		link();
+
+		CONSOLE_MESSAGE("Created Shader Program with ID " << m_programID);
 	}
 
 	void ShaderProgram::attachShader(Shader &_shader)
@@ -29,16 +31,29 @@ namespace SnowGL
 	bool ShaderProgram::link()
 	{
 		glLinkProgram(m_programID);
+		if (!verify())
+		{
+			CONSOLE_ERROR("Failed to verify shader program " << m_programID);
+			return false;
+		}
 
-		verify();
+		bind();
 
-		// if the shader program contains the camera data uniform block then link it to binding point 1
+		// if the shader program contains the camera data uniform block then link it to binding point SHADER_BINDPOINT_CAMERA_VP
 		if (getUniformBlockIndex("u_camera_data") != -1)
 		{
 			CONSOLE_MESSAGE("Found u_camera_data uniform block, starting link");
 			// link the BasicShader Uniform block "u_camera_data" to the binding point
 			linkUniformBlock("u_camera_data", SHADER_BINDPOINT_CAMERA_VP);
 		}
+		else
+		{
+			CONSOLE_MESSAGE("Unable to find u_camera_data uniform block, assuming not needed");
+		}
+
+		CONSOLE_MESSAGE("Shader " << m_programID << " sucessfully linked and verified");
+
+		return true;
 	}
 
 	bool ShaderProgram::verify()
@@ -127,6 +142,7 @@ namespace SnowGL
 
 	GLuint ShaderProgram::getUniformBlockIndex(const std::string & _name)
 	{
+		bind();
 		GLuint blockIndex = glGetUniformBlockIndex(m_programID, _name.c_str());
 		if (blockIndex == -1)
 		{
