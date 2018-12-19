@@ -12,12 +12,21 @@ namespace SnowGL
 		m_verified = false;
 	}
 
+	ShaderProgram::ShaderProgram(const std::string & _vert, const std::string & _frag)
+	{
+		Shader vert(SHADER_VERTEX, "resources/shaders/vert.glsl");
+		Shader frag(SHADER_FRAGMENT, "resources/shaders/frag.glsl");
+		attachShader(vert);
+		attachShader(frag);
+		link();
+	}
+
 	void ShaderProgram::attachShader(Shader &_shader)
 	{
 		glAttachShader(m_programID, _shader.getShaderID());
 	}
 
-	void ShaderProgram::link()
+	bool ShaderProgram::link()
 	{
 		glLinkProgram(m_programID);
 

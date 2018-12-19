@@ -161,6 +161,7 @@
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\InitManager.cpp" />
     <ClCompile Include="src\IOUtilities.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\PCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -169,15 +170,23 @@
     </ClCompile>
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\ShaderProgram.cpp" />
+    <ClCompile Include="src\VertexArray.cpp" />
+    <ClCompile Include="src\VertexBuffer.cpp" />
+    <ClCompile Include="src\VertexBufferLayout.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CompileSettings.h" />
     <ClInclude Include="include\InitManager.h" />
     <ClInclude Include="include\IOUtilities.h" />
+    <ClInclude Include="include\Mesh.h" />
     <ClInclude Include="include\PCH.h" />
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\ShaderProgram.h" />
+    <ClInclude Include="include\Vertex.h" />
+    <ClInclude Include="include\VertexArray.h" />
+    <ClInclude Include="include\VertexBuffer.h" />
+    <ClInclude Include="include\VertexBufferLayout.h" />
     <ClInclude Include="include\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

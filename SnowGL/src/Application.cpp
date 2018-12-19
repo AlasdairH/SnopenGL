@@ -6,19 +6,26 @@
 #include "PCH.h"
 #include "InitManager.h"
 #include "Window.h"
+#include "ShaderProgram.h"
 
 #undef main
 
 static Uint32 next_time;
 
+using namespace SnowGL;
+
 int main()
 {
-	SnowGL::InitManager::initSDL();
+	InitManager::initSDL();
 
-	SnowGL::Window window("SnowGL");
+	Window window("SnowGL");
 
-	SnowGL::InitManager::initOpenGL();
-	
+	InitManager::initOpenGL();
+
+	ShaderProgram program("resources/shaders/vert.glsl", "resources/shaders/frag.glsl");
+
+	Mesh mesh;
+	IOUtilities::loadMesh(mesh, "resources/models/mk2.obj");
 
 	glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
 

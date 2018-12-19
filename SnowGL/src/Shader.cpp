@@ -9,6 +9,13 @@ namespace SnowGL
 		init();
 	}
 
+	Shader::Shader(ShaderType _shaderType, const std::string & _filepath)
+	{
+		m_shaderType = _shaderType;
+		init();
+		load(_filepath);
+	}
+
 	void Shader::init()
 	{
 		m_shaderID = glCreateShader(m_shaderType);

@@ -31,7 +31,14 @@ namespace SnowGL
 		*
 		*	Creates a shader program and sets the verified status to false.
 		*/
-		ShaderProgram();
+		ShaderProgram();		
+		/** @brief Program Ctor
+		*	@param _vert The vertex shader to load
+		*	@param _vert The fragment shader to load
+		*
+		*	Creates a shader program and loads the vertex and fragment shader provided
+		*/
+		ShaderProgram(const std::string &_vert, const std::string &_frag);
 
 		/** @brief Program Ctor
 		*
@@ -47,10 +54,11 @@ namespace SnowGL
 		void attachShader(Shader &_shader);
 
 		/** @brief Links the Shader Program
+		*	@return true/false as to if the link was sucessful
 		*
 		*	Links the shader program.
 		*/
-		void link();
+		bool link();
 
 		/** @brief Verifys the Shader Program
 		*

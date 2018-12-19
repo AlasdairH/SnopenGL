@@ -24,7 +24,14 @@ namespace SnowGL
 		*
 		*	Creates an OpenGL shader of the specified type and stores the OpenGL ID in m_shaderID.
 		*/
-		Shader(ShaderType _shaderType);
+		Shader(ShaderType _shaderType);		
+		/** @brief Shader Ctor
+		*	@param _shaderType The Type of Shader to Create (vertex, fragment, etc)
+		*	@param _filepath The filepath to the shader text file to load
+		*
+		*	Creates an OpenGL shader of the specified type and stores the OpenGL ID in m_shaderID.
+		*/
+		Shader(ShaderType _shaderType, const std::string &_filepath);
 
 		/** @brief Shader Dtor
 		*
