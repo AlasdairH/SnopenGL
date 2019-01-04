@@ -15,6 +15,12 @@ namespace SnowGL
 		CONSOLE_MESSAGE("Vertex Array Object with ID: " << m_vertexArrayID << " Deleted");
 	}
 
+	void VertexArray::reset()
+	{
+		glDeleteVertexArrays(1, &m_vertexArrayID);
+		glGenVertexArrays(1, &m_vertexArrayID);
+	}
+
 	void VertexArray::addBuffer(const VertexBuffer & _vertexBuffer, const VertexBufferLayout & _layout)
 	{
 		// bind the VAO

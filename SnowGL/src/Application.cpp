@@ -36,12 +36,11 @@ int main()
 	Mesh mesh;
 	IOUtilities::loadMesh(mesh, "resources/models/deer.obj");
 	GPU_Mesh openGLMesh;
-	openGLMesh.addMesh(mesh);
+	openGLMesh.setMesh(mesh);
 
 	// create transform
 	Transform transform;
-	transform.translate(glm::vec3(0, 0, -3));
-	transform.scale(glm::vec3(1, 1, 1));
+	transform.translate(glm::vec3(0, 0, -8));
 
 	Renderer renderer;
 

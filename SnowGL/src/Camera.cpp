@@ -32,7 +32,7 @@ namespace SnowGL
 		m_uniformBuffer->loadData(&m_uniformData, 0, sizeof(m_uniformData));
 
 		// link the uniform buffer to the binding point
-		m_uniformBuffer->bindBase(SHADER_BINDPOINT_CAMERA_VP);
+		m_uniformBuffer->bindBase(GL_UNIFORM_BUFFER, SHADER_BINDPOINT_CAMERA_VP);
 		// now the shader and the uniform buffer are pointing at the same binding point the fun can commence
 
 		// if there is no current active camera, set it to this one

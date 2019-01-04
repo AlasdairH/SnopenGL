@@ -164,6 +164,7 @@
     <ClCompile Include="src\InitManager.cpp" />
     <ClCompile Include="src\IOUtilities.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\SnowfallSystem.cpp" />
     <ClCompile Include="src\PCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -186,6 +187,7 @@
     <ClInclude Include="include\InitManager.h" />
     <ClInclude Include="include\IOUtilities.h" />
     <ClInclude Include="include\Mesh.h" />
+    <ClInclude Include="include\SnowfallSystem.h" />
     <ClInclude Include="include\PCH.h" />
     <ClInclude Include="include\Renderer.h" />
     <ClInclude Include="include\Shader.h" />

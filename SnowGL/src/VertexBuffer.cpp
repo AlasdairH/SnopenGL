@@ -56,8 +56,8 @@ namespace SnowGL
 		glBindBuffer(m_vertexBufferType, 0);
 	}
 
-	void VertexBuffer::bindBase(GLuint _index)
+	void VertexBuffer::bindBase(GLuint _base, GLuint _index)
 	{
-		glBindBufferBase(GL_UNIFORM_BUFFER, _index, m_vertexBufferID);
+		glBindBufferBase(_base, _index, m_vertexBufferID);
 	}
 }

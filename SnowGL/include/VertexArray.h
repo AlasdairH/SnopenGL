@@ -31,6 +31,12 @@ namespace SnowGL
 		*/
 		~VertexArray();
 
+		/** @brief Deletes and reinstates the VAO as new
+		*
+		*	Deletes the VAO and then creates a new one and reassigns the ID
+		*/
+		void reset();
+
 		/** @brief Adds a buffer to the VAO
 		*	@param _vertexBuffer The vertex buffer to be added to the array.
 		*	@param _layout The layout of the corresponding buffer.

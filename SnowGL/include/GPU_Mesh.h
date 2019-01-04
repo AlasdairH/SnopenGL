@@ -22,7 +22,7 @@ namespace SnowGL
 	public:
 		GPU_Mesh();
 
-		void addMesh(const Mesh &_mesh);
+		void setMesh(const Mesh &_mesh);
 
 	protected:
 		std::shared_ptr<VertexArray>	m_VAO;

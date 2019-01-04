@@ -11,9 +11,9 @@ namespace SnowGL
 		m_IBO = std::make_shared<VertexBuffer>(BUFFER_ELEMENT_ARRAY);
 	}
 
-	void GPU_Mesh::addMesh(const Mesh &_mesh)
+	void GPU_Mesh::setMesh(const Mesh &_mesh)
 	{
-		// add data buffer
+		// add the model data VBO to the VAO
 		m_VAO->addBuffer(*m_VBO, _mesh.layout);
 
 		// load data to VBOs

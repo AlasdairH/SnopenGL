@@ -77,11 +77,12 @@ namespace SnowGL
 		void unBind() const;
 
 		/** @brief Bind the buffer to an indexed buffer target
+		*	@param _base The target of the bind operation
 		*	@param _index The index of the binding point
 		*
 		*	Binds the buffer object buffer to the binding point at index index of the array of targets specified by target. (Copied from Kkronos.org)
 		*/
-		void bindBase(GLuint _index);
+		void bindBase(GLuint _base, GLuint _index);
 
 	protected:
 		VertexBufferType	m_vertexBufferType;			/**< The type of Vertex Buffer (BUFFER_ARRAY, BUFFER_ELEMENT_ARRAY, etc)  */
