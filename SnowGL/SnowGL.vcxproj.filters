@@ -120,5 +120,7 @@
   <ItemGroup>
     <None Include="resources\shaders\vert.vert" />
     <None Include="resources\shaders\frag.frag" />
+    <None Include="resources\shaders\particle\particle.vert" />
+    <None Include="resources\shaders\particle\particle.frag" />
   </ItemGroup>
 </Project>
