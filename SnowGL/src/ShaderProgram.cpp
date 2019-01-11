@@ -26,6 +26,7 @@ namespace SnowGL
 	void ShaderProgram::attachShader(Shader &_shader)
 	{
 		glAttachShader(m_programID, _shader.getShaderID());
+		CONSOLE_MESSAGE("Attached shader " << _shader.getShaderID() << " to program " << m_programID);
 	}
 
 	bool ShaderProgram::link()
@@ -108,6 +109,36 @@ namespace SnowGL
 		m_uniformLocationCache[_name] = location;
 
 		return location;
+	}
+
+	int ShaderProgram::getAttributeLocation(const std::string & _name)
+	{
+		if (m_uniformLocationCache.find(_name) != m_uniformLocationCache.end())
+			return m_uniformLocationCache[_name];
+
+		int location = glGetAttribLocation(m_programID, _name.c_str());
+		if (location == -1)
+		{
+			CONSOLE_WARNING("Attribute name " << _name << " does not exist!");
+		}
+
+		m_uniformLocationCache[_name] = location;
+
+		return location;
+	}
+
+	void ShaderProgram::setTransformFeedbackVarying(const std::string & _varying, float _count)
+	{
+		if (!m_verified)
+		{
+			const GLchar* feedbackVaryings[] = { _varying.c_str() };
+			glTransformFeedbackVaryings(m_programID, _count, feedbackVaryings, GL_INTERLEAVED_ATTRIBS);
+		}
+		else
+		{
+			CONSOLE_ERROR("Unable to set transform feedback varying, shader already verified / linked");
+		}	
+		return;
 	}
 
 	void ShaderProgram::setUniform1f(const std::string & _name, float _value)

@@ -13,11 +13,8 @@
 
 namespace SnowGL
 {
-	enum ParticleType { PARTICLE_STANDARD, PARTICLE_ROOT };
-
 	struct Particle
 	{
-		ParticleType type;
 		glm::vec3 position;
 		glm::vec3 velocity;
 		float lifetime;

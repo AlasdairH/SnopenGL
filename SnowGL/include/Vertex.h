@@ -6,6 +6,7 @@
 
 // program
 #include "PCH.h"
+#include "VertexBufferLayout.h"
 
 namespace SnowGL
 {
@@ -19,6 +20,20 @@ namespace SnowGL
 		glm::vec3 position;				/**< The position of the Vertex */
 		glm::vec2 textureCoordinate;	/**< The texture coordinates */
 		glm::vec3 normal;				/**< The normal coordinates */
+
+		/** @brief Returns the layout for use in a VAO/VBO
+		*	@return The layout of the struct
+		*
+		*	Returns the layout of the struct for use in the data layout sent to a VAO/VBO
+		*/
+		static VertexBufferLayout getLayout()
+		{
+			VertexBufferLayout layout;
+			layout.push<glm::vec3>(1);	// position
+			layout.push<glm::vec2>(1);	// texture coordinates
+			layout.push<glm::vec3>(1);	// normal
+			return layout;
+		}
 
 		/** @brief Operator Overload of ==
 		*	@param _other The Vertex to compare against

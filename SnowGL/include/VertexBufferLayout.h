@@ -73,6 +73,30 @@ namespace SnowGL
 			m_elements.push_back({ GL_FLOAT, _count, GL_FALSE });
 			m_stride += VertexBufferElement::getSizeOfType(GL_FLOAT) * _count;
 		}
+		/** @brief Pushes a new vec2 element to the layout
+		*	@param _count The number of values in the element. Eg, 3 for a vec3 (3 floats), 2 for a vec2 (2 floats).
+		*
+		*	Pushes a new vec2 element into the layout with the specified count (how many items of the specified type make up the element).
+		*	A vec2 is simply 2 floats so that is what is added.
+		*/
+		template<>
+		void push<glm::vec2>(unsigned int _count)
+		{
+			m_elements.push_back({ GL_FLOAT, 2 * _count, GL_FALSE });
+			m_stride += VertexBufferElement::getSizeOfType(GL_FLOAT) * _count * 2;
+		}
+		/** @brief Pushes a new vec3 element to the layout
+		*	@param _count The number of values in the element. Eg, 3 for a vec3 (3 floats), 2 for a vec2 (2 floats).
+		*
+		*	Pushes a new vec3 element into the layout with the specified count (how many items of the specified type make up the element).
+		*	A vec3 is simply 3 floats so that is what is added.
+		*/
+		template<>
+		void push<glm::vec3>(unsigned int _count)
+		{
+			m_elements.push_back({ GL_FLOAT, 3 * _count, GL_FALSE });
+			m_stride += VertexBufferElement::getSizeOfType(GL_FLOAT) * _count * 3;
+		}
 		/** @brief Pushes a new GLuint element to the layout
 		*	@param _count The number of values in the element. Eg, 3 for a vec3 (3 floats), 2 for a vec2 (2 floats).
 		*

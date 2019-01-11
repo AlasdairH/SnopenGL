@@ -16,7 +16,6 @@ namespace SnowGL
 	{
 		Particle particles[MAX_PARTICLES];
 
-		particles[0].type = PARTICLE_ROOT;
 		particles[0].position = glm::vec3(0, 0, 0);
 		particles[0].velocity = glm::vec3(0.0f, 0.0001f, 0.0f);
 		particles[0].lifetime = 0.0f;
@@ -31,6 +30,8 @@ namespace SnowGL
 			m_particleBuffer[i]->loadData(particles, -1, sizeof(particles));
 			m_particleBuffer[i]->bindBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0);
 		}
+
+		return true;
 	}
 
 	void SnowfallSystem::render(int _deltaTimeMS, const glm::mat4 &_VP, const glm::vec3 &_cameraPos)

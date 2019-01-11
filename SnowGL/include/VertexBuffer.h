@@ -58,6 +58,19 @@ namespace SnowGL
 		*	Loads data to the VBO.
 		*/
 		void loadData(const void *_data, GLuint _count, GLuint _size);
+		/** @brief Loads data to the VBO.
+		*	@param _data he data to send to the VBO
+		*	@param _size The size of the data in bytes
+		*
+		*	Loads data to the VBO.
+		*/
+		void loadData(const void *_data, GLuint _size);
+		/** @brief Loads data to the VBO.
+		*	@param _data he data to send to the VBO
+		*
+		*	Loads data to the VBO.
+		*/
+		void loadData(const void *_data);
 
 		/** @brief Returns the count of the number of items contained within the buffer.
 		*

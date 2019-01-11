@@ -45,6 +45,18 @@ namespace SnowGL
 		bind();
 		glBufferData(m_vertexBufferType, _size, _data, m_usage);
 	}
+	void VertexBuffer::loadData(const void *_data, GLuint _size)
+	{
+		m_count = -1;
+		bind();
+		glBufferData(m_vertexBufferType, _size, _data, m_usage);
+	}	
+	void VertexBuffer::loadData(const void *_data)
+	{
+		m_count = -1;
+		bind();
+		glBufferData(m_vertexBufferType, sizeof(_data), _data, m_usage);
+	}
 
 	void VertexBuffer::bind() const
 	{

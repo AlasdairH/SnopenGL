@@ -77,6 +77,8 @@ namespace SnowGL
 		*/
 		void unBind() const;
 
+		inline GLuint getProgramID() { return m_programID; }
+
 		/** @brief Gets the location of the specified Uniform in a shader
 		*	@param _name The uniform to retrive
 		*	@return The uniform location
@@ -85,7 +87,23 @@ namespace SnowGL
 		*	requested before, it is cached so that future requests do not incur an OpenGL call.
 		*/
 		int getUniformLocation(const std::string &_name);
+		/** @brief Gets the location of the specified attribute in a shader
+		*	@param _name The attribute to retrive
+		*	@return The attribute location
+		*
+		*	Gets the location of a attribute in a shader based on its name. If the shader attribute location has not been
+		*	requested before, it is cached so that future requests do not incur an OpenGL call.
+		*/
+		int getAttributeLocation(const std::string &_name);
 
+		/** @brief Sets a single float uniform
+		*	@param _varyings An array of count zero-terminated strings specifying the names of the varying variables to use for transform feedback
+		*	@param _count The number of varying variables used for transform feedback
+		*
+		*	Uses the getUniformLocation method to get the uniform location and set it to the given value.
+		*/
+		void setTransformFeedbackVarying(const std::string &_varying, float _count);
+		
 		/** @brief Sets a single float uniform
 		*	@param _name The name of the uniform to modify
 		*	@param _value The value to set the uniform to

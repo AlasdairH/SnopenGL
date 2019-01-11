@@ -45,6 +45,8 @@ namespace SnowGL
 		*/
 		void addBuffer(const VertexBuffer &_vertexBuffer, const VertexBufferLayout &_layout);
 
+		void setAttribArray(GLuint _index, GLint _size, GLenum _type, GLboolean _normalised, GLsizei _stride, const GLvoid *_pointer);
+
 		/** @brief VertexArray Dtor
 		*
 		*	Binds the Vertex Array Object (VAO)

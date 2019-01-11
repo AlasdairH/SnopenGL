@@ -182,32 +182,10 @@ namespace SnowGL
 			i = eol;
 		}
 		// push 3 floats for the position (x, y, z)
-		_mesh.layout.push<float>(3);
-		// push 2 floats for the texture coords (x, y)
-		_mesh.layout.push<float>(2);
-		// push 3 floats for the normals (x, y, z)
-		_mesh.layout.push<float>(3);
+		_mesh.layout = Vertex::getLayout();
 		// return the mesh
 
-		//CONSOLE_WARNING("Loaded " << _mesh.vertices.size() << " vertices | " << parsedLines << " lines parsed in " << timer.getDuration() << "s");
 		CONSOLE_MESSAGE("Loaded " << _mesh.vertices.size() << " vertices | " << parsedLines << " lines parsed");
-		/*
-		m_isLoaded = true;
-
-		if (!m_loadedToGPU)
-		{
-			m_VAO = std::make_shared<Graphics::VertexArray>();
-			m_VBO = std::make_shared<Graphics::VertexBuffer>(Graphics::CNG_BUFFER_ARRAY);
-			m_IBO = std::make_shared<Graphics::VertexBuffer>(Graphics::CNG_BUFFER_ELEMENT_ARRAY);
-
-			m_VAO->addBuffer(*m_VBO, layout);
-
-			m_VBO->loadData(vertices.data(), 0, layout.getStride() * vertices.size());
-			m_IBO->loadData(indices.data(), indices.size(), sizeof(unsigned int) * indices.size());
-
-			m_loadedToGPU = true;
-		}
-		*/
 	}
 
 	std::vector<std::string> IOUtilities::split(const std::string & _s, char _delimiter)

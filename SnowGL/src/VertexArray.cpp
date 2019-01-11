@@ -45,4 +45,11 @@ namespace SnowGL
 			offset += elements[i].count * VertexBufferElement::getSizeOfType(elements[i].type);
 		}
 	}
+
+	void VertexArray::setAttribArray(GLuint _index, GLint _size, GLenum _type, GLboolean _normalised, GLsizei _stride, const GLvoid * _pointer)
+	{
+		bind();
+		glEnableVertexAttribArray(_index);
+		glVertexAttribPointer(_index, _size, _type, _normalised, _stride, _pointer);
+	}
 }
