@@ -22,7 +22,11 @@ namespace SnowGL
 		m_tfShader->setTransformFeedbackVarying("out_Value", 1);
 		m_tfShader->link();
 
-		GLfloat data[] = { 1.0f, 2.0f, 3.0f, 4.0f, 5.0f };
+		std::vector<glm::vec3> data;
+		data.push_back(glm::vec3(1, 2, 3));
+
+		VertexBufferLayout layout;
+		layout.push<glm::vec3>(1);
 
 		// Create VAO
 		m_tfVAO = std::make_shared<VertexArray>();
@@ -31,12 +35,10 @@ namespace SnowGL
 		m_tfBuffer[0] = std::make_shared<VertexBuffer>(BUFFER_ARRAY);
 		m_tfBuffer[1] = std::make_shared<VertexBuffer>(BUFFER_ARRAY);
 		// load initial data
-		m_tfBuffer[0]->loadData(data, sizeof(data));
+		m_tfBuffer[0]->loadData(data.data(), sizeof(glm::vec3) * data.size());
 
 		// set attrib array in VAO
-		GLint inputAttrib = m_tfShader->getAttributeLocation("in_Value");
-		std::cout << inputAttrib << std::endl;
-		m_tfVAO->setAttribArray(inputAttrib, 1, GL_FLOAT, GL_FALSE, 0, 0);
+		m_tfVAO->addBuffer(*m_tfBuffer[0], layout);
 
 		// Create transform feedback buffer 2
 		m_tfBuffer[1]->loadData(nullptr, sizeof(data));
@@ -80,9 +82,9 @@ namespace SnowGL
 		glFlush();
 
 		// Fetch and print results
-		GLfloat feedback[5];
+		GLfloat feedback[3];
 		glGetBufferSubData(GL_TRANSFORM_FEEDBACK_BUFFER, 0, sizeof(feedback), feedback);
 
-		CONSOLE_MESSAGE(feedback[0] << ", " << feedback[1] << ", " << feedback[2] << ", " << feedback[3] << ", " << feedback[4]);
+		CONSOLE_MESSAGE(feedback[0] << ", " << feedback[1] << ", " << feedback[2]);
 	}
 }
