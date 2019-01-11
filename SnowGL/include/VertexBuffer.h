@@ -73,10 +73,18 @@ namespace SnowGL
 		void loadData(const void *_data);
 
 		/** @brief Returns the count of the number of items contained within the buffer.
+		*	@return The count
 		*
 		*	Returns the count of the number of items contained within the buffer.
 		*/
 		inline GLuint getCount() const { return m_count; }
+
+		/** @brief Returns OpenGL ID of the vertex buffer
+		*	@return The OpenGL ID
+		*
+		*	Gets the buffer ID
+		*/
+		inline GLuint getBufferID() const { return m_vertexBufferID; }
 
 		/** @brief Binds the VBO.
 		*

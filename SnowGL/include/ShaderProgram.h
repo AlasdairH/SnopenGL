@@ -174,9 +174,9 @@ namespace SnowGL
 
 	protected:
 
-		GLuint	m_programID;	/**< The OpenGL ID */
+		GLuint	m_programID;											/**< The OpenGL ID */
 
-		bool	m_verified;		/**< Flag for the shaders verified status */
+		bool	m_verified = false;										/**< Flag for the shaders verified status */
 
 		std::unordered_map<std::string, int> m_uniformLocationCache;	/**< The cache of uniform names to locations */
 	};

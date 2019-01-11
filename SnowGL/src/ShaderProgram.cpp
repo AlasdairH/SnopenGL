@@ -133,6 +133,7 @@ namespace SnowGL
 		{
 			const GLchar* feedbackVaryings[] = { _varying.c_str() };
 			glTransformFeedbackVaryings(m_programID, _count, feedbackVaryings, GL_INTERLEAVED_ATTRIBS);
+			CONSOLE_MESSAGE("Set values from " << _varying << " to be recorded in Transform Feedback mode");
 		}
 		else
 		{

@@ -10,6 +10,7 @@
 #include "GPU_Mesh.h"
 #include "Renderer.h"
 #include "Camera.h"
+#include "SnowfallSystem.h"
 
 #undef main
 
@@ -32,28 +33,6 @@ int main()
 	// create shader
 	ShaderProgram shader("resources/shaders/vert.vert", "resources/shaders/frag.frag");
 
-	ShaderProgram tfShader;
-
-	Shader tfVertexShader(SHADER_VERTEX);
-	tfVertexShader.load("resources/shaders/particle/particle.vert");
-	tfShader.attachShader(tfVertexShader);
-
-	tfShader.setTransformFeedbackVarying("out_Value", 1);
-
-	tfShader.link();
-
-	VertexArray dataVAO;
-	VertexBuffer dataVBO(BUFFER_ARRAY);
-	GLfloat data[] = { 1.0f, 2.0f, 3.0f, 4.0f, 5.0f };
-	dataVBO.loadData(data, sizeof(data));
-	GLint inputAttrib = tfShader.getAttributeLocation("in_Value");
-	dataVAO.setAttribArray(inputAttrib, 1, GL_FLOAT, GL_FALSE, 0, 0);
-
-
-	// create VBO for processed data and give it no data except the size
-	VertexBuffer tfDataVBO(BUFFER_ARRAY);
-	tfDataVBO.loadData(nullptr, -1, sizeof(data));
-
 	// create mesh
 	Mesh mesh;
 	IOUtilities::loadMesh(mesh, "resources/models/deer.obj");
@@ -66,49 +45,13 @@ int main()
 
 	Renderer renderer;
 
-	
-	/*
-	// Create VAO
-	GLuint vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
 
-	GLuint vbo;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	SnowfallSystem snow;
+	snow.initialise();
+	snow.updateParticles(0);
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+	int m_currVB, m_currTFB = 1;
 
-	GLint inputAttrib = glGetAttribLocation(tfShader.getProgramID(), "in_Value");
-	glEnableVertexAttribArray(inputAttrib);
-	glVertexAttribPointer(inputAttrib, 1, GL_FLOAT, GL_FALSE, 0, 0);
-
-	// Create transform feedback buffer
-	GLuint tbo;
-	glGenBuffers(1, &tbo);
-	glBindBuffer(GL_ARRAY_BUFFER, tbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(data), nullptr, GL_STATIC_READ);
-
-	// Perform feedback transform
-	glEnable(GL_RASTERIZER_DISCARD);
-
-	glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, tbo);
-
-	glBeginTransformFeedback(GL_POINTS);
-	glDrawArrays(GL_POINTS, 0, 5);
-	glEndTransformFeedback();
-
-	glDisable(GL_RASTERIZER_DISCARD);
-
-	glFlush();
-	*/
-	// Fetch and print results
-	GLfloat feedback[5];
-	tfDataVBO.bind();
-	glGetBufferSubData(GL_TRANSFORM_FEEDBACK_BUFFER, 0, sizeof(feedback), feedback);
-
-	CONSOLE_MESSAGE(feedback[0] << ", " << feedback[1] << ", " << feedback[2] << ", " << feedback[3] << ", " << feedback[4]);
-	
 	glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
 
 	bool quit = false;
