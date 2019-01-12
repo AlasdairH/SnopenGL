@@ -17,7 +17,7 @@ namespace SnowGL
 		m_VAO->addBuffer(*m_VBO, _mesh.layout);
 
 		// load data to VBOs
-		m_VBO->loadData(_mesh.vertices.data(), (GLuint)0, _mesh.layout.getStride() * _mesh.vertices.size());
+		m_VBO->loadData(_mesh.vertices.data(), _mesh.layout.getStride() * _mesh.vertices.size());
 		m_IBO->loadData(_mesh.indices.data(), (GLuint)_mesh.indices.size(), sizeof(unsigned int) * _mesh.indices.size());
 	}
 }

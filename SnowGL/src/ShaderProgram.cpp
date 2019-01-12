@@ -127,13 +127,19 @@ namespace SnowGL
 		return location;
 	}
 
-	void ShaderProgram::setTransformFeedbackVarying(const std::string & _varying, float _count)
+	void ShaderProgram::setTransformFeedbackVarying(std::vector<std::string> &_varying)
 	{
 		if (!m_verified)
 		{
-			const GLchar* feedbackVaryings[] = { _varying.c_str() };
-			glTransformFeedbackVaryings(m_programID, _count, feedbackVaryings, GL_INTERLEAVED_ATTRIBS);
-			CONSOLE_MESSAGE("Set values from " << _varying << " to be recorded in Transform Feedback mode");
+			// doing a bit of dodgy shit to convert a vector of strings to char**
+			std::vector<char*> ptr_list;
+			for (std::size_t i = 0; i != _varying.size(); ++i) 
+			{
+				ptr_list.push_back(&_varying.at(i)[0]);
+			}
+			char** arr = &ptr_list[0];
+
+			glTransformFeedbackVaryings(m_programID, _varying.size(), arr, GL_INTERLEAVED_ATTRIBS);
 		}
 		else
 		{

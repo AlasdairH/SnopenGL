@@ -34,6 +34,10 @@ namespace SnowGL
 		else if (m_vertexBufferType == BUFFER_UNIFORM)
 		{
 			m_usage = GL_DYNAMIC_DRAW;
+		}		
+		else if (m_vertexBufferType == BUFFER_TRANSFORM_FEEDBACK)
+		{
+			m_usage = GL_DYNAMIC_COPY;
 		}
 
 		CONSOLE_MESSAGE("Vertex Buffer Object with ID: " << m_vertexBufferID << " Created");

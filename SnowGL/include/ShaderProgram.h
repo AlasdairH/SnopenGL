@@ -98,11 +98,10 @@ namespace SnowGL
 
 		/** @brief Sets a single float uniform
 		*	@param _varyings An array of count zero-terminated strings specifying the names of the varying variables to use for transform feedback
-		*	@param _count The number of varying variables used for transform feedback
 		*
 		*	Uses the getUniformLocation method to get the uniform location and set it to the given value.
 		*/
-		void setTransformFeedbackVarying(const std::string &_varying, float _count);
+		void setTransformFeedbackVarying(std::vector<std::string> &_varying);
 		
 		/** @brief Sets a single float uniform
 		*	@param _name The name of the uniform to modify

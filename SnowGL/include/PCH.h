@@ -1,14 +1,17 @@
 #pragma once
 
 // cstdlib
+#include <algorithm>
+#include <functional>
+#include <fstream>
 #include <iostream>
-#include <string>
-#include <memory>
+#include <iterator>
 #include <map>
+#include <memory>
+#include <sstream>
+#include <string>
 #include <unordered_map>
 #include <vector>
-#include <fstream>
-#include <sstream>
 
 // external libs
 #include "SDL/SDL.h"

@@ -19,7 +19,7 @@ namespace SnowGL
 	{
 		glm::vec3 position;
 		glm::vec3 velocity;
-		float lifetime;
+		float lifetime = -1;
 	};
 
 	class SnowfallSystem
@@ -43,5 +43,7 @@ namespace SnowGL
 		std::shared_ptr<VertexBuffer> m_tfBuffer[2];
 
 		std::shared_ptr<ShaderProgram> m_tfShader;
+
+		int m_numParticles;
 	};
 }

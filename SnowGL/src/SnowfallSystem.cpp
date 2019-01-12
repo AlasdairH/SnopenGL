@@ -19,29 +19,35 @@ namespace SnowGL
 		Shader tfVert(SHADER_VERTEX);
 		tfVert.load("resources/shaders/particle/particle.vert");
 		m_tfShader->attachShader(tfVert);
-		m_tfShader->setTransformFeedbackVarying("out_Value", 1);
+		std::vector<std::string> tfVaryings{ "out_position", "out_velocity", "out_lifetime" };
+		m_tfShader->setTransformFeedbackVarying(tfVaryings);
 		m_tfShader->link();
 
-		std::vector<glm::vec3> data;
-		data.push_back(glm::vec3(1, 2, 3));
+		std::vector<Particle> data;
+		data.push_back(Particle { glm::vec3(1, 2, 3), glm::vec3(4, 5, 6), 10 } );
+		data.push_back(Particle { glm::vec3(2, 3, 4), glm::vec3(5, 6, 7), 20 } );
+		data.push_back(Particle { glm::vec3(2, 3, 4), glm::vec3(5, 6, 7), 20 } );
+
+		m_numParticles = data.size();
 
 		VertexBufferLayout layout;
-		layout.push<glm::vec3>(1);
+		layout.push<glm::vec3>(1);	// position
+		layout.push<glm::vec3>(1);	// velocity
+		layout.push<float>(1);		// lifetime
 
 		// Create VAO
 		m_tfVAO = std::make_shared<VertexArray>();
 
-		// Create transform feedback buffer 1
+		// Create transform feedback buffer 0 and 1
 		m_tfBuffer[0] = std::make_shared<VertexBuffer>(BUFFER_ARRAY);
-		m_tfBuffer[1] = std::make_shared<VertexBuffer>(BUFFER_ARRAY);
-		// load initial data
-		m_tfBuffer[0]->loadData(data.data(), sizeof(glm::vec3) * data.size());
+		m_tfBuffer[1] = std::make_shared<VertexBuffer>(BUFFER_TRANSFORM_FEEDBACK);
+
+		// load initial data to buffer 1
+		m_tfBuffer[0]->loadData(data.data(), sizeof(Particle) * data.size());
+		m_tfBuffer[1]->loadData(nullptr, sizeof(Particle) * data.size());
 
 		// set attrib array in VAO
 		m_tfVAO->addBuffer(*m_tfBuffer[0], layout);
-
-		// Create transform feedback buffer 2
-		m_tfBuffer[1]->loadData(nullptr, sizeof(data));
 
 		// set current vertex buffer and current transform feedback buffer to be alternate of eachother (0, 1);
 		//m_currVB = m_currTFB;
@@ -74,7 +80,7 @@ namespace SnowGL
 		m_tfBuffer[1]->bindBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0);
 
 		glBeginTransformFeedback(GL_POINTS);
-		glDrawArrays(GL_POINTS, 0, 5);
+		glDrawArrays(GL_POINTS, 0, m_numParticles);
 		glEndTransformFeedback();
 
 		glDisable(GL_RASTERIZER_DISCARD);
@@ -82,9 +88,15 @@ namespace SnowGL
 		glFlush();
 
 		// Fetch and print results
-		GLfloat feedback[3];
-		glGetBufferSubData(GL_TRANSFORM_FEEDBACK_BUFFER, 0, sizeof(feedback), feedback);
+		std::vector<Particle> particles;
+		particles.resize(m_numParticles);
 
-		CONSOLE_MESSAGE(feedback[0] << ", " << feedback[1] << ", " << feedback[2]);
+		glGetBufferSubData(GL_TRANSFORM_FEEDBACK_BUFFER, 0, particles.size() * sizeof(Particle), particles.data());
+
+		for (int i = 0; i < particles.size(); ++i)
+		{
+		CONSOLE_MESSAGE(particles[i].position.x << ", " << particles[i].position.y << ", " << particles[i].position.z << " | "
+			<< particles[i].velocity.x << ", " << particles[i].velocity.y << ", " << particles[i].velocity.z << " | " << particles[i].lifetime);
+		}
 	}
 }
