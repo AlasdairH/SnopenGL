@@ -6,6 +6,7 @@
 
 // program
 #include "PCH.h"
+#include "ApplicationState.h"
 
 namespace SnowGL
 {
@@ -40,6 +41,7 @@ namespace SnowGL
 		void onRender();
 
 	protected:
-		SDL_Window *m_window;	/**< The SDL window to render to */
+		SDL_Window			*m_window;	/**< The SDL window to render to */
+		ApplicationState	*m_state;	/**< The state of the application */
 	};
 }

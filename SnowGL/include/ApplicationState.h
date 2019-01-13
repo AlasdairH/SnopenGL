@@ -1,0 +1,63 @@
+#pragma once
+
+// cstdlib
+
+// external libs
+
+// program
+#include "PCH.h"
+
+// TODO: Doxygen
+
+namespace SnowGL
+{
+	enum SceneMode { MODE_VIEW, MODE_EDIT };
+
+	/*! @class ApplicationState
+	*	@brief Holds the state of the application
+	*
+	*	Holds various elements of the applications state
+	*/
+	class ApplicationState
+	{
+	public:
+		/** @brief Gets the static instance of the ResourceManager
+		*
+		*	Gets the static instance of the ResourceManager.
+		*/
+		static ApplicationState& getInstance()
+		{
+			static ApplicationState instance;	// guaranteed to be destroyed
+												// instantiated on first use
+			return instance;
+		}
+
+		bool isRunning		= true;
+		bool hideMenuBar	= false;
+
+		inline SceneMode getSceneMode() { return m_sceneMode; }
+		
+		void switchSceneMode();
+
+		// ------------------------------------------------
+		ApplicationState(ApplicationState const&) = delete;
+		void operator=(ApplicationState const&) = delete;
+
+	protected:
+
+		SceneMode m_sceneMode = MODE_VIEW;
+
+
+		/** @brief ApplicationState Ctor
+		*
+		*	This is called on the first time the ApplicationState instance is grabbed.
+		*/
+		ApplicationState() { };
+		/** @brief ApplicationState Dtor
+		*
+		*	Called on program close
+		*/
+		~ApplicationState() { };
+
+	};
+}

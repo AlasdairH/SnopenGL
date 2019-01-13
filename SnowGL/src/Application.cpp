@@ -4,6 +4,7 @@
 
 // program
 #include "PCH.h"
+#include "ApplicationState.h"
 #include "InitManager.h"
 #include "Window.h"
 #include "ShaderProgram.h"
@@ -16,12 +17,12 @@
 
 #undef main
 
-enum SceneMode { MODE_EDIT, MODE_VIEW };
-
 using namespace SnowGL;
 
 int main()
 {
+	ApplicationState &state = ApplicationState::getInstance();
+
 	InitManager::initSDL();
 
 	Window window("SnowGL");
@@ -37,7 +38,7 @@ int main()
 
 	// create mesh
 	Mesh mesh;
-	IOUtilities::loadMesh(mesh, "resources/models/deer.obj");
+	IOUtilities::loadMesh(mesh, "resources/models/barrel.obj");
 	GPU_Mesh openGLMesh;
 	openGLMesh.setMesh(mesh);
 
@@ -65,11 +66,11 @@ int main()
 	Timer runtime;
 	float startTime = runtime.getDuration().count();
 
-	while (!quit)
+	while (state.isRunning)
 	{
 		float timepassed = runtime.getDuration().count();
 		frames++;
-		// if a new FPS value needs to be calculatedf
+		// if a new FPS value needs to be calculated
 		if (timepassed - startTime > 0.25 && frames > 10)
 		{
 			fps = (double)frames / (timepassed - startTime);
@@ -80,19 +81,27 @@ int main()
 
 		// START INPUT
 		SDL_Event incomingEvent;
+		
+		// get mouse position
+		int mousePosX, mousePosY;
+		SDL_GetMouseState(&mousePosX, &mousePosY);
+
 		while (SDL_PollEvent(&incomingEvent))
 		{
 			if (incomingEvent.type == SDL_QUIT)
 			{
-				quit = true;
+				state.isRunning = false;
 			}
 			if (incomingEvent.type == SDL_KEYDOWN)
 			{
 				//Select surfaces based on key press
 				switch (incomingEvent.key.keysym.sym)
 				{
-				case SDLK_RETURN:
-
+				case SDLK_ESCAPE:
+					state.isRunning = false;
+					break; 
+				case SDLK_SPACE:
+					state.hideMenuBar = !state.hideMenuBar;
 					break;
 
 				default:

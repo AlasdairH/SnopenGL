@@ -5,6 +5,7 @@ namespace SnowGL
 {
 	Renderer::Renderer()
 	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glCullFace(GL_BACK);
 	}
 
