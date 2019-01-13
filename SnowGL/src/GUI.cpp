@@ -29,11 +29,9 @@ namespace SnowGL
 
 	void GUI::onUpdate()
 	{
-		bool isOpen = true;
-
 		ImGui_ImplSdlGL3_NewFrame(m_window);
 
-		if (!m_state->hideMenuBar)
+		if (!m_state->isMenuBarHidden)
 		{
 			if (ImGui::BeginMainMenuBar())
 			{
@@ -57,11 +55,12 @@ namespace SnowGL
 		}
 
 
-		//ImGui::Begin("SnowGL", &isOpen, ImGuiWindowFlags_MenuBar);
+		ImGui::Begin("Performance");
 		
-		//ImGui::Text("TEST");
+		ImGui::Text("FPS: %f", m_state->framesPerSecond);
+		ImGui::Text("DT: %f", m_state->deltaTime);
 
-		//ImGui::End();
+		ImGui::End();
 	}
 
 	void GUI::onRender()

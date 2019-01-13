@@ -32,8 +32,11 @@ namespace SnowGL
 			return instance;
 		}
 
-		bool isRunning		= true;
-		bool hideMenuBar	= false;
+		bool isRunning			= true;
+		bool isMenuBarHidden	= false;
+
+		float deltaTime;
+		float framesPerSecond;
 
 		inline SceneMode getSceneMode() { return m_sceneMode; }
 		

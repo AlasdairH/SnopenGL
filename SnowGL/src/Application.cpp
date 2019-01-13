@@ -53,30 +53,38 @@ int main()
 	snow.initialise();
 	snow.updateParticles(0);
 
-	int m_currVB, m_currTFB = 1;
-
 	glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
 
 	bool quit = false;
 	SceneMode mode = MODE_VIEW;
+
+	float cameraMoveSpeed = 5.0f;
 
 	// fps counter variables
 	int frames = 0;
 	float fps = 0.0f;
 	Timer runtime;
 	float startTime = runtime.getDuration().count();
+	float lastTime = 0;
+	float deltaTime = 0;
 
 	while (state.isRunning)
 	{
+		// calculate FPS
 		float timepassed = runtime.getDuration().count();
 		frames++;
-		// if a new FPS value needs to be calculated
 		if (timepassed - startTime > 0.25 && frames > 10)
 		{
-			fps = (double)frames / (timepassed - startTime);
+			state.framesPerSecond = (double)frames / (timepassed - startTime);
 			startTime = timepassed;
 			frames = 0;
 		}
+		// calculate deltaTime
+		if (timepassed > lastTime) {
+			state.deltaTime = ((float)(timepassed - lastTime));
+			lastTime = timepassed;
+		}
+
 
 
 		// START INPUT
@@ -101,7 +109,19 @@ int main()
 					state.isRunning = false;
 					break; 
 				case SDLK_SPACE:
-					state.hideMenuBar = !state.hideMenuBar;
+					state.isMenuBarHidden = !state.isMenuBarHidden;
+				break; 
+				case SDLK_a:
+					camera.transform.translate(glm::vec3(-cameraMoveSpeed, 0, 0) * state.deltaTime);
+					break;
+				case SDLK_d:
+					camera.transform.translate(glm::vec3(cameraMoveSpeed, 0, 0) * state.deltaTime);
+					break;
+				case SDLK_w:
+					camera.transform.translate(glm::vec3(0, cameraMoveSpeed, 0) * state.deltaTime);
+					break;
+				case SDLK_s:
+					camera.transform.translate(glm::vec3(0, -cameraMoveSpeed, 0) * state.deltaTime);
 					break;
 
 				default:
@@ -114,7 +134,8 @@ int main()
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-		transform.rotate(1, glm::vec3(0, 1, 0));
+		//transform.rotate(1, glm::vec3(0, 1, 0));
+		camera.updateCameraUniform();
 		renderer.render(openGLMesh, shader, transform);
 	
 		gui.onRender();
