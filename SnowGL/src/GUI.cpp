@@ -60,11 +60,20 @@ namespace SnowGL
 			}
 		}
 
-
-		ImGui::Begin("Performance");
+		bool *open = NULL;
+		ImGui::SetNextWindowPos(ImVec2(0, 50));
+		ImGui::Begin("Performance", open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings);
 		
 		ImGui::Text("FPS: %f", m_state->framesPerSecond);
-		ImGui::Text("DT: %f", m_state->deltaTime);
+		for (int i = 0; i < m_fpsValues.size() - 1; ++i)
+		{
+			m_fpsValues[i] = m_fpsValues[i + 1]; //move all element to the left except first one
+		}
+		m_fpsValues[m_fpsValues.size() - 1] = m_state->framesPerSecond;
+
+		ImGui::PlotLines("", m_fpsValues.data(), m_fpsValues.size());
+		ImGui::Separator();
+		ImGui::Text("Delta Time: %fms", m_state->deltaTime);
 
 		ImGui::End();
 	}

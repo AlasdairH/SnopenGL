@@ -42,7 +42,9 @@ namespace SnowGL
 		void onRender();
 
 	protected:
-		SDL_Window			*m_window;	/**< The SDL window to render to */
-		ApplicationState	*m_state;	/**< The state of the application */
+		SDL_Window				*m_window;	/**< The SDL window to render to */
+		ApplicationState		*m_state;	/**< The state of the application */
+
+		std::array<float, 50>	m_fpsValues;
 	};
 }
