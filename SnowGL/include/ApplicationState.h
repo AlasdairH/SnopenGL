@@ -44,6 +44,10 @@ namespace SnowGL
 		glm::vec2 lastMousePosition = glm::vec2(640, 360);
 		glm::vec2 mouseOffset;
 
+		// camera
+		float cameraPitch;
+		float cameraYaw = -90.0f;
+
 		inline SceneMode getSceneMode() { return m_sceneMode; }
 		
 		void switchSceneMode();

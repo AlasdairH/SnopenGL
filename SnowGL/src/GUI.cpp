@@ -46,6 +46,12 @@ namespace SnowGL
 					{ 
 						// switch mode between view and edit
 						m_state->switchSceneMode();
+					}					
+					if (ImGui::MenuItem("Reset Camera")) 
+					{ 
+						// switch mode between view and edit
+						Camera::activeCamera->setFront(glm::vec3(0, 0, -1));
+						Camera::activeCamera->transform.setPosition(glm::vec3(0, 2, 0));
 					}
 					if (ImGui::MenuItem("Options")) { /* Do stuff */ }
 					ImGui::EndMenu();

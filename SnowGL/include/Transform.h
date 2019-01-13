@@ -46,6 +46,16 @@ namespace SnowGL
 		void scale(const glm::vec3 &_scale);
 
 		// ------------------------------------------------
+		// set
+
+		/** @brief Sets the position of the transform
+		*	@param _position The position in 3D space
+		*
+		*	sets the position in 3D space of the transform
+		*/
+		inline void setPosition(glm::vec3 _position) { m_vec_position = _position; m_mat_position = glm::translate(glm::mat4(1.0f), _position); }
+		
+		// ------------------------------------------------
 		// get
 
 		/** @brief Gets the position of the transform

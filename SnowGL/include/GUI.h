@@ -7,6 +7,7 @@
 // program
 #include "PCH.h"
 #include "ApplicationState.h"
+#include "Camera.h"
 
 namespace SnowGL
 {

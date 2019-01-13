@@ -68,8 +68,6 @@ int main()
 	float lastTime = 0;
 	float deltaTime = 0;
 
-	float yaw = 0.0f, pitch = 0.0f;
-
 	while (state.isRunning)
 	{
 		// calculate FPS
@@ -104,23 +102,24 @@ int main()
 		{
 			glm::vec2 fixedOffset = state.mouseOffset * 0.05f;
 
-			yaw -= fixedOffset.x;
-			pitch += fixedOffset.y;
+			state.cameraYaw -= fixedOffset.x;
+			state.cameraPitch += fixedOffset.y;
 
-			if (pitch > 89.0f)
-				pitch = 89.0f;
-			if (pitch < -89.0f)
-				pitch = -89.0f;
+			if (state.cameraPitch > 89.0f)
+				state.cameraPitch = 89.0f;
+			if (state.cameraPitch < -89.0f)
+				state.cameraPitch = -89.0f;
 
 			glm::vec3 front;
-			front.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
-			front.y = sin(glm::radians(pitch));
-			front.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
+			front.x = cos(glm::radians(state.cameraPitch)) * cos(glm::radians(state.cameraYaw));
+			front.y = sin(glm::radians(state.cameraPitch));
+			front.z = cos(glm::radians(state.cameraPitch)) * sin(glm::radians(state.cameraYaw));
 			front = glm::normalize(front);
 			//front = glm::vec3(front.x, front.y, -front.z);
 			camera.setFront(front);
 
 			CONSOLE_MESSAGE(front.x << ", " << front.y << ", " << front.z);
+			CONSOLE_MESSAGE(state.cameraPitch << ", " << state.cameraYaw);
 		}
 
 		const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
