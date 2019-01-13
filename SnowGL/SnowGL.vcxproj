@@ -92,7 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\$(ProjectName)\include;$(SolutionDir)\SDKs\Include;$(SolutionDir)\$(ProjectName);$(SolutionDir)\$(ProjectName)\src\external</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>COMPILE_DEBUG;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
+      <PreprocessorDefinitions>COMPILE_DEBUG;%(PreprocessorDefinitions);GLEW_STATIC;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -108,7 +108,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\$(ProjectName)\include;$(SolutionDir)\SDKs\Include;$(SolutionDir)\$(ProjectName);$(SolutionDir)\$(ProjectName)\src\external</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>COMPILE_DEBUG;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
+      <PreprocessorDefinitions>COMPILE_DEBUG;%(PreprocessorDefinitions);GLEW_STATIC;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -126,7 +126,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\$(ProjectName)\include;$(SolutionDir)\SDKs\Include;$(SolutionDir)\$(ProjectName);$(SolutionDir)\$(ProjectName)\src\external</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>COMPILE_RELEASE;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
+      <PreprocessorDefinitions>COMPILE_RELEASE;%(PreprocessorDefinitions);GLEW_STATIC;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -146,7 +146,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\$(ProjectName)\include;$(SolutionDir)\SDKs\Include;$(SolutionDir)\$(ProjectName);$(SolutionDir)\$(ProjectName)\src\external</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>COMPILE_RELEASE;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
+      <PreprocessorDefinitions>COMPILE_RELEASE;%(PreprocessorDefinitions);GLEW_STATIC;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -158,9 +158,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\external\imgui.cpp" />
+    <ClCompile Include="include\external\imgui_draw.cpp" />
+    <ClCompile Include="include\external\imgui_impl_sdl_gl3.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\GPU_Mesh.cpp" />
+    <ClCompile Include="src\GUI.cpp" />
     <ClCompile Include="src\InitManager.cpp" />
     <ClCompile Include="src\IOUtilities.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
@@ -183,7 +187,15 @@
   <ItemGroup>
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\CompileSettings.h" />
+    <ClInclude Include="include\external\imconfig.h" />
+    <ClInclude Include="include\external\imgui.h" />
+    <ClInclude Include="include\external\imgui_impl_sdl_gl3.h" />
+    <ClInclude Include="include\external\imgui_internal.h" />
+    <ClInclude Include="include\external\stb_rect_pack.h" />
+    <ClInclude Include="include\external\stb_textedit.h" />
+    <ClInclude Include="include\external\stb_truetype.h" />
     <ClInclude Include="include\GPU_Mesh.h" />
+    <ClInclude Include="include\GUI.h" />
     <ClInclude Include="include\InitManager.h" />
     <ClInclude Include="include\IOUtilities.h" />
     <ClInclude Include="include\Mesh.h" />
@@ -192,6 +204,7 @@
     <ClInclude Include="include\Renderer.h" />
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\ShaderProgram.h" />
+    <ClInclude Include="include\Timer.h" />
     <ClInclude Include="include\Transform.h" />
     <ClInclude Include="include\Vertex.h" />
     <ClInclude Include="include\VertexArray.h" />

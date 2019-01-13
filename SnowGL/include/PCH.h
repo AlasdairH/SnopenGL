@@ -2,6 +2,7 @@
 
 // cstdlib
 #include <algorithm>
+#include <chrono>
 #include <functional>
 #include <fstream>
 #include <iostream>
@@ -18,6 +19,9 @@
 #include "GL/glew.h"
 #include "GLM/glm.hpp"
 #include "GLM/ext.hpp"
+
+#include "external/imgui.h"
+#include "external/imgui_impl_sdl_gl3.h"
 
 // program
 #include "IOUtilities.h"

@@ -62,7 +62,14 @@ namespace SnowGL
 		*
 		*	Returns the window height.
 		*/
-		inline int getHeight() { return m_height; }
+		inline int getHeight() { return m_height; }		
+		
+		/** @brief Get a pointer to the SDL Window
+		*	@return A pointer to the SDL window
+		*
+		*	Get a pointer to the SDL Window. Used by IMGUI.
+		*/
+		inline SDL_Window * getWindowPtr() { return m_window; }
 
 	protected:
 		SDL_Window		*m_window;				/**< A pointer to the SDL_Window. */

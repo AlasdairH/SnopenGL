@@ -10,11 +10,13 @@
 #include "GPU_Mesh.h"
 #include "Renderer.h"
 #include "Camera.h"
+#include "Timer.h"
 #include "SnowfallSystem.h"
+#include "GUI.h"
 
 #undef main
 
-static Uint32 next_time;
+enum SceneMode { MODE_EDIT, MODE_VIEW };
 
 using namespace SnowGL;
 
@@ -44,7 +46,7 @@ int main()
 	transform.translate(glm::vec3(0, 0, -8));
 
 	Renderer renderer;
-
+	GUI gui(window.getWindowPtr());
 
 	SnowfallSystem snow;
 	snow.initialise();
@@ -55,9 +57,27 @@ int main()
 	glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
 
 	bool quit = false;
+	SceneMode mode = MODE_VIEW;
+
+	// fps counter variables
+	int frames = 0;
+	float fps = 0.0f;
+	Timer runtime;
+	float startTime = runtime.getDuration().count();
 
 	while (!quit)
 	{
+		float timepassed = runtime.getDuration().count();
+		frames++;
+		// if a new FPS value needs to be calculatedf
+		if (timepassed - startTime > 0.25 && frames > 10)
+		{
+			fps = (double)frames / (timepassed - startTime);
+			startTime = timepassed;
+			frames = 0;
+		}
+
+
 		// START INPUT
 		SDL_Event incomingEvent;
 		while (SDL_PollEvent(&incomingEvent))
@@ -81,14 +101,17 @@ int main()
 			}
 		}
 
+		gui.onUpdate();
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 		transform.rotate(1, glm::vec3(0, 1, 0));
 		renderer.render(openGLMesh, shader, transform);
-		
+	
+		gui.onRender();
+
 		window.swapBuffer();
 	}
-	
 
 	std::cout << "Hello World!" << std::endl;
 
