@@ -26,17 +26,26 @@ namespace SnowGL
 
 	void GUI::onUpdate()
 	{
+		bool isOpen = true;
+
 		ImGui_ImplSdlGL3_NewFrame(m_window);
+		ImGui::Begin("SnowGL", &isOpen, ImGuiWindowFlags_MenuBar);
 
-		ImGui::Text("SnowGL");
-
-
-		if (ImGui::Button("View Mode"))
+		if (ImGui::BeginMenuBar())
 		{
-			CONSOLE_MESSAGE("Activated View Mode");
+			if (ImGui::BeginMenu("File"))
+			{
+				if (ImGui::MenuItem("Open..", "Ctrl+O")) { /* Do stuff */ }
+				if (ImGui::MenuItem("Save", "Ctrl+S")) { /* Do stuff */ }
+				if (ImGui::MenuItem("Close", "Ctrl+W")) { isOpen = false; }
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenuBar();
 		}
 
-		//ImGui::Text("FPS: %.1f", fps);
+		ImGui::Text("TEST");
+
+		ImGui::End();
 	}
 
 	void GUI::onRender()

@@ -5,7 +5,7 @@ namespace SnowGL
 {
 	Renderer::Renderer()
 	{
-
+		glCullFace(GL_BACK);
 	}
 
 	void Renderer::render(const GPU_Mesh &_mesh, ShaderProgram &_shaderProgram, const Transform &_transform)

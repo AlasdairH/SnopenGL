@@ -56,10 +56,10 @@ namespace SnowGL
 		return true;
 	}
 
-	void SnowfallSystem::render(int _deltaTimeMS, const glm::mat4 &_VP, const glm::vec3 &_cameraPos)
+	void SnowfallSystem::render(int _deltaTime, const glm::mat4 &_VP, const glm::vec3 &_cameraPos)
 	{
 
-		updateParticles(_deltaTimeMS);
+		updateParticles(_deltaTime);
 
 		renderParticles(_VP, _cameraPos);
 
@@ -72,7 +72,7 @@ namespace SnowGL
 
 	}
 
-	void SnowfallSystem::updateParticles(int _deltaTimeMS)
+	void SnowfallSystem::updateParticles(int _deltaTime)
 	{
 		// Perform feedback transform
 		glEnable(GL_RASTERIZER_DISCARD);
