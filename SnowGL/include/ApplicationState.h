@@ -35,8 +35,14 @@ namespace SnowGL
 		bool isRunning			= true;
 		bool isMenuBarHidden	= false;
 
+		// performance
 		float deltaTime;
 		float framesPerSecond;
+
+		// input
+		glm::vec2 mousePosition;
+		glm::vec2 lastMousePosition = glm::vec2(640, 360);
+		glm::vec2 mouseOffset;
 
 		inline SceneMode getSceneMode() { return m_sceneMode; }
 		

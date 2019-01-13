@@ -55,7 +55,7 @@ namespace SnowGL
 	{
 		cleanViewMatrix();
 		// grab the new matrices
-		m_uniformData.viewMatrix = glm::inverse(transform.getModelMatrix());
+		m_uniformData.viewMatrix = glm::lookAt(transform.getPosition(), transform.getPosition() + m_front, m_up);
 		m_uniformData.projectionMatrix = getProjectionMatrix();
 		m_uniformData.orthographicMatrix = getOrthographicMatrix();
 

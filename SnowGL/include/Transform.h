@@ -45,6 +45,16 @@ namespace SnowGL
 		*/
 		void scale(const glm::vec3 &_scale);
 
+		// ------------------------------------------------
+		// get
+
+		/** @brief Gets the position of the transform
+		*	@return The position in 3D space
+		*
+		*	Returns the position in 3D space of the transform
+		*/
+		inline glm::vec3 getPosition() { return m_vec_position; }
+
 	protected:
 		glm::mat4 m_mat_position	= glm::mat4(1.0f);	/**< The position as a 4x4 Matrix */
 		glm::mat4 m_mat_rotation	= glm::mat4(1.0f);	/**< The rotation as a 4x4 Matrix */

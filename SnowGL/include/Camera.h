@@ -107,6 +107,13 @@ namespace SnowGL
 		*/
 		inline int getViewportHeight() { return m_viewportHeight; }
 
+		/** @brief Sets the camera front 
+		*	@param _front The new camera front value
+		*
+		*	Sets the new front orientation for the camera
+		*/
+		inline void setFront(glm::vec3 _front) { m_front = _front; }
+
 		static Camera *activeCamera;	/**< The currently active camera */
 
 	protected:
@@ -121,15 +128,18 @@ namespace SnowGL
 		*/
 		void cleanViewMatrix();
 
-		float										m_fovRad;				/**< The current FoV in radians */
-		float										m_aspect;				/**< The current Aspect Ratio */
-		int											m_viewportWidth;		/**< Width of the viewport in pixels */
-		int											m_viewportHeight;		/**< Height of the viewport in pixels */
+		float										m_fovRad;						/**< The current FoV in radians */
+		float										m_aspect;						/**< The current Aspect Ratio */
+		int											m_viewportWidth;				/**< Width of the viewport in pixels */
+		int											m_viewportHeight;				/**< Height of the viewport in pixels */
 
-		glm::mat4									m_projectionMatrix;		/**< The Projection Matrix */
-		glm::mat4									m_orthographicMatrix;	/**< The Orthographic Matrix */
+		glm::vec3									m_up = glm::vec3(0, 1, 0);
+		glm::vec3									m_front = glm::vec3(0, 0, -1);
 
-		std::shared_ptr<VertexBuffer>				m_uniformBuffer;		/**< The uniform buffer for View and Projection matrices */
-		u_CameraData								m_uniformData;			/**< The struct containing the matrices for the uniform buffer to use */
+		glm::mat4									m_projectionMatrix;				/**< The Projection Matrix */
+		glm::mat4									m_orthographicMatrix;			/**< The Orthographic Matrix */
+
+		std::shared_ptr<VertexBuffer>				m_uniformBuffer;				/**< The uniform buffer for View and Projection matrices */
+		u_CameraData								m_uniformData;					/**< The struct containing the matrices for the uniform buffer to use */
 	};
 }

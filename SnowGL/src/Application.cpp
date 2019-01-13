@@ -68,6 +68,8 @@ int main()
 	float lastTime = 0;
 	float deltaTime = 0;
 
+	float yaw = 0.0f, pitch = 0.0f;
+
 	while (state.isRunning)
 	{
 		// calculate FPS
@@ -93,7 +95,52 @@ int main()
 		// get mouse position
 		int mousePosX, mousePosY;
 		SDL_GetMouseState(&mousePosX, &mousePosY);
+		state.lastMousePosition = state.mousePosition;
+		state.mousePosition = glm::vec2(mousePosX, mousePosY);
+		state.mouseOffset = state.mousePosition - state.lastMousePosition;
 
+		// if right mouse button is being held
+		if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT)) 
+		{
+			glm::vec2 fixedOffset = state.mouseOffset * 0.05f;
+
+			yaw -= fixedOffset.x;
+			pitch += fixedOffset.y;
+
+			if (pitch > 89.0f)
+				pitch = 89.0f;
+			if (pitch < -89.0f)
+				pitch = -89.0f;
+
+			glm::vec3 front;
+			front.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
+			front.y = sin(glm::radians(pitch));
+			front.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
+			front = glm::normalize(front);
+			//front = glm::vec3(front.x, front.y, -front.z);
+			camera.setFront(front);
+
+			CONSOLE_MESSAGE(front.x << ", " << front.y << ", " << front.z);
+		}
+
+		const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
+		if (keyboardState[SDL_SCANCODE_W]) 
+		{
+			camera.transform.translate(glm::vec3(0, 0, -cameraMoveSpeed) * state.deltaTime);
+		}
+		if (keyboardState[SDL_SCANCODE_S])
+		{
+			camera.transform.translate(glm::vec3(0, 0, cameraMoveSpeed) * state.deltaTime);
+		}
+		if (keyboardState[SDL_SCANCODE_A])
+		{
+			camera.transform.translate(glm::vec3(-cameraMoveSpeed, 0, 0) * state.deltaTime);
+		}
+		if (keyboardState[SDL_SCANCODE_D])
+		{
+			camera.transform.translate(glm::vec3(cameraMoveSpeed, 0, 0) * state.deltaTime);
+		}
+		
 		while (SDL_PollEvent(&incomingEvent))
 		{
 			if (incomingEvent.type == SDL_QUIT)
@@ -110,20 +157,7 @@ int main()
 					break; 
 				case SDLK_SPACE:
 					state.isMenuBarHidden = !state.isMenuBarHidden;
-				break; 
-				case SDLK_a:
-					camera.transform.translate(glm::vec3(-cameraMoveSpeed, 0, 0) * state.deltaTime);
-					break;
-				case SDLK_d:
-					camera.transform.translate(glm::vec3(cameraMoveSpeed, 0, 0) * state.deltaTime);
-					break;
-				case SDLK_w:
-					camera.transform.translate(glm::vec3(0, cameraMoveSpeed, 0) * state.deltaTime);
-					break;
-				case SDLK_s:
-					camera.transform.translate(glm::vec3(0, -cameraMoveSpeed, 0) * state.deltaTime);
-					break;
-
+					break; 
 				default:
 					break;
 				}
