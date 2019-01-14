@@ -24,9 +24,9 @@ namespace SnowGL
 		m_tfShader->link();
 
 		std::vector<Particle> data;
-		data.push_back(Particle { glm::vec3(1, 2, 3), glm::vec3(4, 5, 6), 10 } );
-		data.push_back(Particle { glm::vec3(2, 3, 4), glm::vec3(5, 6, 7), 20 } );
-		data.push_back(Particle { glm::vec3(2, 3, 4), glm::vec3(5, 6, 7), 20 } );
+		data.push_back(Particle { glm::vec3(1, 2, 3), glm::vec3(0, 0, 0), 10 } );
+		data.push_back(Particle { glm::vec3(2, 3, 4), glm::vec3(0, 0, 0), 20 } );
+		data.push_back(Particle { glm::vec3(3, 4, 5), glm::vec3(0, 0, 0), 30 } );
 
 		m_numParticles = data.size();
 

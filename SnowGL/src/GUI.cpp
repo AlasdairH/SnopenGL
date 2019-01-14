@@ -37,7 +37,7 @@ namespace SnowGL
 			{
 				if (ImGui::BeginMenu("File"))
 				{
-					if (ImGui::MenuItem("Close", "Esc")) { m_state->isRunning = false; }
+					if (ImGui::MenuItem("Exit", "Esc")) { m_state->isRunning = false; }
 					ImGui::EndMenu();
 				}
 				if (ImGui::BeginMenu("Scene"))
@@ -73,7 +73,7 @@ namespace SnowGL
 
 		ImGui::PlotLines("", m_fpsValues.data(), m_fpsValues.size());
 		ImGui::Separator();
-		ImGui::Text("Delta Time: %fms", m_state->deltaTime);
+		ImGui::Text("Delta Time: %fms", m_state->deltaTime * 1000.0f);
 
 		ImGui::End();
 	}

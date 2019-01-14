@@ -115,7 +115,6 @@ int main()
 			front.y = sin(glm::radians(state.cameraPitch));
 			front.z = cos(glm::radians(state.cameraPitch)) * sin(glm::radians(state.cameraYaw));
 			front = glm::normalize(front);
-			//front = glm::vec3(front.x, front.y, -front.z);
 			camera.setFront(front);
 
 			CONSOLE_MESSAGE(front.x << ", " << front.y << ", " << front.z);
