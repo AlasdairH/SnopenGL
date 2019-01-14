@@ -78,6 +78,12 @@
     <ClCompile Include="src\ApplicationState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\external\stb_image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\PCH.h">
@@ -161,11 +167,17 @@
     <ClInclude Include="include\ApplicationState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\external\stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\vert.vert" />
-    <None Include="resources\shaders\frag.frag" />
     <None Include="resources\shaders\particle\particle.vert" />
     <None Include="resources\shaders\particle\particle.frag" />
+    <None Include="resources\shaders\frag.frag" />
   </ItemGroup>
 </Project>

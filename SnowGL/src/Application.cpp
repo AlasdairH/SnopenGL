@@ -14,6 +14,7 @@
 #include "Timer.h"
 #include "SnowfallSystem.h"
 #include "GUI.h"
+#include "Texture.h"
 
 #undef main
 
@@ -36,9 +37,11 @@ int main()
 	// create shader
 	ShaderProgram shader("resources/shaders/vert.vert", "resources/shaders/frag.frag");
 
+	Texture texture("test", "resources/textures/base.png");
+
 	// create mesh
 	Mesh mesh;
-	IOUtilities::loadMesh(mesh, "resources/models/barrel.obj");
+	IOUtilities::loadMesh(mesh, "resources/models/MK2.obj");
 	GPU_Mesh openGLMesh;
 	openGLMesh.setMesh(mesh);
 
@@ -170,6 +173,7 @@ int main()
 		camera.updateCameraUniform();
 		renderer.render(openGLMesh, shader, transform);
 	
+		texture.bind();
 		gui.onRender();
 
 		window.swapBuffer();

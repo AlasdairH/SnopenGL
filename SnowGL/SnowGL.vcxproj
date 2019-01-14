@@ -161,6 +161,7 @@
     <ClCompile Include="include\external\imgui.cpp" />
     <ClCompile Include="include\external\imgui_draw.cpp" />
     <ClCompile Include="include\external\imgui_impl_sdl_gl3.cpp" />
+    <ClCompile Include="include\external\stb_image.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\ApplicationState.cpp" />
     <ClCompile Include="src\Camera.cpp" />
@@ -179,6 +180,7 @@
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\ShaderProgram.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Transform.cpp" />
     <ClCompile Include="src\VertexArray.cpp" />
     <ClCompile Include="src\VertexBuffer.cpp" />
@@ -193,6 +195,7 @@
     <ClInclude Include="include\external\imgui.h" />
     <ClInclude Include="include\external\imgui_impl_sdl_gl3.h" />
     <ClInclude Include="include\external\imgui_internal.h" />
+    <ClInclude Include="include\external\stb_image.h" />
     <ClInclude Include="include\external\stb_rect_pack.h" />
     <ClInclude Include="include\external\stb_textedit.h" />
     <ClInclude Include="include\external\stb_truetype.h" />
@@ -206,6 +209,7 @@
     <ClInclude Include="include\Renderer.h" />
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\ShaderProgram.h" />
+    <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\Timer.h" />
     <ClInclude Include="include\Transform.h" />
     <ClInclude Include="include\Vertex.h" />
