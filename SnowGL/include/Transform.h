@@ -11,6 +11,8 @@
 
 namespace SnowGL
 {
+	enum TransformMode { TRANSFORM_LOCAL, TRANSFORM_WORLD };
+
 	class Transform
 	{
 	public:
@@ -66,14 +68,16 @@ namespace SnowGL
 		inline glm::vec3 getPosition() { return m_vec_position; }
 
 	protected:
-		glm::mat4 m_mat_position	= glm::mat4(1.0f);	/**< The position as a 4x4 Matrix */
-		glm::mat4 m_mat_rotation	= glm::mat4(1.0f);	/**< The rotation as a 4x4 Matrix */
-		glm::mat4 m_mat_scale		= glm::mat4(1.0f);	/**< The scale as a 4x4 Matrix */
+		glm::mat4 m_mat_position		= glm::mat4(1.0f);	/**< The position as a 4x4 Matrix */
+		glm::mat4 m_mat_rotation		= glm::mat4(1.0f);	/**< The rotation as a 4x4 Matrix */
+		glm::mat4 m_mat_scale			= glm::mat4(1.0f);	/**< The scale as a 4x4 Matrix */
+										
+		glm::vec3 m_vec_position		= glm::vec3(0);		/**< The position as a vec3 */
+		glm::vec3 m_vec_scale			= glm::vec3(1);		/**< The scale as a vec3 */
+		glm::vec3 m_vec_rotation		= glm::vec3(0);		/**< The rotation as a vec3 */
 
-		glm::vec3 m_vec_position	= glm::vec3(0);		/**< The position as a vec3 */
-		glm::vec3 m_vec_scale		= glm::vec3(1);		/**< The scale as a vec3 */
-		glm::vec3 m_vec_rotation	= glm::vec3(0);		/**< The rotation as a vec3 */
+		glm::mat4 m_modelMatrix			= glm::mat4(1);		/**< The model matrix (pos, rot, scale combined) */
 
-		glm::mat4 m_modelMatrix		= glm::mat4(1);		/**< The model matrix (pos, rot, scale combined) */
+		TransformMode m_transformMode	= TRANSFORM_WORLD;	/**< Whether to transform by local coordinates or world */
 	};
 }

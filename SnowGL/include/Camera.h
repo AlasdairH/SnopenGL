@@ -113,6 +113,12 @@ namespace SnowGL
 		*	Sets the new front orientation for the camera
 		*/
 		inline void setFront(glm::vec3 _front) { m_front = _front; }
+		/** @brief Gets the camera front 
+		*	@return The front value of the camera
+		*
+		*	Gets the front orientation for the camera
+		*/
+		inline glm::vec3 getFront() { return m_front; }
 
 		static Camera *activeCamera;	/**< The currently active camera */
 

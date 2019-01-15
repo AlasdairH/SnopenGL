@@ -130,19 +130,21 @@ int main()
 		const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
 		if (keyboardState[SDL_SCANCODE_W]) 
 		{
-			camera.transform.translate(glm::vec3(0, 0, -cameraMoveSpeed) * state.deltaTime);
+			camera.transform.translate(camera.getFront() * cameraMoveSpeed * state.deltaTime);
 		}
 		if (keyboardState[SDL_SCANCODE_S])
 		{
-			camera.transform.translate(glm::vec3(0, 0, cameraMoveSpeed) * state.deltaTime);
+			camera.transform.translate(-camera.getFront() * cameraMoveSpeed * state.deltaTime);
 		}
 		if (keyboardState[SDL_SCANCODE_A])
 		{
-			camera.transform.translate(glm::vec3(-cameraMoveSpeed, 0, 0) * state.deltaTime);
+			glm::vec3 leftVector = glm::cross(glm::vec3(0, 1, 0), camera.getFront());
+			camera.transform.translate(leftVector * cameraMoveSpeed * state.deltaTime);
 		}
 		if (keyboardState[SDL_SCANCODE_D])
 		{
-			camera.transform.translate(glm::vec3(cameraMoveSpeed, 0, 0) * state.deltaTime);
+			glm::vec3 rightVector = glm::cross(camera.getFront(), glm::vec3(0, 1, 0));
+			camera.transform.translate(rightVector * cameraMoveSpeed * state.deltaTime);
 		}
 		
 		while (SDL_PollEvent(&incomingEvent))
