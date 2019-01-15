@@ -36,7 +36,7 @@ int main()
 
 	// create shader
 	ShaderProgram shader("resources/shaders/Basic.vert", "resources/shaders/Basic.frag");
-	ShaderProgram outlineShader("resources/shaders/Basic.vert", "resources/shaders/StencilOutline.frag");
+	ShaderProgram outlineShader("resources/shaders/Basic.vert", "resources/shaders/BlockColour.frag");
 
 	Texture texture("MK2_Diffuse", "resources/textures/base.png");
 
@@ -60,7 +60,9 @@ int main()
 	Transform transform;
 	transform.translate(glm::vec3(0, 2, 0));	
 	Transform transformUpscale = transform;
-	transformUpscale.scale(glm::vec3(1.05f));
+	transformUpscale.scale(glm::vec3(1.05f));	
+	Transform transformDownscale = transform;
+	transformDownscale.scale(glm::vec3(0.95f));
 
 	Transform zeroTransform;
 
@@ -215,6 +217,7 @@ int main()
 
 			outlineShader.setUniform4f("diffuseColour", 0.0f, 0.8f, 0.0f, 1.0f);
 			renderer.render(openGLMesh, outlineShader, transformUpscale);
+			renderer.render(openGLMesh, outlineShader, transformDownscale);
 
 			renderer.setStencilBufferActive(true);
 			renderer.setDepthTest(true);

@@ -60,7 +60,7 @@ namespace SnowGL
 				{
 					if (ImGui::BeginMenu("Edit Mode"))
 					{
-						if (ImGui::MenuItem("Exit", "Esc")) { m_state->isRunning = false; }
+						if (ImGui::MenuItem("Exit")) { m_state->isRunning = false; }
 						ImGui::EndMenu();
 					}
 				}
@@ -68,7 +68,7 @@ namespace SnowGL
 				{
 					if (ImGui::BeginMenu("View Mode"))
 					{
-						if (ImGui::MenuItem("Exit", "Esc")) { m_state->isRunning = false; }
+						if (ImGui::MenuItem("Exit")) { m_state->isRunning = false; }
 						ImGui::EndMenu();
 					}
 				}

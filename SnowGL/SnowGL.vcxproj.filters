@@ -177,8 +177,8 @@
   <ItemGroup>
     <None Include="resources\shaders\particle\particle.vert" />
     <None Include="resources\shaders\particle\particle.frag" />
-    <None Include="resources\shaders\StencilOutline.frag" />
     <None Include="resources\shaders\Basic.frag" />
     <None Include="resources\shaders\Basic.vert" />
+    <None Include="resources\shaders\BlockColour.frag" />
   </ItemGroup>
 </Project>
