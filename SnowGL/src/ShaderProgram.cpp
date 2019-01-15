@@ -150,31 +150,37 @@ namespace SnowGL
 
 	void ShaderProgram::setUniform1f(const std::string & _name, float _value)
 	{
+		bind();
 		glUniform1f(getUniformLocation(_name), _value);
 	}
 
 	void ShaderProgram::setUniform3f(const std::string & _name, float _value1, float _value2, float _value3)
 	{
+		bind();
 		glUniform3f(getUniformLocation(_name), _value1, _value2, _value3);
 	}
 
 	void ShaderProgram::setUniform4f(const std::string &_name, float _value1, float _value2, float _value3, float _value4)
 	{
+		bind();
 		glUniform4f(getUniformLocation(_name), _value1, _value2, _value3, _value4);
 	}
 
 	void ShaderProgram::setUniform1i(const std::string & _name, int _value)
 	{
+		bind();
 		glUniform1i(getUniformLocation(_name), _value);
 	}
 
 	void ShaderProgram::setUniformMat4f(const std::string & _name, const glm::mat4 &_value)
 	{
+		bind();
 		glUniformMatrix4fv(getUniformLocation(_name), 1, GL_FALSE, &_value[0][0]);
 	}
 
 	void ShaderProgram::setUniformBool(const std::string & _name, const bool _value)
 	{
+		bind();
 		setUniform1i(_name, _value);
 	}
 
@@ -191,6 +197,7 @@ namespace SnowGL
 
 	void ShaderProgram::linkUniformBlock(const std::string &_blockIndex, GLuint _bindingPoint)
 	{
+		bind();
 		glUniformBlockBinding(m_programID, getUniformBlockIndex(_blockIndex), _bindingPoint);
 		CONSOLE_MESSAGE("Linked shader " << m_programID << " uniform block " << _blockIndex << " to binding point " << _bindingPoint);
 	}

@@ -31,7 +31,7 @@ int main()
 	InitManager::initOpenGL();
 
 	Camera camera(1280, 720);
-	camera.transform.translate(glm::vec3(0, 2, 0));
+	camera.transform.translate(glm::vec3(0, 2, 8));
 	camera.updateCameraUniform();
 
 	// create shader
@@ -58,10 +58,11 @@ int main()
 
 	// create transform
 	Transform transform;
-	transform.translate(glm::vec3(0, 0, -8));	
-	Transform transformUpscale;
-	transformUpscale.translate(glm::vec3(0, 0, -8));
+	transform.translate(glm::vec3(0, 2, 0));	
+	Transform transformUpscale = transform;
 	transformUpscale.scale(glm::vec3(1.05f));
+
+	Transform zeroTransform;
 
 	Renderer renderer;
 	GUI gui(window.getWindowPtr());
@@ -76,6 +77,9 @@ int main()
 	SceneMode mode = MODE_VIEW;
 
 	float cameraMoveSpeed = 5.0f;
+
+	SDL_ShowCursor(SDL_DISABLE);
+	
 
 	// fps counter variables
 	int frames = 0;
@@ -120,8 +124,8 @@ int main()
 		{
 			glm::vec2 fixedOffset = state.mouseOffset * 0.05f;
 
-			state.cameraYaw -= fixedOffset.x;
-			state.cameraPitch += fixedOffset.y;
+			state.cameraYaw += fixedOffset.x;
+			state.cameraPitch -= fixedOffset.y;
 
 			if (state.cameraPitch > 89.0f)
 				state.cameraPitch = 89.0f;
@@ -200,21 +204,22 @@ int main()
 
 		if (state.getSceneMode() == MODE_EDIT)
 		{
-			outlineShader.setUniform4f("diffuseColour", 1.0f, 0.0f, 0.0f, 0.0f);
-			renderer.render(gpu_DebugPlane, outlineShader, transform);
+			outlineShader.setUniform4f("diffuseColour", 0.5f, 0.5f, 0.5f, 1.0f);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			renderer.render(gpu_DebugPlane, outlineShader, zeroTransform);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+			// second pass (scaled)
+			renderer.setStencilBufferActive(false);
+			renderer.setDepthTest(false);
+
+			outlineShader.setUniform4f("diffuseColour", 0.0f, 0.8f, 0.0f, 1.0f);
+			renderer.render(openGLMesh, outlineShader, transformUpscale);
+
+			renderer.setStencilBufferActive(true);
+			renderer.setDepthTest(true);
 		}
 
-		/*
-		// second pass (scaled)
-		renderer.setStencilBufferActive(false);
-		renderer.setDepthTest(false);
-
-		renderer.render(openGLMesh, outlineShader, transformUpscale);
-
-		renderer.setStencilBufferActive(true);
-		renderer.setDepthTest(true);
-		*/
-	
 		gui.onRender();
 
 		window.swapBuffer();

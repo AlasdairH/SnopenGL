@@ -56,6 +56,23 @@ namespace SnowGL
 					if (ImGui::MenuItem("Options")) { /* Do stuff */ }
 					ImGui::EndMenu();
 				}
+				if (m_state->getSceneMode() == MODE_EDIT)
+				{
+					if (ImGui::BeginMenu("Edit Mode"))
+					{
+						if (ImGui::MenuItem("Exit", "Esc")) { m_state->isRunning = false; }
+						ImGui::EndMenu();
+					}
+				}
+				else
+				{
+					if (ImGui::BeginMenu("View Mode"))
+					{
+						if (ImGui::MenuItem("Exit", "Esc")) { m_state->isRunning = false; }
+						ImGui::EndMenu();
+					}
+				}
+
 				ImGui::EndMainMenuBar();
 			}
 		}
