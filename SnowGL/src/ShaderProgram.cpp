@@ -13,6 +13,7 @@ namespace SnowGL
 	ShaderProgram::ShaderProgram(const std::string & _vert, const std::string & _frag)
 	{
 		m_programID = glCreateProgram();
+		CONSOLE_MESSAGE("Created Shader Program with ID " << m_programID);
 
 		Shader vert(SHADER_VERTEX, _vert);
 		Shader frag(SHADER_FRAGMENT, _frag);
@@ -20,7 +21,6 @@ namespace SnowGL
 		attachShader(frag);
 		link();
 
-		CONSOLE_MESSAGE("Created Shader Program with ID " << m_programID);
 	}
 
 	void ShaderProgram::attachShader(Shader &_shader)
@@ -52,7 +52,7 @@ namespace SnowGL
 			CONSOLE_MESSAGE("Unable to find u_camera_data uniform block, assuming not needed");
 		}
 
-		CONSOLE_MESSAGE("Shader " << m_programID << " sucessfully linked and verified");
+		CONSOLE_MESSAGE("Shader Program " << m_programID << " sucessfully linked and verified");
 
 		return true;
 	}

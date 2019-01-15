@@ -219,10 +219,11 @@
     <ClInclude Include="include\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\shaders\frag.frag" />
+    <None Include="resources\shaders\Basic.frag" />
     <None Include="resources\shaders\particle\particle.vert" />
     <None Include="resources\shaders\particle\particle.frag" />
-    <None Include="resources\shaders\vert.vert" />
+    <None Include="resources\shaders\StencilOutline.frag" />
+    <None Include="resources\shaders\Basic.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

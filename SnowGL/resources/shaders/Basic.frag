@@ -22,11 +22,11 @@ in vec3 frag_normal;
 
 void main()
 {
-	vec4 surfaceColor;
-	surfaceColor = u_diffuse;
+	//vec4 surfaceColor;
+	//surfaceColor = u_diffuse;
 
-    vec3 fragPosition = vec3(u_m * vec4(frag_vert, 1));
+    //vec3 fragPosition = vec3(u_m * vec4(frag_vert, 1));
 
     color = texture(u_diffuseTexture, frag_texCoord);
-    color =	vec4(color.x, color.y, color.z, 1.0f);
+    //color =	vec4(color.x, color.y, color.z, 1.0f);
 } 

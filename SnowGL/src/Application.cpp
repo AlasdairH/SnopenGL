@@ -35,22 +35,33 @@ int main()
 	camera.updateCameraUniform();
 
 	// create shader
-	ShaderProgram shader("resources/shaders/vert.vert", "resources/shaders/frag.frag");
+	ShaderProgram shader("resources/shaders/Basic.vert", "resources/shaders/Basic.frag");
+	ShaderProgram outlineShader("resources/shaders/Basic.vert", "resources/shaders/StencilOutline.frag");
 
-	Texture texture("test", "resources/textures/base.png");
+	Texture texture("MK2_Diffuse", "resources/textures/base.png");
 
 	shader.setUniform1i("u_diffuseTexture", 0);
 	texture.bind(0);
 
 	// create mesh
 	Mesh mesh;
+	Mesh debugPlane;
+
 	IOUtilities::loadMesh(mesh, "resources/models/MK2.obj");
+	IOUtilities::loadMesh(debugPlane, "resources/models/Debug_Plane.obj");
+
 	GPU_Mesh openGLMesh;
+	GPU_Mesh gpu_DebugPlane;
+
 	openGLMesh.setMesh(mesh);
+	gpu_DebugPlane.setMesh(debugPlane);
 
 	// create transform
 	Transform transform;
-	transform.translate(glm::vec3(0, 0, -8));
+	transform.translate(glm::vec3(0, 0, -8));	
+	Transform transformUpscale;
+	transformUpscale.translate(glm::vec3(0, 0, -8));
+	transformUpscale.scale(glm::vec3(1.05f));
 
 	Renderer renderer;
 	GUI gui(window.getWindowPtr());
@@ -86,7 +97,8 @@ int main()
 			frames = 0;
 		}
 		// calculate deltaTime
-		if (timepassed > lastTime) {
+		if (timepassed > lastTime) 
+		{
 			state.deltaTime = ((float)(timepassed - lastTime));
 			lastTime = timepassed;
 		}
@@ -122,9 +134,6 @@ int main()
 			front.z = cos(glm::radians(state.cameraPitch)) * sin(glm::radians(state.cameraYaw));
 			front = glm::normalize(front);
 			camera.setFront(front);
-
-			CONSOLE_MESSAGE(front.x << ", " << front.y << ", " << front.z);
-			CONSOLE_MESSAGE(state.cameraPitch << ", " << state.cameraYaw);
 		}
 
 		const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
@@ -145,6 +154,14 @@ int main()
 		{
 			glm::vec3 rightVector = glm::cross(camera.getFront(), glm::vec3(0, 1, 0));
 			camera.transform.translate(rightVector * cameraMoveSpeed * state.deltaTime);
+		}		
+		if (keyboardState[SDL_SCANCODE_E])
+		{
+			camera.transform.translate(glm::vec3(0, 1, 0) * cameraMoveSpeed * state.deltaTime);
+		}		
+		if (keyboardState[SDL_SCANCODE_Q])
+		{
+			camera.transform.translate(glm::vec3(0, -1, 0) * cameraMoveSpeed * state.deltaTime);
 		}
 		
 		while (SDL_PollEvent(&incomingEvent))
@@ -171,12 +188,32 @@ int main()
 		}
 
 		gui.onUpdate();
-
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+		glStencilMask(1);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	
-		//transform.rotate(1, glm::vec3(0, 1, 0));
 		camera.updateCameraUniform();
+
+		// first pass
+		renderer.setStencilBufferActive(true);
 		renderer.render(openGLMesh, shader, transform);
+
+		if (state.getSceneMode() == MODE_EDIT)
+		{
+			outlineShader.setUniform4f("diffuseColour", 1.0f, 0.0f, 0.0f, 0.0f);
+			renderer.render(gpu_DebugPlane, outlineShader, transform);
+		}
+
+		/*
+		// second pass (scaled)
+		renderer.setStencilBufferActive(false);
+		renderer.setDepthTest(false);
+
+		renderer.render(openGLMesh, outlineShader, transformUpscale);
+
+		renderer.setStencilBufferActive(true);
+		renderer.setDepthTest(true);
+		*/
 	
 		gui.onRender();
 

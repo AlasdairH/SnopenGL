@@ -28,7 +28,7 @@ namespace SnowGL
 		*/
 		Renderer();
 
-		/** @brief Loads a text file into the Shader
+		/** @brief Renders an object to the screen
 		*	@param _mesh The mesh to render
 		*	@param _shaderProgram The shader to render the mesh with
 		*	@param _transform The transform to apply to the mesh
@@ -38,7 +38,22 @@ namespace SnowGL
 		*/
 		void render(const GPU_Mesh &_mesh, ShaderProgram &_shaderProgram, const Transform &_transform);
 
-	protected:
+		/** @brief Sets whether the stencil buffer is active
+		*	@param _active Flag stating whether to write to the stencil buffer or not
+		*
+		*	Sets whether the stencil buffer should be written to or not
+		*/
+		void setStencilBufferActive(bool _active);
 
+		/** @brief Sets whether depth should be tested when rendering
+		*	@param _active Flag stating whether depth should be tested
+		*
+		*	Sets whether depth should be tested when rendering with OpenGL
+		*/
+		void setDepthTest(bool _active);
+
+	protected:
+		GLenum m_sencilFunc = GL_NOTEQUAL;
+		int m_stencilBufferInt = 0x00;
 	};
 }
