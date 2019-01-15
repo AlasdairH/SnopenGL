@@ -22,6 +22,8 @@ using namespace SnowGL;
 
 int main()
 {
+	srand(1);
+
 	ApplicationState &state = ApplicationState::getInstance();
 
 	InitManager::initSDL();
@@ -31,7 +33,7 @@ int main()
 	InitManager::initOpenGL();
 
 	Camera camera(1280, 720);
-	camera.transform.translate(glm::vec3(0, 2, 8));
+	camera.transform.translate(glm::vec3(0, 2, 12));
 	camera.updateCameraUniform();
 
 	// create shader
@@ -47,7 +49,7 @@ int main()
 	Mesh mesh;
 	Mesh debugPlane;
 
-	IOUtilities::loadMesh(mesh, "resources/models/MK2.obj");
+	IOUtilities::loadMesh(mesh, "resources/models/Debug_Plane.obj");
 	IOUtilities::loadMesh(debugPlane, "resources/models/Debug_Plane.obj");
 
 	GPU_Mesh openGLMesh;
@@ -58,7 +60,7 @@ int main()
 
 	// create transform
 	Transform transform;
-	transform.translate(glm::vec3(0, 2, 0));	
+	transform.translate(glm::vec3(0, 0, 0));	
 	Transform transformUpscale = transform;
 	transformUpscale.scale(glm::vec3(1.05f));	
 	Transform transformDownscale = transform;
@@ -71,7 +73,6 @@ int main()
 
 	SnowfallSystem snow;
 	snow.initialise();
-	snow.updateParticles(0);
 
 	glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
 
@@ -194,9 +195,12 @@ int main()
 		}
 
 		gui.onUpdate();
+
 		
 		glStencilMask(1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+		snow.updateParticles(state.deltaTime);
 	
 		camera.updateCameraUniform();
 

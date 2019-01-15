@@ -7,9 +7,11 @@
 
 // program
 #include "PCH.h"
+#include "Transform.h"
 #include "ShaderProgram.h"
 #include "VertexArray.h"
 #include "VertexBuffer.h"
+#include "Utils.h"
 
 #define MAX_PARTICLES 10000
 
@@ -22,7 +24,7 @@ namespace SnowGL
 	*/
 	struct Particle
 	{
-		glm::vec3 position;		/**< The particle position */
+		glm::vec4 position;		/**< The particle position */
 		glm::vec3 velocity;		/**< The particle velocity */
 		float lifetime = -1;	/**< The particles maximum lifetime */
 	};
@@ -58,7 +60,7 @@ namespace SnowGL
 		*
 		*	Performs the transform feedback operation for simulating particles
 		*/
-		void updateParticles(int _deltaTime);
+		void updateParticles(float _deltaTime);
 		/** @brief Renderer Ctor
 		*	@param _deltaTime The update deltaTime
 		// TODO: Particle Renderer
@@ -80,5 +82,9 @@ namespace SnowGL
 		std::shared_ptr<ShaderProgram>		m_tfShader;				/**< The transform Feedback shader */
 
 		int									m_numParticles;			/**< THe number of particles */
+
+		int									m_frameCount = 0;
+
+		Transform							m_transform;
 	};
 }

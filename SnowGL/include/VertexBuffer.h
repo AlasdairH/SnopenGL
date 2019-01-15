@@ -91,6 +91,13 @@ namespace SnowGL
 		*	Binds the VBO.
 		*/
 		void bind() const;
+		/** @brief Binds the VBO.
+		*	@param _bindPoint The custom bind point to bind the VBO to
+		*
+		*	Binds the VBO to a specified point
+		*/
+		void bind(VertexBufferType _bindPoint) const;
+
 		/** @brief Unbinds the VBO.
 		*
 		* Unbinds the VBO.

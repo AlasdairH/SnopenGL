@@ -16,6 +16,9 @@ namespace SnowGL
 		glEnable(GL_STENCIL_TEST);
 		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+		glStencilFunc(m_sencilFunc, 1, 0xFF);
+		glStencilMask(m_stencilBufferInt);
 	}
 
 	void Renderer::render(const GPU_Mesh &_mesh, ShaderProgram &_shaderProgram, const Transform &_transform)

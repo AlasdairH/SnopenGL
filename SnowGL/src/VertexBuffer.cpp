@@ -66,6 +66,10 @@ namespace SnowGL
 	{
 		glBindBuffer(m_vertexBufferType, m_vertexBufferID);
 	}
+	void VertexBuffer::bind(VertexBufferType _bindPoint) const
+	{
+		glBindBuffer(_bindPoint, m_vertexBufferID);
+	}
 
 	void VertexBuffer::unBind() const
 	{

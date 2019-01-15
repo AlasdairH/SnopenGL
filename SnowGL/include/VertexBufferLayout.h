@@ -97,6 +97,18 @@ namespace SnowGL
 			m_elements.push_back({ GL_FLOAT, 3 * _count, GL_FALSE });
 			m_stride += sizeof(glm::vec3) * _count;
 		}
+		/** @brief Pushes a new vec4 element to the layout
+		*	@param _count The number of values in the element. Eg, 3 for a vec3 (3 floats), 2 for a vec2 (2 floats).
+		*
+		*	Pushes a new vec3 element into the layout with the specified count (how many items of the specified type make up the element).
+		*	A vec4 is simply 4 floats so that is what is added.
+		*/
+		template<>
+		void push<glm::vec4>(unsigned int _count)
+		{
+			m_elements.push_back({ GL_FLOAT, 4 * _count, GL_FALSE });
+			m_stride += sizeof(glm::vec4) * _count;
+		}
 		/** @brief Pushes a new GLuint element to the layout
 		*	@param _count The number of values in the element. Eg, 3 for a vec3 (3 floats), 2 for a vec2 (2 floats).
 		*
