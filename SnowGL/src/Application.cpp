@@ -39,6 +39,9 @@ int main()
 
 	Texture texture("test", "resources/textures/base.png");
 
+	shader.setUniform1i("u_diffuseTexture", 0);
+	texture.bind(0);
+
 	// create mesh
 	Mesh mesh;
 	IOUtilities::loadMesh(mesh, "resources/models/MK2.obj");
@@ -173,7 +176,6 @@ int main()
 		camera.updateCameraUniform();
 		renderer.render(openGLMesh, shader, transform);
 	
-		texture.bind();
 		gui.onRender();
 
 		window.swapBuffer();

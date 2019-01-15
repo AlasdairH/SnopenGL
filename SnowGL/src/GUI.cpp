@@ -61,6 +61,7 @@ namespace SnowGL
 		}
 
 		bool *open = NULL;
+		// Performance
 		ImGui::SetNextWindowPos(ImVec2(0, 50));
 		ImGui::Begin("Performance", open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings);
 		
@@ -74,6 +75,14 @@ namespace SnowGL
 		ImGui::PlotLines("", m_fpsValues.data(), m_fpsValues.size());
 		ImGui::Separator();
 		ImGui::Text("Delta Time: %fms", m_state->deltaTime * 1000.0f);
+
+		ImGui::End();
+
+		// OpenGL
+		ImGui::SetNextWindowPos(ImVec2(0, 200));
+		ImGui::Begin("OpenGL", open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings);
+
+		ImGui::Text("Bound Texture: %s", m_state->curBoundTexture.c_str());
 
 		ImGui::End();
 	}

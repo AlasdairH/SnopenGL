@@ -1,6 +1,6 @@
 #version 430 core
 
-uniform sampler2D u_texture;
+uniform sampler2D u_diffuseTexture;
 
 uniform vec4 u_diffuse = { 1.0f, 0.78f, 0.91f, 1.0f };
 uniform bool u_useTexture = false;
@@ -27,6 +27,6 @@ void main()
 
     vec3 fragPosition = vec3(u_m * vec4(frag_vert, 1));
 
-    color = texture(u_texture, frag_texCoord);
+    color = texture(u_diffuseTexture, frag_texCoord);
     color =	vec4(color.x, color.y, color.z, 1.0f);
 } 

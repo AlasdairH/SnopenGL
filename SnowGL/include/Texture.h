@@ -9,6 +9,7 @@
 
 // program
 #include "PCH.h"
+#include "ApplicationState.h"
 
 namespace SnowGL
 {

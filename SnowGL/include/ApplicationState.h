@@ -48,6 +48,9 @@ namespace SnowGL
 		float cameraPitch;
 		float cameraYaw = -90.0f;
 
+		// gl
+		std::string curBoundTexture = "None";
+
 		inline SceneMode getSceneMode() { return m_sceneMode; }
 		
 		void switchSceneMode();
