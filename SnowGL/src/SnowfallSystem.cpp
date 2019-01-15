@@ -39,15 +39,16 @@ namespace SnowGL
 		m_tfVAO = std::make_shared<VertexArray>();
 
 		// Create transform feedback buffer 0 and 1
-		m_tfBuffer[0] = std::make_shared<VertexBuffer>(BUFFER_ARRAY);
-		m_tfBuffer[1] = std::make_shared<VertexBuffer>(BUFFER_TRANSFORM_FEEDBACK);
+		m_tfVBO[0] = std::make_shared<VertexBuffer>(BUFFER_ARRAY);
+		m_tfVBO[1] = std::make_shared<VertexBuffer>(BUFFER_TRANSFORM_FEEDBACK);
 
 		// load initial data to buffer 1
-		m_tfBuffer[0]->loadData(data.data(), sizeof(Particle) * data.size());
-		m_tfBuffer[1]->loadData(nullptr, sizeof(Particle) * data.size());
+		m_tfVBO[0]->loadData(data.data(), sizeof(Particle) * data.size());
+		m_tfVBO[1]->loadData(nullptr, sizeof(Particle) * data.size());
 
 		// set attrib array in VAO
-		m_tfVAO->addBuffer(*m_tfBuffer[0], layout);
+		m_tfVAO->addBuffer(*m_tfVBO[0], layout);
+		//m_tfVAO->addBuffer(*m_tfBuffer[1], layout);
 
 		// set current vertex buffer and current transform feedback buffer to be alternate of eachother (0, 1);
 		//m_currVB = m_currTFB;
@@ -77,7 +78,7 @@ namespace SnowGL
 		// Perform feedback transform
 		glEnable(GL_RASTERIZER_DISCARD);
 
-		m_tfBuffer[1]->bindBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0);
+		m_tfVBO[1]->bindBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0);
 
 		glBeginTransformFeedback(GL_POINTS);
 		glDrawArrays(GL_POINTS, 0, m_numParticles);

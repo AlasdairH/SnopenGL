@@ -22,7 +22,11 @@ void main()
 {
     out_velocity = in_velocity + vec3(0, -0.1f, 0);
     out_position = in_position + (out_velocity * u_timeStep);
-    out_lifetime = in_lifetime - 1;
+    out_lifetime = in_lifetime - 1;    
+	
+	out_velocity = in_velocity;
+    out_position = in_position;
+    out_lifetime = in_lifetime;
 
 	mat4 MVP = projectionMatrix * viewMatrix * u_modelMatrix;
     gl_Position = MVP * vec4(in_position.x, in_position.y, in_position.z, 1.0);

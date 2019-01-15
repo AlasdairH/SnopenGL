@@ -74,8 +74,8 @@ namespace SnowGL
 		bool								m_isFirstRender;		/**< Flag for if this is the first render */			
 		unsigned int						m_currVB;				/**< The current Vertex Buffer */
 		unsigned int						m_currTFB;				/**< The current Transform Feedback Buffer */
-		std::shared_ptr<VertexArray>		m_tfVAO;				// TODO: Do I need this?
-		std::shared_ptr<VertexBuffer>		m_tfBuffer[2];			/**< The Vertex Buffers for particle data */
+		std::shared_ptr<VertexArray>		m_tfVAO[2];				/**< The Vertex Arrays for particle data */
+		std::shared_ptr<VertexBuffer>		m_tfVBO[2];				/**< The Vertex Buffers for particle data */
 
 		std::shared_ptr<ShaderProgram>		m_tfShader;				/**< The transform Feedback shader */
 
