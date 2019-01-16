@@ -25,10 +25,11 @@ void main()
     out_position = (in_position + (vec4(out_velocity, 0.0f) * u_timeStep)) * in_position.w;
     out_lifetime = in_lifetime - (u_timeStep * 1000.0f);   
 	
-    if(out_position.y < 0.0f)
+    if(out_position.y < 0.0f || out_lifetime < 0.0f)
 	{
 		out_position = vec4(u_randomStartingPos, out_position.w);
         out_velocity = vec3(0, 0, 0);
+		out_lifetime = 5000.0f;
 	}
 
 	mat4 MVP = projectionMatrix * viewMatrix * u_modelMatrix;

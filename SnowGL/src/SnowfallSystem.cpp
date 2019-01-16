@@ -56,7 +56,7 @@ namespace SnowGL
 				{
 					buffer[j].position = glm::vec4(Utils::randFloat(-5.0f, 5.0f), 5, Utils::randFloat(-5.0f, 5.0f), 1);
 					buffer[j].velocity = glm::vec3(0, 0, 0);
-					buffer[j].lifetime = 0;
+					buffer[j].lifetime = Utils::randFloat(0.0f, 5000.0f);
 				}
 
 				glUnmapBuffer(GL_TRANSFORM_FEEDBACK_BUFFER);
