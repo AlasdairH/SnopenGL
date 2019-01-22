@@ -113,13 +113,20 @@ namespace SnowGL
 
 		/** @brief Sets a vec3 uniform
 		*	@param _name The name of the uniform to modify
-		*	@param _value1 The x value of the Vec4
-		*	@param _value2 The y value of the Vec4
-		*	@param _value3 The z value of the Vec4
+		*	@param _value1 The x value of the Vec3
+		*	@param _value2 The y value of the Vec3
+		*	@param _value3 The z value of the Vec3
 		*
 		*	Uses the getUniformLocation method to get the uniform location and set it to the given values.
 		*/
 		void setUniform3f(const std::string &_name, float _value1, float _value2, float _value3);
+		/** @brief Sets a vec3 uniform
+		*	@param _name The name of the uniform to modify
+		*	@param _vector The vec3
+		*
+		*	Uses the getUniformLocation method to get the uniform location and set it to the given values.
+		*/
+		void setUniform3f(const std::string &_name, glm::vec3 _vector);
 
 		/** @brief Sets a vec4 uniform
 		*	@param _name The name of the uniform to modify

@@ -160,6 +160,11 @@ namespace SnowGL
 		glUniform3f(getUniformLocation(_name), _value1, _value2, _value3);
 	}
 
+	void ShaderProgram::setUniform3f(const std::string &_name, glm::vec3 _vector)
+	{
+		setUniform3f(_name, _vector.x, _vector.y, _vector.z);
+	}
+
 	void ShaderProgram::setUniform4f(const std::string &_name, float _value1, float _value2, float _value3, float _value4)
 	{
 		bind();

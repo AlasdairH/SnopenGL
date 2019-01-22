@@ -1,12 +1,10 @@
 #version 430
 
-in vec4 particleColor;
+in vec4 particleColour;
 
-out vec4 out_Color;
+out vec4 out_Colour;
 
 void main(void)
 {
-
-    out_Color = vec4(particleColor.x, particleColor.y, particleColor.z, particleColor.w);
-
+    out_Colour = particleColour;
 }
