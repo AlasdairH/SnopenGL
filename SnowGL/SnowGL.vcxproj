@@ -204,6 +204,7 @@
     <ClInclude Include="include\InitManager.h" />
     <ClInclude Include="include\IOUtilities.h" />
     <ClInclude Include="include\Mesh.h" />
+    <ClInclude Include="include\ParticleSettings.h" />
     <ClInclude Include="include\SnowfallSystem.h" />
     <ClInclude Include="include\PCH.h" />
     <ClInclude Include="include\Renderer.h" />

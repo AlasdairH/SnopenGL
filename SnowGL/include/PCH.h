@@ -9,6 +9,7 @@
 #include <iostream>
 #include <iterator>
 #include <map>
+#include <math.h>
 #include <memory>
 #include <sstream>
 #include <string>

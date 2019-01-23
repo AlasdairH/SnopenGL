@@ -7,6 +7,7 @@
 
 // program
 #include "PCH.h"
+#include "ParticleSettings.h"
 #include "Transform.h"
 #include "ShaderProgram.h"
 #include "VertexArray.h"
@@ -24,13 +25,14 @@ namespace SnowGL
 	*/
 	struct Particle
 	{
-		glm::vec4 position;		/**< The particle position */
-		glm::vec3 velocity;		/**< The particle velocity */
-		float delay = -1;	/**< The particles maximum delay */
+		glm::vec4	position;			/**< The particle position */
+		glm::vec3	velocity;			/**< The particle velocity */
+		float		delay		= -1;	/**< The particles delay from the start of the simulation to when it is created */
+		float		lifetime	= -1;	/**< The particles lifetime */
 	};
 
 	/*! @class SnowfallSystem
-	*	@brief The managment system for simulating snowfall
+	*	@brief The management system for simulating snowfall
 	*
 	*	The snowfall system simulates particles through Transform Feedback with OpenGL.
 	// TODO: Expand
@@ -42,7 +44,7 @@ namespace SnowGL
 		*
 		*	Nothing
 		*/
-		SnowfallSystem();
+		SnowfallSystem(const ParticleSettings &_settings);
 		/** @brief Snowfall System Dtor
 		*
 		*	Nothing
@@ -72,6 +74,8 @@ namespace SnowGL
 	protected:
 		// TODO: This
 		void renderParticles(const glm::mat4 & _VP, const glm::vec3 & _cameraPos);
+
+		ParticleSettings					m_settings;
 
 		bool								m_isFirstRender;		/**< Flag for if this is the first render */			
 		unsigned int						m_currVAO;				/**< The current Transform Feedback Buffer */

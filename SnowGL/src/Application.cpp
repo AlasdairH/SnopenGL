@@ -71,7 +71,12 @@ int main()
 	Renderer renderer;
 	GUI gui(window.getWindowPtr());
 
-	SnowfallSystem snow;
+	ParticleSettings settings;
+	settings.lifetimeMin = 7.0f;
+	settings.lifetimeMax = 7.0f;
+	settings.particlesPerSecond = 100;
+
+	SnowfallSystem snow(settings);
 	snow.initialise();
 
 	glClearColor(0.2f, 0.2f, 0.2f, 0.0f);

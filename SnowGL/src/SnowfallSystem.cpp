@@ -3,15 +3,16 @@
 
 namespace SnowGL
 {
-	SnowfallSystem::SnowfallSystem()
+	SnowfallSystem::SnowfallSystem(const ParticleSettings &_settings)
 	{
-
+		m_settings = _settings;
 	}
 
 	SnowfallSystem::~SnowfallSystem()
 	{
 
 	}
+
 	bool SnowfallSystem::initialise()
 	{
 		CONSOLE_MESSAGE("Initialising Snowfall Particle System")
@@ -26,16 +27,17 @@ namespace SnowGL
 		Shader tfFrag(SHADER_FRAGMENT);
 		tfFrag.load("resources/shaders/particle/particle.frag");
 		m_tfShader->attachShader(tfFrag);
-		std::vector<std::string> tfVaryings{ "out_position", "out_velocity", "out_delay" };
+		std::vector<std::string> tfVaryings{ "out_position", "out_velocity", "out_startTime", "out_lifetime" };
 		m_tfShader->setTransformFeedbackVarying(tfVaryings);
 		m_tfShader->link();
 
-		m_numParticles = 100000;
+		m_numParticles = m_settings.getMaxParticles();
 
 		VertexBufferLayout layout;
 		layout.push<glm::vec4>(1);	// position (w = is active)
 		layout.push<glm::vec3>(1);	// velocity
 		layout.push<float>(1);		// delay
+		layout.push<float>(1);		// lifetime
 
 		for (int i = 0; i < 2; ++i)
 		{
@@ -52,13 +54,16 @@ namespace SnowGL
 					glm::vec4 position;		/**< The particle position */
 					glm::vec3 velocity;		/**< The particle velocity */
 					float delay;			/**< The particles maximum delay */
+					float lifetime;			/**< The particles lifetime */
 				} *buffer = (buffer_t *) glMapBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, GL_WRITE_ONLY);
 
 				for (int j = 0; j < m_numParticles; ++j)
 				{
 					buffer[j].position = glm::vec4(Utils::randFloat(-spread, spread), 10, Utils::randFloat(-spread, spread), 1);
 					buffer[j].velocity = glm::vec3(0, 0, 0);
-					buffer[j].delay = Utils::randFloat(0.0f, 5.0f);
+					buffer[j].delay = (j / (float)m_numParticles) * m_settings.lifetimeMax;
+					buffer[j].lifetime = Utils::randFloat(m_settings.lifetimeMin, m_settings.lifetimeMax);
+					//buffer[j].lifetime = 1.0f;
 				}
 
 				glUnmapBuffer(GL_TRANSFORM_FEEDBACK_BUFFER);
@@ -75,6 +80,8 @@ namespace SnowGL
 		// set current vertex buffer and current transform feedback buffer to be alternate of eachother (0, 1);
 		m_currVAO = m_currVBO;
 		m_currVBO = (m_currVBO + 1) & 0x1;
+
+		CONSOLE_MESSAGE("Created " << m_numParticles << " particles on the GPU");
 
 		return true;
 	}
