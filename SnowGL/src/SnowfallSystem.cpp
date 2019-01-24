@@ -75,7 +75,7 @@ namespace SnowGL
 		}
 
 		// particle system setup
-		m_tfShader->setUniform3f("u_baseColour", glm::vec3(1.0f));
+		m_tfShader->setUniform3f("u_baseColour", glm::vec3(0.79f, 0.90f, 0.88f));
 
 		// set current vertex buffer and current transform feedback buffer to be alternate of eachother (0, 1);
 		m_currVAO = m_currVBO;
@@ -104,7 +104,7 @@ namespace SnowGL
 	void SnowfallSystem::updateParticles(float _deltaTime)
 	{
 		m_simTime += _deltaTime;
-		CONSOLE_MESSAGE(m_simTime);
+		//CONSOLE_MESSAGE(m_simTime);
 		m_tfShader->setUniform1f("u_deltaTime", _deltaTime);
 		m_tfShader->setUniform1f("u_simTime", m_simTime);
 

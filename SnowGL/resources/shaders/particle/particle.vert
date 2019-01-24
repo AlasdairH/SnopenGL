@@ -44,25 +44,34 @@ vec4 when_gt(vec4 x, vec4 y)
 
 void main()
 {
-	particleColour = vec4(u_baseColour, 1.0f) * when_gt(vec4(u_simTime), vec4(in_startTime));
+	particleColour = vec4(u_baseColour, 0.0f);
 
+	out_position = in_position;
+	out_velocity = in_velocity;
 	out_startTime = in_startTime;
     out_lifetime = in_lifetime;
 
-    out_velocity = in_velocity + (vec3(0, -0.01f, 0) * when_gt(vec4(u_simTime), vec4(out_startTime)).xyz);
-    out_position = (in_position + (vec4(out_velocity, 0.0f) * u_deltaTime)) * in_position.w;
-
-
-	// if the particle has passed its lifetime
-	if(out_lifetime + out_startTime < u_simTime)
+	if(u_simTime >= in_startTime)
 	{
-		out_position = vec4(out_position.x, 10, out_position.z, 1.0f);
-		out_velocity = vec3(0, 0, 0);
-		out_startTime += u_simTime;
+		float age = u_simTime - in_startTime;
+		if(age > in_lifetime)
+		{
+			// particle is past it's lifetime
+			out_position = vec4(in_position.x, 10, in_position.z, 1.0f);
+			out_velocity = vec3(0.0f);
+			out_startTime = u_simTime;
+			particleColour = vec4(u_baseColour, 0.0f);
+		}
+		else
+		{
+			// particle is alive and well so update it
+			out_velocity += vec3(0.0f, -0.03f, 0.0f);
+			out_position = vec4(in_position.xyz + (out_velocity * u_deltaTime), 1.0f);
+
+			particleColour = vec4(u_baseColour, 1.0f);
+		}
 	}
 
-	particleColour = vec4(1.0f);
-
 	mat4 MVP = projectionMatrix * viewMatrix * u_modelMatrix;
-    gl_Position = MVP * vec4(in_position.x, in_position.y, in_position.z, 1.0);
+    gl_Position = MVP * vec4(out_position.x, out_position.y, out_position.z, 1.0);
 }

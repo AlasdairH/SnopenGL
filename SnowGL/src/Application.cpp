@@ -72,9 +72,9 @@ int main()
 	GUI gui(window.getWindowPtr());
 
 	ParticleSettings settings;
-	settings.lifetimeMin = 7.0f;
-	settings.lifetimeMax = 7.0f;
-	settings.particlesPerSecond = 100;
+	settings.lifetimeMin = 3.0f;
+	settings.lifetimeMax = 3.0f;
+	settings.particlesPerSecond = 100000;
 
 	SnowfallSystem snow(settings);
 	snow.initialise();
@@ -84,7 +84,7 @@ int main()
 	bool quit = false;
 	SceneMode mode = MODE_VIEW;
 
-	float cameraMoveSpeed = 5.0f;
+	float cameraMoveSpeed;
 
 	SDL_ShowCursor(SDL_DISABLE);
 	
@@ -149,6 +149,15 @@ int main()
 		}
 
 		const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
+		if (keyboardState[SDL_SCANCODE_LSHIFT])
+		{
+			cameraMoveSpeed = 10;
+		}
+		else
+		{
+			cameraMoveSpeed = 5;
+
+		}
 		if (keyboardState[SDL_SCANCODE_W]) 
 		{
 			camera.transform.translate(camera.getFront() * cameraMoveSpeed * state.deltaTime);
