@@ -41,21 +41,19 @@ namespace SnowGL
 
 		for (int i = 0; i < 2; ++i)
 		{
+			// create 2 VAOs and VBOs for ping ponging
 			m_tfVAO[i] = std::make_shared<VertexArray>();
-			m_tfVBO[i] = std::make_shared<VertexBuffer>(BUFFER_TRANSFORM_FEEDBACK);
+			m_tfVBO[i] = std::make_shared<VertexBuffer>(BUFFER_ARRAY);
 
 			m_tfVBO[i]->bind();
+			// load correctly sized but empty data to the VBO
 			m_tfVBO[i]->loadData(nullptr, sizeof(Particle) * m_numParticles);
 
+			// if the buffer is the first to be created, send it the actual particle data
 			if (i == 0)
 			{
-				struct buffer_t
-				{
-					glm::vec4 position;		/**< The particle position */
-					glm::vec3 velocity;		/**< The particle velocity */
-					float delay;			/**< The particles maximum delay */
-					float lifetime;			/**< The particles lifetime */
-				} *buffer = (buffer_t *) glMapBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, GL_WRITE_ONLY);
+ 
+				Particle *buffer = (Particle *)glMapBuffer(BUFFER_ARRAY, GL_WRITE_ONLY);
 
 				for (int j = 0; j < m_numParticles; ++j)
 				{
@@ -63,10 +61,10 @@ namespace SnowGL
 					buffer[j].velocity = glm::vec3(0, 0, 0);
 					buffer[j].delay = (j / (float)m_numParticles) * m_settings.lifetimeMax;
 					buffer[j].lifetime = Utils::randFloat(m_settings.lifetimeMin, m_settings.lifetimeMax);
-					//buffer[j].lifetime = 1.0f;
 				}
 
-				glUnmapBuffer(GL_TRANSFORM_FEEDBACK_BUFFER);
+				glUnmapBuffer(BUFFER_ARRAY);
+				// delete buffer?
 			}
 
 			m_tfVAO[i]->bind();

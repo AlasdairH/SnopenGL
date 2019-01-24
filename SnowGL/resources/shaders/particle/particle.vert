@@ -16,7 +16,6 @@ layout (location = 3) in float in_lifetime;
 uniform mat4 u_modelMatrix;
 
 // particle system
-uniform float u_spawnRange = 5.0f;
 uniform vec3 u_baseColour = vec3(1.0f, 0.07f, 0.58f);
 
 // timing
@@ -65,10 +64,15 @@ void main()
 		else
 		{
 			// particle is alive and well so update it
-			out_velocity += vec3(0.0f, -0.03f, 0.0f);
+			out_velocity += vec3(0.0f, -0.01f, 0.0f);
 			out_position = vec4(in_position.xyz + (out_velocity * u_deltaTime), 1.0f);
 
-			particleColour = vec4(u_baseColour, 1.0f);
+			float agePerc = age / in_lifetime;
+
+			//particleColour = vec4(u_baseColour * agePerc, 1.0f);
+			vec3 startColour = vec3(1.0f, 1.0f, 1.0f);
+			vec3 endColour = vec3(1.0f, 0.54f, 0.0f);
+			particleColour = vec4(mix(startColour, endColour, agePerc), 1 - agePerc);
 		}
 	}
 

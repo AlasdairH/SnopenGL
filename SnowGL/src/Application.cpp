@@ -72,9 +72,9 @@ int main()
 	GUI gui(window.getWindowPtr());
 
 	ParticleSettings settings;
-	settings.lifetimeMin = 3.0f;
-	settings.lifetimeMax = 3.0f;
-	settings.particlesPerSecond = 100000;
+	settings.lifetimeMin = 6.0f;
+	settings.lifetimeMax = 6.0f;
+	settings.particlesPerSecond = 1000;
 
 	SnowfallSystem snow(settings);
 	snow.initialise();
