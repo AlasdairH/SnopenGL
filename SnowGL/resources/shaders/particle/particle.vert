@@ -16,7 +16,8 @@ layout (location = 3) in float in_lifetime;
 uniform mat4 u_modelMatrix;
 
 // particle system
-uniform vec3 u_baseColour = vec3(1.0f, 0.07f, 0.58f);
+uniform vec4 u_startColour = vec4(1.0f, 0.07f, 0.58f, 1.0f);
+uniform vec4 u_endColour = vec4(1.0f, 0.07f, 0.58f, 1.0f);
 
 // timing
 uniform float u_deltaTime = 1.0f;
@@ -43,7 +44,7 @@ vec4 when_gt(vec4 x, vec4 y)
 
 void main()
 {
-	particleColour = vec4(u_baseColour, 0.0f);
+	particleColour = vec4(u_startColour.xyz, 0.0f);
 
 	out_position = in_position;
 	out_velocity = in_velocity;
@@ -59,7 +60,6 @@ void main()
 			out_position = vec4(in_position.x, 10, in_position.z, 1.0f);
 			out_velocity = vec3(0.0f);
 			out_startTime = u_simTime;
-			particleColour = vec4(u_baseColour, 0.0f);
 		}
 		else
 		{
@@ -69,10 +69,7 @@ void main()
 
 			float agePerc = age / in_lifetime;
 
-			//particleColour = vec4(u_baseColour * agePerc, 1.0f);
-			vec3 startColour = vec3(1.0f, 1.0f, 1.0f);
-			vec3 endColour = vec3(1.0f, 0.54f, 0.0f);
-			particleColour = vec4(mix(startColour, endColour, agePerc), 1 - agePerc);
+			particleColour = mix(u_startColour, u_endColour, agePerc);
 		}
 	}
 

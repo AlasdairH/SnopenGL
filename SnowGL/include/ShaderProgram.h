@@ -138,8 +138,15 @@ namespace SnowGL
 		*	Uses the getUniformLocation method to get the uniform location and set it to the given values.
 		*/
 		void setUniform4f(const std::string &_name, float _value1, float _value2, float _value3, float _value4);
+		/** @brief Sets a vec4 uniform
+		*	@param _name The name of the uniform to modify
+		*	@param _vector The vec4
+		*
+		*	Uses the getUniformLocation method to get the uniform location and set it to the given values.
+		*/
+		void setUniform4f(const std::string &_name, glm::vec4 _vector);
 
-		/** @brief Sets a single integar uniform
+		/** @brief Sets a single integer uniform
 		*	@param _name The name of the uniform to modify
 		*	@param _value The value to set the uniform to
 		*

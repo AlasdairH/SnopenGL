@@ -64,7 +64,6 @@ namespace SnowGL
 				}
 
 				glUnmapBuffer(BUFFER_ARRAY);
-				// delete buffer?
 			}
 
 			m_tfVAO[i]->bind();
@@ -73,7 +72,8 @@ namespace SnowGL
 		}
 
 		// particle system setup
-		m_tfShader->setUniform3f("u_baseColour", glm::vec3(0.79f, 0.90f, 0.88f));
+		m_tfShader->setUniform4f("u_startColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_tfShader->setUniform4f("u_endColour", glm::vec4(0.79f, 0.90f, 0.88f, 1.0f));
 
 		// set current vertex buffer and current transform feedback buffer to be alternate of eachother (0, 1);
 		m_currVAO = m_currVBO;

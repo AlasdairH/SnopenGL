@@ -20,7 +20,6 @@ namespace SnowGL
 		attachShader(vert);
 		attachShader(frag);
 		link();
-
 	}
 
 	void ShaderProgram::attachShader(Shader &_shader)
@@ -169,6 +168,11 @@ namespace SnowGL
 	{
 		bind();
 		glUniform4f(getUniformLocation(_name), _value1, _value2, _value3, _value4);
+	}
+
+	void ShaderProgram::setUniform4f(const std::string &_name, glm::vec4 _vector)
+	{
+		setUniform4f(_name, _vector.x, _vector.y, _vector.z, _vector.w);
 	}
 
 	void ShaderProgram::setUniform1i(const std::string & _name, int _value)
