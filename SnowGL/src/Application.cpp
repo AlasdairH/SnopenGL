@@ -49,7 +49,7 @@ int main()
 	GUI gui(window.getWindowPtr());
 
 	ParticleSettings settings;
-	settings.lifetimeMin = 3.0f;
+	settings.lifetimeMin = 6.0f;
 	settings.lifetimeMax = 6.0f;
 	settings.particlesPerSecond = 1000;
 

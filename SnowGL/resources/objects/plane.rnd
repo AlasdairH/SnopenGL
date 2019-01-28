@@ -3,6 +3,4 @@ SHADER_VERT resources/shaders/Basic.vert
 SHADER_FRAG resources/shaders/Basic.frag
 TEXTURE mk2_diffuse resources/textures/base.png
 MESH resources/models/Debug_Plane.obj
-POSITION 0 0 0
-ROTATION 0 0 0
-SCALE 0 0 0
+TRANSFORM 0 0 0 0 0 0 1 1 1

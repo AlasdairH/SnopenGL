@@ -222,7 +222,7 @@ namespace SnowGL
 				}
 			}
 
-			// vertex shader
+			// SHADER_VERT path
 			if (line.find("SHADER_VERT") != std::string::npos)
 			{
 				std::vector<std::string> splitBlock = split(line, ' ');
@@ -231,7 +231,7 @@ namespace SnowGL
 				shader->attachShader(vertShader);
 			}
 
-			// fragment shader
+			// SHADER_FRAG path
 			if (line.find("SHADER_FRAG") != std::string::npos)
 			{
 				std::vector<std::string> splitBlock = split(line, ' ');
@@ -240,20 +240,31 @@ namespace SnowGL
 				shader->attachShader(fragShader);
 			}
 
-			// normal line
+			// TEXTURE name path
 			if (line.find("TEXTURE") != std::string::npos)
 			{
 				std::vector<std::string> splitBlock = split(line, ' ');
 				texture->load(splitBlock[1], splitBlock[2]);
 			}
 
-			// face line
+			// MESH path
 			if (line.find("MESH") != std::string::npos)
 			{
 				std::vector<std::string> splitBlock = split(line, ' ');
 				Mesh objMesh;
 				loadMesh(objMesh, splitBlock[1]);
 				mesh->setMesh(objMesh);
+			}
+
+			// TRANSFORM pos_x pos_y pos_z rot_x rot_y rot_z scale_x scale_y scale_z 
+			if (line.find("TRANSFORM") != std::string::npos)
+			{
+				std::vector<std::string> splitBlock = split(line, ' ');
+				_renderable.transform.setPosition(glm::vec3(std::stof(splitBlock[1]), std::stof(splitBlock[2]), std::stof(splitBlock[3])));
+				_renderable.transform.rotate(std::stof(splitBlock[4]), glm::vec3(1, 0, 0));
+				_renderable.transform.rotate(std::stof(splitBlock[5]), glm::vec3(0, 1, 0));
+				_renderable.transform.rotate(std::stof(splitBlock[6]), glm::vec3(0, 0, 1));
+				_renderable.transform.scale(glm::vec3(std::stof(splitBlock[7]), std::stof(splitBlock[8]), std::stof(splitBlock[9])));
 			}
 
 			// move the next start point to the end of the last line
