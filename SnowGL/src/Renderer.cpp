@@ -36,6 +36,21 @@ namespace SnowGL
 		glDrawElements(GL_TRIANGLES, _mesh.m_IBO->getCount(), GL_UNSIGNED_INT, 0);
 	}
 
+	void Renderer::render(const Renderable &_renderable)
+	{
+		// set stencil buffer
+		glStencilFunc(m_sencilFunc, 1, 0xFF);
+		glStencilMask(m_stencilBufferInt);
+
+		_renderable.m_shader->bind();
+		_renderable.m_shader->setUniformMat4f("u_modelMatrix", _renderable.transform.getModelMatrix());
+		// access member through friend
+		_renderable.m_mesh->m_VAO->bind();
+		_renderable.m_mesh->m_IBO->bind();
+
+		glDrawElements(GL_TRIANGLES, _renderable.m_mesh->m_IBO->getCount(), GL_UNSIGNED_INT, 0);
+	}
+
 	void Renderer::setStencilBufferActive(bool _active)
 	{
 		if (_active)

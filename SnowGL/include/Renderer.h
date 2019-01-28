@@ -11,6 +11,7 @@
 #include "GPU_Mesh.h"
 #include "Transform.h"
 #include "ShaderProgram.h"
+#include "Renderable.h"
 
 namespace SnowGL
 {
@@ -37,6 +38,15 @@ namespace SnowGL
 		*	are accessible through the "friend" class.
 		*/
 		void render(const GPU_Mesh &_mesh, ShaderProgram &_shaderProgram, const Transform &_transform);
+		/** @brief Renders an object to the screen
+		*	@param _mesh The mesh to render
+		*	@param _shaderProgram The shader to render the mesh with
+		*	@param _transform The transform to apply to the mesh
+		*
+		*	Renders the GPU_Mesh with the shader program and transform. GPU_Mesh protected variables
+		*	are accessible through the "friend" class.
+		*/
+		void render(const Renderable &_renderable);
 
 		/** @brief Sets whether the stencil buffer is active
 		*	@param _active Flag stating whether to write to the stencil buffer or not

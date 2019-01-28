@@ -188,6 +188,91 @@ namespace SnowGL
 		CONSOLE_MESSAGE("Loaded " << _mesh.vertices.size() << " vertices | " << parsedLines << " lines parsed");
 	}
 
+	void IOUtilities::loadRenderable(Renderable &_renderable, const std::string &_filepath)
+	{
+		CONSOLE_MESSAGE("Loading renderable " << _filepath);
+
+		int parsedLines = 0;
+		bool filetypeVerified = false;
+
+		std::string fileText = loadText(_filepath);
+
+		std::shared_ptr<GPU_Mesh>		mesh		= std::make_shared<GPU_Mesh>();
+		std::shared_ptr<ShaderProgram>	shader		= std::make_shared<ShaderProgram>();
+		std::shared_ptr<Texture>		texture		= std::make_shared<Texture>();
+
+		for (unsigned int i = 0; i < fileText.size(); ++i)
+		{
+			// find the index of the next end of line char, starting from i
+			unsigned int eol = fileText.find("\n", i);
+			// get a substring from i, for end of line - i chars
+			std::string line = fileText.substr(i, eol - i);
+
+			if (i == 0)
+			{
+				// vertex line
+				if (line.find("FILETYPE RENDERABLE") != std::string::npos)
+				{
+					filetypeVerified = true;
+				}
+				else
+				{
+					CONSOLE_ERROR("Failed to load Renderable file, incorrect file type");
+					return;
+				}
+			}
+
+			// vertex shader
+			if (line.find("SHADER_VERT") != std::string::npos)
+			{
+				std::vector<std::string> splitBlock = split(line, ' ');
+				Shader vertShader(SHADER_VERTEX);
+				vertShader.load(splitBlock[1]);
+				shader->attachShader(vertShader);
+			}
+
+			// fragment shader
+			if (line.find("SHADER_FRAG") != std::string::npos)
+			{
+				std::vector<std::string> splitBlock = split(line, ' ');
+				Shader fragShader(SHADER_FRAGMENT);
+				fragShader.load(splitBlock[1]);
+				shader->attachShader(fragShader);
+			}
+
+			// normal line
+			if (line.find("TEXTURE") != std::string::npos)
+			{
+				std::vector<std::string> splitBlock = split(line, ' ');
+				texture->load(splitBlock[1], splitBlock[2]);
+			}
+
+			// face line
+			if (line.find("MESH") != std::string::npos)
+			{
+				std::vector<std::string> splitBlock = split(line, ' ');
+				Mesh objMesh;
+				loadMesh(objMesh, splitBlock[1]);
+				mesh->setMesh(objMesh);
+			}
+
+			// move the next start point to the end of the last line
+			i = eol;
+		}
+
+
+
+		shader->link();
+		shader->setUniform1i("u_diffuseTexture", 0);
+		texture->bind(0);
+
+		_renderable.setMesh(mesh);
+		_renderable.setShader(shader);
+		_renderable.setTexture(texture);
+
+		CONSOLE_MESSAGE("Finished loading renderable " << _filepath);
+	}
+
 	std::vector<std::string> IOUtilities::split(const std::string & _s, char _delimiter)
 	{
 		std::vector<std::string> tokens;

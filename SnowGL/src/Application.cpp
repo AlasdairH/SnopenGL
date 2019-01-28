@@ -12,7 +12,7 @@
 #include "Renderer.h"
 #include "Camera.h"
 #include "Timer.h"
-#include "SnowfallSystem.h"
+#include "ParticleSystem.h"
 #include "GUI.h"
 #include "Texture.h"
 
@@ -37,36 +37,13 @@ int main()
 	camera.updateCameraUniform();
 
 	// create shader
-	ShaderProgram shader("resources/shaders/Basic.vert", "resources/shaders/Basic.frag");
 	ShaderProgram outlineShader("resources/shaders/Basic.vert", "resources/shaders/BlockColour.frag");
 
-	Texture texture("MK2_Diffuse", "resources/textures/base.png");
-
-	shader.setUniform1i("u_diffuseTexture", 0);
-	texture.bind(0);
-
-	// create mesh
-	Mesh mesh;
-	Mesh debugPlane;
-
-	IOUtilities::loadMesh(mesh, "resources/models/Debug_Plane.obj");
-	IOUtilities::loadMesh(debugPlane, "resources/models/Debug_Plane.obj");
-
-	GPU_Mesh openGLMesh;
-	GPU_Mesh gpu_DebugPlane;
-
-	openGLMesh.setMesh(mesh);
-	gpu_DebugPlane.setMesh(debugPlane);
-
-	// create transform
-	Transform transform;
-	transform.translate(glm::vec3(0, 0, 0));	
-	Transform transformUpscale = transform;
-	transformUpscale.scale(glm::vec3(1.05f));	
-	Transform transformDownscale = transform;
-	transformDownscale.scale(glm::vec3(0.95f));
-
 	Transform zeroTransform;
+
+	//Renderable groundPlane(openGLMesh, shader, texture);
+	Renderable editPlane;
+	IOUtilities::loadRenderable(editPlane, "resources/objects/plane.rnd");
 
 	Renderer renderer;
 	GUI gui(window.getWindowPtr());
@@ -76,7 +53,7 @@ int main()
 	settings.lifetimeMax = 6.0f;
 	settings.particlesPerSecond = 1000;
 
-	SnowfallSystem snow(settings);
+	ParticleSystem snow(settings);
 	snow.initialise();
 
 	glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
@@ -220,22 +197,26 @@ int main()
 
 		// first pass
 		renderer.setStencilBufferActive(true);
-		renderer.render(openGLMesh, shader, transform);
+		renderer.render(editPlane);
 
+		// if the scene is in edit mode
 		if (state.getSceneMode() == MODE_EDIT)
 		{
+			// render a plane in wire frame mode at the origin
 			outlineShader.setUniform4f("diffuseColour", 0.5f, 0.5f, 0.5f, 1.0f);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			renderer.render(gpu_DebugPlane, outlineShader, zeroTransform);
+			renderer.render(*editPlane.getGPUMesh(), outlineShader, zeroTransform);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-			// second pass (scaled)
+			// second pass (scaled) for outline
 			renderer.setStencilBufferActive(false);
 			renderer.setDepthTest(false);
 
+			Transform transformUpscale = editPlane.transform;
+			transformUpscale.scale(glm::vec3(1.05f));
+
 			outlineShader.setUniform4f("diffuseColour", 0.0f, 0.8f, 0.0f, 1.0f);
-			renderer.render(openGLMesh, outlineShader, transformUpscale);
-			renderer.render(openGLMesh, outlineShader, transformDownscale);
+			renderer.render(*editPlane.getGPUMesh(), outlineShader, transformUpscale);
 
 			renderer.setStencilBufferActive(true);
 			renderer.setDepthTest(true);

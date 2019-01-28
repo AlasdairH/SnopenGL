@@ -7,6 +7,7 @@
 // program
 #include "PCH.h"
 #include "Shader.h"
+
 namespace SnowGL
 {
 	/*! @class ShaderProgram
@@ -44,7 +45,7 @@ namespace SnowGL
 		*
 		*	Deletes the shader program and frees the GPU memory
 		*/
-		~ShaderProgram() { glDeleteProgram(m_programID); CONSOLE_MESSAGE("Deleted Program: " << m_programID); }
+		~ShaderProgram() { glDeleteProgram(m_programID); }
 
 		/** @brief Attaches a Shader to the Program
 		*	@param _shader The shader to be attached

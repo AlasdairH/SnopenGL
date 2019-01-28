@@ -1,19 +1,19 @@
 #include "PCH.h"
-#include "..\include\SnowfallSystem.h"
+#include "ParticleSystem.h"
 
 namespace SnowGL
 {
-	SnowfallSystem::SnowfallSystem(const ParticleSettings &_settings)
+	ParticleSystem::ParticleSystem(const ParticleSettings &_settings)
 	{
 		m_settings = _settings;
 	}
 
-	SnowfallSystem::~SnowfallSystem()
+	ParticleSystem::~ParticleSystem()
 	{
 
 	}
 
-	bool SnowfallSystem::initialise()
+	bool ParticleSystem::initialise()
 	{
 		CONSOLE_MESSAGE("Initialising Snowfall Particle System")
 
@@ -84,7 +84,7 @@ namespace SnowGL
 		return true;
 	}
 
-	void SnowfallSystem::render(int _deltaTime, const glm::mat4 &_VP, const glm::vec3 &_cameraPos)
+	void ParticleSystem::render(int _deltaTime, const glm::mat4 &_VP, const glm::vec3 &_cameraPos)
 	{
 
 		updateParticles(_deltaTime);
@@ -94,12 +94,12 @@ namespace SnowGL
 
 	}
 
-	void SnowfallSystem::renderParticles(const glm::mat4 & _VP, const glm::vec3 & _cameraPos)
+	void ParticleSystem::renderParticles(const glm::mat4 & _VP, const glm::vec3 & _cameraPos)
 	{
 
 	}
 
-	void SnowfallSystem::updateParticles(float _deltaTime)
+	void ParticleSystem::updateParticles(float _deltaTime)
 	{
 		m_simTime += _deltaTime;
 		//CONSOLE_MESSAGE(m_simTime);

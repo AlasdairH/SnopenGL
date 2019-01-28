@@ -37,19 +37,19 @@ namespace SnowGL
 	*	The snowfall system simulates particles through Transform Feedback with OpenGL.
 	// TODO: Expand
 	*/
-	class SnowfallSystem
+	class ParticleSystem
 	{
 	public:
 		/** @brief Snowfall System Ctor
 		*
 		*	Nothing
 		*/
-		SnowfallSystem(const ParticleSettings &_settings);
+		ParticleSystem(const ParticleSettings &_settings);
 		/** @brief Snowfall System Dtor
 		*
 		*	Nothing
 		*/
-		~SnowfallSystem();
+		~ParticleSystem();
 
 		/** @brief Initialises the Snowfall System
 		*

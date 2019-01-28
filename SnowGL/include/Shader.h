@@ -37,20 +37,20 @@ namespace SnowGL
 		*
 		*	Destorys the shader
 		*/
-		~Shader() { glDeleteShader(m_shaderID); CONSOLE_MESSAGE("Deleted Shader: " << m_shaderID); }
+		~Shader() { glDeleteShader(m_shaderID); }
 
 		/** @brief Loads a text file into the Shader
 		*	@param _filepath The path to the Text File to be loaded
-		*	@return the result of the load. True for sucessful, false for error.
+		*	@return the result of the load. True for successful, false for error.
 		*
 		*	Uses the file manager service to load a text file and places it onto the GPU. The shader is then verified to ensure the shader source is valid.
 		*/
 		bool load(std::string _filepath);
 
 		/** @brief Loads a text file into the Shader
-		*	@return The result of the verification. True for sucessful, false for error.
+		*	@return The result of the verification. True for successful, false for error.
 		*
-		*	Verifies the shader complination and insures it will run.
+		*	Verifies the shader and insures it will run.
 		*/
 		bool verify();
 
