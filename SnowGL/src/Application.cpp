@@ -51,7 +51,7 @@ int main()
 	ParticleSettings settings;
 	settings.lifetimeMin = 6.0f;
 	settings.lifetimeMax = 6.0f;
-	settings.particlesPerSecond = 1000;
+	settings.particlesPerSecond = 100000;
 
 	ParticleSystem snow(settings);
 	snow.initialise();
@@ -91,8 +91,6 @@ int main()
 			state.deltaTime = ((float)(timepassed - lastTime));
 			lastTime = timepassed;
 		}
-
-
 
 		// START INPUT
 		SDL_Event incomingEvent;
