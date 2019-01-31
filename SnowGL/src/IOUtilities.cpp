@@ -201,6 +201,8 @@ namespace SnowGL
 		std::shared_ptr<ShaderProgram>	shader		= std::make_shared<ShaderProgram>();
 		std::shared_ptr<Texture>		texture		= std::make_shared<Texture>();
 
+		std::vector<std::string>		varyings;
+
 		for (unsigned int i = 0; i < fileText.size(); ++i)
 		{
 			// find the index of the next end of line char, starting from i
@@ -256,6 +258,13 @@ namespace SnowGL
 				mesh->setMesh(objMesh);
 			}
 
+			// TFB_VARYING varying
+			if (line.find("TFB_VARYING") != std::string::npos)
+			{
+				std::vector<std::string> splitBlock = split(line, ' ');
+				varyings.push_back(splitBlock[1]);
+			}
+
 			// TRANSFORM pos_x pos_y pos_z rot_x rot_y rot_z scale_x scale_y scale_z 
 			if (line.find("TRANSFORM") != std::string::npos)
 			{
@@ -271,7 +280,10 @@ namespace SnowGL
 			i = eol;
 		}
 
-
+		if (varyings.size() > 0)
+		{
+			shader->setTransformFeedbackVarying(varyings);
+		}
 
 		shader->link();
 		shader->setUniform1i("u_diffuseTexture", 0);
