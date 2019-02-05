@@ -27,7 +27,7 @@ namespace SnowGL
 		Shader tfFrag(SHADER_FRAGMENT);
 		tfFrag.load("resources/shaders/particle/particle.frag");
 		m_tfShader->attachShader(tfFrag);
-		std::vector<std::string> tfVaryings{ "out_position", "out_velocity", "out_startTime", "out_lifetime" };
+		std::vector<std::string> tfVaryings{ "out_position", "out_startPosition", "out_velocity", "out_startTime", "out_lifetime" };
 		m_tfShader->setTransformFeedbackVarying(tfVaryings);
 		m_tfShader->link();
 
@@ -35,6 +35,7 @@ namespace SnowGL
 
 		VertexBufferLayout layout;
 		layout.push<glm::vec4>(1);	// position (w = is active)
+		layout.push<glm::vec4>(1);	// start position
 		layout.push<glm::vec3>(1);	// velocity
 		layout.push<float>(1);		// delay
 		layout.push<float>(1);		// lifetime
@@ -57,7 +58,8 @@ namespace SnowGL
 
 				for (int j = 0; j < m_numParticles; ++j)
 				{
-					buffer[j].position = glm::vec4(Utils::randFloat(-spread, spread), 10, Utils::randFloat(-spread, spread), 1);
+					buffer[j].currentPosition = glm::vec4(Utils::randFloat(-spread, spread), 10, Utils::randFloat(-spread, spread), 1);
+					buffer[j].startPosition = buffer[j].currentPosition;
 					buffer[j].velocity = glm::vec3(0, 0, 0);
 					buffer[j].delay = (j / (float)m_numParticles) * m_settings.lifetimeMax;
 					buffer[j].lifetime = Utils::randFloat(m_settings.lifetimeMin, m_settings.lifetimeMax);
@@ -72,8 +74,7 @@ namespace SnowGL
 		}
 
 		// particle system setup
-		m_tfShader->setUniform4f("u_startColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-		m_tfShader->setUniform4f("u_endColour", glm::vec4(0.79f, 0.90f, 0.88f, 1.0f));
+		applySettingsToShader();
 
 		// set current vertex buffer and current transform feedback buffer to be alternate of eachother (0, 1);
 		m_currVAO = m_currVBO;
@@ -82,6 +83,13 @@ namespace SnowGL
 		CONSOLE_MESSAGE("Created " << m_numParticles << " particles on the GPU");
 
 		return true;
+	}
+
+	void ParticleSystem::applySettingsToShader()
+	{
+		m_tfShader->setUniform4f("u_startColour", m_settings.colourStart);
+		m_tfShader->setUniform4f("u_endColour", m_settings.colourEnd);
+		m_tfShader->setUniform3f("u_globalWind", m_settings.globalWind);
 	}
 
 	void ParticleSystem::render(int _deltaTime, const glm::mat4 &_VP, const glm::vec3 &_cameraPos)

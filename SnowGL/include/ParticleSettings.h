@@ -15,6 +15,8 @@ namespace SnowGL
 		float		lifetimeMin;			// min lifetime in seconds
 		float		lifetimeMax;			// max lifetime in seconds
 
+		glm::vec3	globalWind;
+
 		glm::vec4	colourStart;			// the start colour in RGBA
 		glm::vec4	colourEnd;				// the end colour in RGBA
 

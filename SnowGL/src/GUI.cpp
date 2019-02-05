@@ -102,6 +102,14 @@ namespace SnowGL
 		ImGui::Text("Bound Texture: %s", m_state->curBoundTexture.c_str());
 
 		ImGui::End();
+
+		// Particle System
+		ImGui::SetNextWindowPos(ImVec2(0, 400));
+		ImGui::Begin("Particle System", open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings);
+
+		ImGui::Text("Global Wind");
+
+		ImGui::End();
 	}
 
 	void GUI::onRender()

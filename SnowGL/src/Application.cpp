@@ -43,15 +43,21 @@ int main()
 
 	//Renderable groundPlane(openGLMesh, shader, texture);
 	Renderable editPlane;
-	IOUtilities::loadRenderable(editPlane, "resources/objects/plane.rnd");
+	IOUtilities::loadRenderable(editPlane, "resources/objects/Grenade.rnd");
 
 	Renderer renderer;
 	GUI gui(window.getWindowPtr());
 
 	ParticleSettings settings;
-	settings.lifetimeMin = 6.0f;
-	settings.lifetimeMax = 6.0f;
-	settings.particlesPerSecond = 100000;
+	settings.lifetimeMin = 10.0f;
+	settings.lifetimeMax = 10.0f;
+
+	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	settings.colourEnd = glm::vec4(0.79f, 0.90f, 0.88f, 1.0f);
+
+	settings.particlesPerSecond = 1000;
+
+	settings.globalWind = glm::vec3(1.0f, 0.0f, 0.0f);
 
 	ParticleSystem snow(settings);
 	snow.initialise();

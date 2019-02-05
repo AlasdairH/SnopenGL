@@ -25,7 +25,8 @@ namespace SnowGL
 	*/
 	struct Particle
 	{
-		glm::vec4	position;			/**< The particle position */
+		glm::vec4	currentPosition;	/**< The particle position */
+		glm::vec4	startPosition;		/**< The particle position */
 		glm::vec3	velocity;			/**< The particle velocity */
 		float		delay		= -1;	/**< The particles delay from the start of the simulation to when it is created */
 		float		lifetime	= -1;	/**< The particles lifetime */
@@ -57,6 +58,12 @@ namespace SnowGL
 		*/
 		bool initialise();
 
+		/** @brief Applys settings to the shader
+		*
+		*	Takes the stored settings CPU side and applies them to the GPU based shader for the particles.
+		*/
+		void applySettingsToShader();
+
 		/** @brief Renderer Ctor
 		*	@param _deltaTime The update deltaTime
 		*
@@ -70,6 +77,14 @@ namespace SnowGL
 		*	Performs the transform feedback operation for simulating particles
 		*/
 		void render(int _deltaTime, const glm::mat4 & _VP, const glm::vec3 & _cameraPos);
+
+		/** @brief Gets the partcle settings
+		*	@return A pointer to the particles settings
+		*
+		*	Returns a pointer to the particles settings which can be modified and then pushed to the GPU using the applySettingsToShader
+		*	method, also on this class.
+		*/
+		inline std::shared_ptr<ParticleSettings> getSettingsPtr() { return std::make_shared<ParticleSettings>(m_settings); }
 
 	protected:
 		// TODO: This
