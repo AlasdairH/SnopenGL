@@ -103,13 +103,33 @@ namespace SnowGL
 
 		ImGui::End();
 
-		// Particle System
-		ImGui::SetNextWindowPos(ImVec2(0, 400));
-		ImGui::Begin("Particle System", open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings);
+		if (m_selectedParticleSystem != nullptr)
+		{
+			// Particle System
+			//ImGui::SetNextWindowPos(ImVec2(0, 400));
+			ImGui::Begin("Particle System", open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings);
 
-		ImGui::Text("Global Wind");
+			ImGui::Text("Global Wind");
+			ImGui::PushItemWidth(80);
+			ImGui::SliderFloat("x", &m_selectedParticleSystem->getSettingsPtr()->globalWind.x, -1.0f, 1.0f, "%.2f");
+			ImGui::SameLine();
+			ImGui::SliderFloat("y", &m_selectedParticleSystem->getSettingsPtr()->globalWind.y, -1.0f, 1.0f, "%.2f");
+			ImGui::SameLine();
+			ImGui::SliderFloat("z", &m_selectedParticleSystem->getSettingsPtr()->globalWind.z, -1.0f, 1.0f, "%.2f");
 
-		ImGui::End();
+			if (ImGui::Button("Apply"))
+			{
+				m_selectedParticleSystem->applySettingsToShader();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Reset"))
+			{
+				m_selectedParticleSystem->getSettingsPtr()->globalWind = glm::vec3(0);
+				m_selectedParticleSystem->applySettingsToShader();
+			}
+
+			ImGui::End();
+		}
 	}
 
 	void GUI::onRender()

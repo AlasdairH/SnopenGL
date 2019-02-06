@@ -84,13 +84,13 @@ namespace SnowGL
 		*	Returns a pointer to the particles settings which can be modified and then pushed to the GPU using the applySettingsToShader
 		*	method, also on this class.
 		*/
-		inline std::shared_ptr<ParticleSettings> getSettingsPtr() { return std::make_shared<ParticleSettings>(m_settings); }
+		inline std::shared_ptr<ParticleSettings> getSettingsPtr() { return m_settings; }
 
 	protected:
-		// TODO: This
+		// TODO: doxygen
 		void renderParticles(const glm::mat4 & _VP, const glm::vec3 & _cameraPos);
 
-		ParticleSettings					m_settings;
+		std::shared_ptr<ParticleSettings>	m_settings;
 
 		bool								m_isFirstRender;		/**< Flag for if this is the first render */			
 		unsigned int						m_currVAO;				/**< The current Transform Feedback Buffer */

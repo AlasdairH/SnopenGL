@@ -5,7 +5,7 @@ namespace SnowGL
 {
 	ParticleSystem::ParticleSystem(const ParticleSettings &_settings)
 	{
-		m_settings = _settings;
+		m_settings = std::make_shared<ParticleSettings>(_settings);
 	}
 
 	ParticleSystem::~ParticleSystem()
@@ -31,7 +31,7 @@ namespace SnowGL
 		m_tfShader->setTransformFeedbackVarying(tfVaryings);
 		m_tfShader->link();
 
-		m_numParticles = m_settings.getMaxParticles();
+		m_numParticles = m_settings->getMaxParticles();
 
 		VertexBufferLayout layout;
 		layout.push<glm::vec4>(1);	// position (w = is active)
@@ -61,8 +61,8 @@ namespace SnowGL
 					buffer[j].currentPosition = glm::vec4(Utils::randFloat(-spread, spread), 10, Utils::randFloat(-spread, spread), 1);
 					buffer[j].startPosition = buffer[j].currentPosition;
 					buffer[j].velocity = glm::vec3(0, 0, 0);
-					buffer[j].delay = (j / (float)m_numParticles) * m_settings.lifetimeMax;
-					buffer[j].lifetime = Utils::randFloat(m_settings.lifetimeMin, m_settings.lifetimeMax);
+					buffer[j].delay = (j / (float)m_numParticles) * m_settings->lifetimeMax;
+					buffer[j].lifetime = Utils::randFloat(m_settings->lifetimeMin, m_settings->lifetimeMax);
 				}
 
 				glUnmapBuffer(BUFFER_ARRAY);
@@ -87,9 +87,10 @@ namespace SnowGL
 
 	void ParticleSystem::applySettingsToShader()
 	{
-		m_tfShader->setUniform4f("u_startColour", m_settings.colourStart);
-		m_tfShader->setUniform4f("u_endColour", m_settings.colourEnd);
-		m_tfShader->setUniform3f("u_globalWind", m_settings.globalWind);
+		m_tfShader->setUniform4f("u_startColour", m_settings->colourStart);
+		m_tfShader->setUniform4f("u_endColour", m_settings->colourEnd);
+		m_tfShader->setUniform3f("u_globalWind", m_settings->globalWind);
+		CONSOLE_MESSAGE("Particle settings applied to shader")
 	}
 
 	void ParticleSystem::render(int _deltaTime, const glm::mat4 &_VP, const glm::vec3 &_cameraPos)
@@ -98,13 +99,11 @@ namespace SnowGL
 		updateParticles(_deltaTime);
 
 		renderParticles(_VP, _cameraPos);
-
-
 	}
 
 	void ParticleSystem::renderParticles(const glm::mat4 & _VP, const glm::vec3 & _cameraPos)
 	{
-
+		// todo: Render billboards
 	}
 
 	void ParticleSystem::updateParticles(float _deltaTime)

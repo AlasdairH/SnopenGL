@@ -51,18 +51,14 @@ int main()
 	ParticleSettings settings;
 	settings.lifetimeMin = 10.0f;
 	settings.lifetimeMax = 10.0f;
-
 	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	settings.colourEnd = glm::vec4(0.79f, 0.90f, 0.88f, 1.0f);
-
 	settings.particlesPerSecond = 1000;
-
-	settings.globalWind = glm::vec3(1.0f, 0.0f, 0.0f);
+	settings.globalWind = glm::vec3(0.0f);
 
 	ParticleSystem snow(settings);
 	snow.initialise();
-
-	glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
+	gui.setSelectedParticleSystem(std::make_shared<ParticleSystem>(snow));
 
 	bool quit = false;
 	SceneMode mode = MODE_VIEW;
@@ -183,6 +179,16 @@ int main()
 				case SDLK_SPACE:
 					state.isMenuBarHidden = !state.isMenuBarHidden;
 					break; 
+				case SDLK_g:
+					CONSOLE_MESSAGE("WINDING1");
+					snow.getSettingsPtr()->globalWind.x -= 0.5f;
+					snow.applySettingsToShader();
+					break;				
+				case SDLK_h:
+					CONSOLE_MESSAGE("WINDING2");
+					//snow.m_settings.globalWind.x -= 0.5f;
+					//snow.applySettingsToShader();
+					break;
 				default:
 					break;
 				}

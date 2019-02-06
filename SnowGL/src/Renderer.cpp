@@ -19,6 +19,8 @@ namespace SnowGL
 
 		glStencilFunc(m_sencilFunc, 1, 0xFF);
 		glStencilMask(m_stencilBufferInt);
+
+		glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
 	}
 
 	void Renderer::render(const GPU_Mesh &_mesh, ShaderProgram &_shaderProgram, const Transform &_transform)
