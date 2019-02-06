@@ -43,7 +43,10 @@ int main()
 
 	//Renderable groundPlane(openGLMesh, shader, texture);
 	Renderable editPlane;
-	IOUtilities::loadRenderable(editPlane, "resources/objects/Grenade.rnd");
+	IOUtilities::loadRenderable(editPlane, "resources/objects/Plane.rnd");
+
+	Renderable mainObject;
+	IOUtilities::loadRenderable(mainObject, "resources/objects/Grenade.rnd");
 
 	Renderer renderer;
 	GUI gui(window.getWindowPtr());
@@ -83,7 +86,7 @@ int main()
 		frames++;
 		if (timepassed - startTime > 0.25 && frames > 10)
 		{
-			state.framesPerSecond = (double)frames / (timepassed - startTime);
+			state.framesPerSecond = (float)frames / (timepassed - startTime);
 			startTime = timepassed;
 			frames = 0;
 		}
@@ -207,7 +210,7 @@ int main()
 
 		// first pass
 		renderer.setStencilBufferActive(true);
-		renderer.render(editPlane);
+		renderer.render(mainObject);
 
 		// if the scene is in edit mode
 		if (state.getSceneMode() == MODE_EDIT)

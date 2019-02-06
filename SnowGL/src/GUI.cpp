@@ -128,6 +128,8 @@ namespace SnowGL
 				m_selectedParticleSystem->applySettingsToShader();
 			}
 
+			ImGui::Separator();
+
 			ImGui::End();
 		}
 	}

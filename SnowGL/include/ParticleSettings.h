@@ -25,6 +25,6 @@ namespace SnowGL
 		*
 		*	Calculagtes the maxiumum number of particles that would be required for the system
 		*/
-		inline int getMaxParticles() const { return ceil(lifetimeMax) * particlesPerSecond; }
+		inline int getMaxParticles() const { return ceil(lifetimeMax) * (int)particlesPerSecond; }
 	};
 }
