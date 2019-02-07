@@ -90,6 +90,9 @@
     <ClCompile Include="src\ParticleSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\FrameBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\PCH.h">
@@ -191,6 +194,9 @@
     <ClInclude Include="include\ParticleSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\FrameBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\particle\particle.vert" />
@@ -198,5 +204,7 @@
     <None Include="resources\shaders\Basic.frag" />
     <None Include="resources\shaders\Basic.vert" />
     <None Include="resources\shaders\BlockColour.frag" />
+    <None Include="resources\shaders\post_processing\PostProcVert.vert" />
+    <None Include="resources\shaders\post_processing\PostProcFrag.frag" />
   </ItemGroup>
 </Project>

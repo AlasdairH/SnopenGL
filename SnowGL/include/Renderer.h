@@ -12,6 +12,7 @@
 #include "Transform.h"
 #include "ShaderProgram.h"
 #include "Renderable.h"
+#include "FrameBuffer.h"
 
 namespace SnowGL
 {
@@ -55,6 +56,11 @@ namespace SnowGL
 		*/
 		void setStencilBufferActive(bool _active);
 
+		inline void bindFrameBuffer() { m_frameBuffer->bind(); }
+		inline void unBindFrameBuffer() { m_frameBuffer->unBind(); }
+
+		void drawFrameBuffer();
+
 		/** @brief Sets whether depth should be tested when rendering
 		*	@param _active Flag stating whether depth should be tested
 		*
@@ -65,5 +71,7 @@ namespace SnowGL
 	protected:
 		GLenum m_sencilFunc = GL_NOTEQUAL;
 		int m_stencilBufferInt = 0x00;
+
+		std::shared_ptr<FrameBuffer>	m_frameBuffer;	/**< The framebuffer that will be rendered to */
 	};
 }

@@ -197,14 +197,13 @@ int main()
 				}
 			}
 		}
-
-		gui.onUpdate();
-
 		
 		glStencilMask(1);
+		renderer.bindFrameBuffer();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		renderer.unBindFrameBuffer();
 
-		snow.updateParticles(state.deltaTime);
+		//snow.updateParticles(state.deltaTime);
 	
 		camera.updateCameraUniform();
 
@@ -235,6 +234,10 @@ int main()
 			renderer.setDepthTest(true);
 		}
 
+		renderer.drawFrameBuffer();
+
+		// GUI
+		gui.onUpdate();
 		gui.onRender();
 
 		window.swapBuffer();

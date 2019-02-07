@@ -32,9 +32,13 @@ namespace SnowGL
 		m_width = _width;
 		m_height = _height;
 
+		ApplicationState &state = ApplicationState::getInstance();
+		state.windowSize.x = m_width;
+		state.windowSize.y = m_height;
+
 		// TODO: RESIZE
 
-		CONSOLE_MESSAGE("Window resised to: " << m_width << ", " << m_height);
+		CONSOLE_MESSAGE("Window resized to: " << m_width << ", " << m_height);
 
 	}
 }

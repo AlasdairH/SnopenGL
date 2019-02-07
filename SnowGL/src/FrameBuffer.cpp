@@ -1,0 +1,124 @@
+#include "PCH.h"
+#include "FrameBuffer.h"
+
+namespace SnowGL
+{
+	FrameBuffer::FrameBuffer(const int _width, const int _height)
+	{
+		m_width = _width;
+		m_height = _height;
+		CONSOLE_MESSAGE("Creating Frame Buffer with resolution: " << m_width << ", " << m_height);
+
+		// create VAO
+		m_arrayBuffer = new VertexArray;
+		// create VBO
+		m_vertexBuffer = new VertexBuffer(BUFFER_ARRAY);
+		GLfloat fbo_vertices[] = 
+		{
+			-1.0f,  1.0f,  0.0f, 1.0f,
+			-1.0f, -1.0f,  0.0f, 0.0f,
+			 1.0f, -1.0f,  1.0f, 0.0f,
+
+			-1.0f,  1.0f,  0.0f, 1.0f,
+			 1.0f, -1.0f,  1.0f, 0.0f,
+			 1.0f,  1.0f,  1.0f, 1.0f
+		};
+		// create layout
+		VertexBufferLayout layout1;
+		// push 2 floats to the layout (x and y pos)
+		layout1.push<float>(2);
+		// push 2 floats to the layout (x and y tex coord)
+		layout1.push<float>(2);
+		m_arrayBuffer->addBuffer(*m_vertexBuffer, layout1);
+		m_vertexBuffer->loadData(&fbo_vertices, 0, sizeof(fbo_vertices));
+
+		m_shaderProgram = new ShaderProgram("resources/shaders/post_processing/PostProcVert.vert", "resources/shaders/post_processing/PostProcFrag.frag");
+		m_shaderProgram->setUniform1i("screenTexture", 0);
+
+		glGenFramebuffers(1, &m_frameBufferID);
+		bind();
+		
+		createTextureAttachment();
+		createDepthRenderBufferAttachment();
+
+		GLenum status;
+		if ((status = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE) 
+		{
+			CONSOLE_ERROR("Could not Create FrameBuffer: " << status);
+		}
+		else
+		{
+			CONSOLE_MESSAGE("Created Frame Buffer with ID: " << m_frameBufferID);
+		}
+
+
+		unBind();
+	}
+
+	FrameBuffer::~FrameBuffer()
+	{
+		glDeleteFramebuffers(1, &m_frameBufferID);
+		glDeleteTextures(1, &m_textureID);
+		glDeleteRenderbuffers(1, &m_depthRenderBufferID);
+		delete m_vertexBuffer;
+		delete m_arrayBuffer;
+		delete m_shaderProgram;
+	}
+
+	void FrameBuffer::bind() const
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferID);
+	}
+
+	void FrameBuffer::unBind() const
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, 0); // back to default franebuffer
+	}
+
+	void FrameBuffer::drawToScreen()
+	{
+		unBind();
+
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		m_shaderProgram->bind();
+		m_arrayBuffer->bind();
+
+		glBindTexture(GL_TEXTURE_2D, m_textureID);
+
+		glDisable(GL_DEPTH_TEST);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glEnable(GL_DEPTH_TEST);
+
+#ifdef DEBUG
+		m_shaderProgram->unBind();
+		m_arrayBuffer->unBind();
+#endif
+	}
+
+	void FrameBuffer::createTextureAttachment()
+	{
+		bind();
+		glGenTextures(1, &m_textureID);
+		glBindTexture(GL_TEXTURE_2D, m_textureID);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		// attach the texture to the framebuffer
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_textureID, 0);
+	}
+
+	void FrameBuffer::createDepthRenderBufferAttachment()
+	{
+		bind();
+		glGenRenderbuffers(1, &m_depthRenderBufferID);
+		glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBufferID);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_width, m_height);
+
+		// attach the renderbuffer to the framebuffer
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthRenderBufferID);
+	}
+}

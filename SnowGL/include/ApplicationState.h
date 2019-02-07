@@ -35,6 +35,9 @@ namespace SnowGL
 		bool isRunning			= true;
 		bool isMenuBarHidden	= false;
 
+		// window
+		glm::vec2 windowSize;
+
 		// performance
 		float deltaTime;
 		float framesPerSecond;
