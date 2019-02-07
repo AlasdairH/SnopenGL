@@ -24,6 +24,9 @@ namespace SnowGL
 		glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
 
 		ApplicationState &state = ApplicationState::getInstance();
+
+		glViewport(0, 0, state.windowSize.x, state.windowSize.y);
+
 		m_frameBuffer = std::make_shared<FrameBuffer>(state.windowSize.x, state.windowSize.y);
 	}
 
