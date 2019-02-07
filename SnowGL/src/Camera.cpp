@@ -26,13 +26,6 @@ namespace SnowGL
 
 	void Camera::init()
 	{
-		// create the uniform buffer
-		m_uniformBuffer = std::make_shared<VertexBuffer>(BUFFER_UNIFORM);
-		// load the data to the uniform buffer
-		m_uniformBuffer->loadData(&m_uniformData, 0, sizeof(m_uniformData));
-
-		// link the uniform buffer to the binding point
-		m_uniformBuffer->bindBase(GL_UNIFORM_BUFFER, SHADER_BINDPOINT_CAMERA_VP);
 		// now the shader and the uniform buffer are pointing at the same binding point the fun can commence
 
 		// if there is no current active camera, set it to this one
@@ -53,15 +46,16 @@ namespace SnowGL
 
 	void Camera::updateCameraUniform()
 	{
+		m_front.x = cos(glm::radians(m_pitch)) * cos(glm::radians(m_yaw));
+		m_front.y = sin(glm::radians(m_pitch));
+		m_front.z = cos(glm::radians(m_pitch)) * sin(glm::radians(m_yaw));
+
 		cleanViewMatrix();
 		// grab the new matrices
 		m_uniformData.viewMatrix = glm::lookAt(transform.getPosition(), transform.getPosition() + m_front, m_up);
 		m_uniformData.projectionMatrix = getProjectionMatrix();
 		m_uniformData.orthographicMatrix = getOrthographicMatrix();
 
-		// bind the uniform buffer
-		m_uniformBuffer->bind();
-		// load the data to the uniform buffer
-		m_uniformBuffer->loadData(&m_uniformData, 0, sizeof(m_uniformData));
+
 	}
 }

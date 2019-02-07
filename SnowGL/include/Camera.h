@@ -7,32 +7,20 @@
 
 // program
 #include "PCH.h"
+#include "Uniform_CameraData.h"
 #include "VertexBuffer.h"
 #include "Transform.h"
 
 // TODO: Matrix Optimisation
 namespace SnowGL
 {
-	/*! @class u_CameraData
-	*	@brief The CPU side uniform block for camera view and projection matrices
-	*
-	*	This data corresponds to the shader side "u_camera_data" for the per frame unchanging data of camera matrices.
-	*/
-	struct u_CameraData
-	{
-		glm::mat4 viewMatrix;			/**< Camera View Matrix data */
-		glm::mat4 projectionMatrix;		/**< Camera Projection Matrix data */
-		glm::mat4 orthographicMatrix;	/**< Camera Projection Matrix data */
-	};
-
-
 	/*! @class Camera
 	*	@brief Contains the data for the representation of a perspective camera
 	*
 	*	Contains the data required to represent a camera in OpenGL. This uses the glm::perspective function to create a camera that can be moved around using the
 	*	transform.
 	*/
-	class Camera : public std::enable_shared_from_this<Camera>
+	class Camera
 	{
 	public:
 		/** @brief Camera Ctor
@@ -94,6 +82,12 @@ namespace SnowGL
 		*/
 		void updateCameraUniform();
 
+		/** @brief Returns a unifom block struct with the cameras data
+		*
+		*	Returns a unifom block struct with the cameras data
+		*/
+		inline u_CameraData getCameraUniformData() { return m_uniformData; }
+
 		/** @brief Returns the width of the viewport
 		*	@return The width of the viewport
 		*
@@ -120,6 +114,12 @@ namespace SnowGL
 		*/
 		inline glm::vec3 getFront() { return m_front; }
 
+		inline void setPitch(const float &_pitch) { m_pitch = _pitch; }
+		inline void setYaw(const float &_yaw) { m_yaw = _yaw; }
+
+		inline float getPitch() { return m_pitch; }
+		inline float getYaw() { return m_yaw; }
+
 		static Camera *activeCamera;	/**< The currently active camera */
 
 	protected:
@@ -139,13 +139,15 @@ namespace SnowGL
 		int											m_viewportWidth;				/**< Width of the viewport in pixels */
 		int											m_viewportHeight;				/**< Height of the viewport in pixels */
 
+		float										m_pitch = 0.0f;
+		float										m_yaw = -90.0f;
+
 		glm::vec3									m_up = glm::vec3(0, 1, 0);
 		glm::vec3									m_front = glm::vec3(0, 0, -1);
 
 		glm::mat4									m_projectionMatrix;				/**< The Projection Matrix */
 		glm::mat4									m_orthographicMatrix;			/**< The Orthographic Matrix */
 
-		std::shared_ptr<VertexBuffer>				m_uniformBuffer;				/**< The uniform buffer for View and Projection matrices */
 		u_CameraData								m_uniformData;					/**< The struct containing the matrices for the uniform buffer to use */
 	};
 }

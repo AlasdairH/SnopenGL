@@ -36,6 +36,18 @@ int main()
 	camera.transform.translate(glm::vec3(0, 2, 12));
 	camera.updateCameraUniform();
 
+	Camera depthCamera(1280, 720);
+	depthCamera.transform.translate(glm::vec3(0, 15, 0));
+	Camera::activeCamera = &depthCamera;
+	depthCamera.setPitch(-89.9f);
+
+	// create a camera data uniform buffer
+	std::shared_ptr<VertexBuffer> cameraDataUniformBuffer = std::make_shared<VertexBuffer>(BUFFER_UNIFORM);
+	// link the uniform buffer to the binding point
+	cameraDataUniformBuffer->bindBase(GL_UNIFORM_BUFFER, SHADER_BINDPOINT_CAMERA_VP);
+	// load the data to the uniform buffer
+	cameraDataUniformBuffer->loadData(&camera.getCameraUniformData(), 0, sizeof(u_CameraData));
+
 	// create shader
 	ShaderProgram outlineShader("resources/shaders/Basic.vert", "resources/shaders/BlockColour.frag");
 
@@ -112,20 +124,15 @@ int main()
 		{
 			glm::vec2 fixedOffset = state.mouseOffset * 0.05f;
 
-			state.cameraYaw += fixedOffset.x;
-			state.cameraPitch -= fixedOffset.y;
+			Camera *cameraPtr = Camera::activeCamera;
 
-			if (state.cameraPitch > 89.0f)
-				state.cameraPitch = 89.0f;
-			if (state.cameraPitch < -89.0f)
-				state.cameraPitch = -89.0f;
+			cameraPtr->setYaw(cameraPtr->getYaw() + fixedOffset.x);
+			cameraPtr->setPitch(cameraPtr->getPitch() - fixedOffset.y);
 
-			glm::vec3 front;
-			front.x = cos(glm::radians(state.cameraPitch)) * cos(glm::radians(state.cameraYaw));
-			front.y = sin(glm::radians(state.cameraPitch));
-			front.z = cos(glm::radians(state.cameraPitch)) * sin(glm::radians(state.cameraYaw));
-			front = glm::normalize(front);
-			camera.setFront(front);
+			if (cameraPtr->getPitch() > 90.0f)
+				cameraPtr->setPitch(90.0);
+			if (cameraPtr->getPitch() < -90.0f)
+				cameraPtr->setPitch(-90.0f);
 		}
 
 		const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
@@ -140,29 +147,29 @@ int main()
 		}
 		if (keyboardState[SDL_SCANCODE_W]) 
 		{
-			camera.transform.translate(camera.getFront() * cameraMoveSpeed * state.deltaTime);
+			Camera::activeCamera->transform.translate(camera.getFront() * cameraMoveSpeed * state.deltaTime);
 		}
 		if (keyboardState[SDL_SCANCODE_S])
 		{
-			camera.transform.translate(-camera.getFront() * cameraMoveSpeed * state.deltaTime);
+			Camera::activeCamera->transform.translate(-camera.getFront() * cameraMoveSpeed * state.deltaTime);
 		}
 		if (keyboardState[SDL_SCANCODE_A])
 		{
 			glm::vec3 leftVector = glm::cross(glm::vec3(0, 1, 0), camera.getFront());
-			camera.transform.translate(leftVector * cameraMoveSpeed * state.deltaTime);
+			Camera::activeCamera->transform.translate(leftVector * cameraMoveSpeed * state.deltaTime);
 		}
 		if (keyboardState[SDL_SCANCODE_D])
 		{
 			glm::vec3 rightVector = glm::cross(camera.getFront(), glm::vec3(0, 1, 0));
-			camera.transform.translate(rightVector * cameraMoveSpeed * state.deltaTime);
+			Camera::activeCamera->transform.translate(rightVector * cameraMoveSpeed * state.deltaTime);
 		}		
 		if (keyboardState[SDL_SCANCODE_E])
 		{
-			camera.transform.translate(glm::vec3(0, 1, 0) * cameraMoveSpeed * state.deltaTime);
+			Camera::activeCamera->transform.translate(glm::vec3(0, 1, 0) * cameraMoveSpeed * state.deltaTime);
 		}		
 		if (keyboardState[SDL_SCANCODE_Q])
 		{
-			camera.transform.translate(glm::vec3(0, -1, 0) * cameraMoveSpeed * state.deltaTime);
+			Camera::activeCamera->transform.translate(glm::vec3(0, -1, 0) * cameraMoveSpeed * state.deltaTime);
 		}
 		
 		while (SDL_PollEvent(&incomingEvent))
@@ -205,7 +212,8 @@ int main()
 
 		//snow.updateParticles(state.deltaTime);
 	
-		camera.updateCameraUniform();
+		Camera::activeCamera->updateCameraUniform();
+		cameraDataUniformBuffer->loadData(&Camera::activeCamera->getCameraUniformData(), 0, sizeof(u_CameraData));
 
 		// first pass
 		renderer.setStencilBufferActive(true);
