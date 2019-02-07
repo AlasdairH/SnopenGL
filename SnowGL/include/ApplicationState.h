@@ -33,7 +33,7 @@ namespace SnowGL
 		}
 
 		bool isRunning			= true;
-		bool isMenuBarHidden	= false;
+		bool isUIHidden = false;
 
 		// window
 		glm::vec2 windowSize;

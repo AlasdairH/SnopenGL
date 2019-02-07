@@ -31,7 +31,7 @@ namespace SnowGL
 	{
 		ImGui_ImplSdlGL3_NewFrame(m_window);
 
-		if (!m_state->isMenuBarHidden)
+		if (!m_state->isUIHidden)
 		{
 			if (ImGui::BeginMainMenuBar())
 			{
@@ -82,62 +82,62 @@ namespace SnowGL
 
 				ImGui::EndMainMenuBar();
 			}
-		}
 
-		bool *open = NULL;
-		// Performance
-		//ImGui::SetNextWindowPos(ImVec2(0, 50));
-		ImGui::Begin("Performance", open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings);
+			bool *open = NULL;
+			// Performance
+			//ImGui::SetNextWindowPos(ImVec2(0, 50));
+			ImGui::Begin("Performance", open, ImGuiWindowFlags_AlwaysAutoResize);
 		
-		ImGui::Text("FPS: %f", m_state->framesPerSecond);
-		for (int i = 0; i < m_fpsValues.size() - 1; ++i)
-		{
-			m_fpsValues[i] = m_fpsValues[i + 1]; //move all element to the left except first one
-		}
-		m_fpsValues[m_fpsValues.size() - 1] = m_state->framesPerSecond;
-
-		ImGui::PlotLines("", m_fpsValues.data(), m_fpsValues.size());
-		ImGui::Separator();
-		ImGui::Text("Delta Time: %fms", m_state->deltaTime * 1000.0f);
-
-		ImGui::End();
-
-		// OpenGL
-		//ImGui::SetNextWindowPos(ImVec2(0, 200));
-		ImGui::Begin("OpenGL", open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings);
-
-		ImGui::Text("Bound Texture: %s", m_state->curBoundTexture.c_str());
-
-		ImGui::End();
-
-		if (m_selectedParticleSystem != nullptr)
-		{
-			// Particle System
-			//ImGui::SetNextWindowPos(ImVec2(0, 400));
-			ImGui::Begin("Particle System", open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings);
-
-			ImGui::Text("Global Wind");
-			ImGui::PushItemWidth(80);
-			ImGui::SliderFloat("x", &m_selectedParticleSystem->getSettingsPtr()->globalWind.x, -1.0f, 1.0f, "%.2f");
-			ImGui::SameLine();
-			ImGui::SliderFloat("y", &m_selectedParticleSystem->getSettingsPtr()->globalWind.y, -1.0f, 1.0f, "%.2f");
-			ImGui::SameLine();
-			ImGui::SliderFloat("z", &m_selectedParticleSystem->getSettingsPtr()->globalWind.z, -1.0f, 1.0f, "%.2f");
-
-			if (ImGui::Button("Apply"))
+			ImGui::Text("FPS: %f", m_state->framesPerSecond);
+			for (int i = 0; i < m_fpsValues.size() - 1; ++i)
 			{
-				m_selectedParticleSystem->applySettingsToShader();
+				m_fpsValues[i] = m_fpsValues[i + 1]; //move all element to the left except first one
 			}
-			ImGui::SameLine();
-			if (ImGui::Button("Reset"))
-			{
-				m_selectedParticleSystem->getSettingsPtr()->globalWind = glm::vec3(0);
-				m_selectedParticleSystem->applySettingsToShader();
-			}
+			m_fpsValues[m_fpsValues.size() - 1] = m_state->framesPerSecond;
 
+			ImGui::PlotLines("", m_fpsValues.data(), m_fpsValues.size());
 			ImGui::Separator();
+			ImGui::Text("Delta Time: %fms", m_state->deltaTime * 1000.0f);
 
 			ImGui::End();
+
+			// OpenGL
+			//ImGui::SetNextWindowPos(ImVec2(0, 200));
+			ImGui::Begin("OpenGL", open, ImGuiWindowFlags_AlwaysAutoResize);
+
+			ImGui::Text("Bound Texture: %s", m_state->curBoundTexture.c_str());
+
+			ImGui::End();
+
+			if (m_selectedParticleSystem != nullptr)
+			{
+				// Particle System
+				//ImGui::SetNextWindowPos(ImVec2(0, 400));
+				ImGui::Begin("Particle System", open, ImGuiWindowFlags_AlwaysAutoResize);
+
+				ImGui::Text("Global Wind");
+				ImGui::PushItemWidth(80);
+				ImGui::SliderFloat("x", &m_selectedParticleSystem->getSettingsPtr()->globalWind.x, -1.0f, 1.0f, "%.2f");
+				ImGui::SameLine();
+				ImGui::SliderFloat("y", &m_selectedParticleSystem->getSettingsPtr()->globalWind.y, -1.0f, 1.0f, "%.2f");
+				ImGui::SameLine();
+				ImGui::SliderFloat("z", &m_selectedParticleSystem->getSettingsPtr()->globalWind.z, -1.0f, 1.0f, "%.2f");
+
+				if (ImGui::Button("Apply"))
+				{
+					m_selectedParticleSystem->applySettingsToShader();
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Reset"))
+				{
+					m_selectedParticleSystem->getSettingsPtr()->globalWind = glm::vec3(0);
+					m_selectedParticleSystem->applySettingsToShader();
+				}
+
+				ImGui::Separator();
+
+				ImGui::End();
+			}
 		}
 	}
 

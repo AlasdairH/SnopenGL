@@ -39,7 +39,7 @@ int main()
 	depthCamera.transform.translate(glm::vec3(0, 15, 0));
 	depthCamera.setPitch(-89.9f);
 	depthCamera.setProjectionMode(PROJECTION_ORTHOGRAPHIC);
-	Camera::activeCamera = &depthCamera;
+	//Camera::activeCamera = &depthCamera;
 
 	// create a camera data uniform buffer
 	std::shared_ptr<VertexBuffer> cameraDataUniformBuffer = std::make_shared<VertexBuffer>(BUFFER_UNIFORM);
@@ -187,17 +187,7 @@ int main()
 					state.isRunning = false;
 					break; 
 				case SDLK_SPACE:
-					state.isMenuBarHidden = !state.isMenuBarHidden;
-					break; 
-				case SDLK_g:
-					CONSOLE_MESSAGE("WINDING1");
-					snow.getSettingsPtr()->globalWind.x -= 0.5f;
-					snow.applySettingsToShader();
-					break;				
-				case SDLK_h:
-					CONSOLE_MESSAGE("WINDING2");
-					//snow.m_settings.globalWind.x -= 0.5f;
-					//snow.applySettingsToShader();
+					state.isUIHidden = !state.isUIHidden;
 					break;
 				default:
 					break;
@@ -208,9 +198,11 @@ int main()
 		glStencilMask(1);
 		renderer.bindFrameBuffer();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+		snow.updateParticles(state.deltaTime);
+
 		renderer.unBindFrameBuffer();
 
-		//snow.updateParticles(state.deltaTime);
 	
 		Camera::activeCamera->updateCameraUniform();
 		cameraDataUniformBuffer->loadData(&Camera::activeCamera->getCameraUniformData(), 0, sizeof(u_CameraData));
