@@ -34,12 +34,12 @@ int main()
 
 	Camera camera(1280, 720);
 	camera.transform.translate(glm::vec3(0, 2, 12));
-	camera.updateCameraUniform();
 
 	Camera depthCamera(1280, 720);
 	depthCamera.transform.translate(glm::vec3(0, 15, 0));
-	Camera::activeCamera = &depthCamera;
 	depthCamera.setPitch(-89.9f);
+	depthCamera.setProjectionMode(PROJECTION_ORTHOGRAPHIC);
+	Camera::activeCamera = &depthCamera;
 
 	// create a camera data uniform buffer
 	std::shared_ptr<VertexBuffer> cameraDataUniformBuffer = std::make_shared<VertexBuffer>(BUFFER_UNIFORM);
@@ -120,7 +120,7 @@ int main()
 		state.mouseOffset = state.mousePosition - state.lastMousePosition;
 
 		// if right mouse button is being held
-		if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT)) 
+		if ((SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT)) && Camera::activeCamera->getProjectionMode() == PROJECTION_PERSPECTIVE) 
 		{
 			glm::vec2 fixedOffset = state.mouseOffset * 0.05f;
 

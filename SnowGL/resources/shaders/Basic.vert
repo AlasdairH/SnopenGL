@@ -4,7 +4,6 @@ layout (std140) uniform u_camera_data
 { 
 	mat4 viewMatrix;
 	mat4 projectionMatrix;
-	mat4 orthographicMatrix;
 };
 
 layout (location = 0) in vec3 position;
@@ -26,6 +25,7 @@ void main()
 	frag_normal = normal;
 
 	mat4 MVP = projectionMatrix * viewMatrix * u_modelMatrix;
+	//MVP = orthographicMatrix * viewMatrix * u_modelMatrix;
 	out_worldSpacePosition = MVP * vec4(position.x, position.y, position.z, 1.0);
     gl_Position = out_worldSpacePosition;
 }

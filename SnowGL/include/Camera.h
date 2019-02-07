@@ -14,6 +14,8 @@
 // TODO: Matrix Optimisation
 namespace SnowGL
 {
+	enum ProjectionMode { PROJECTION_PERSPECTIVE, PROJECTION_ORTHOGRAPHIC };
+
 	/*! @class Camera
 	*	@brief Contains the data for the representation of a perspective camera
 	*
@@ -67,14 +69,7 @@ namespace SnowGL
 		*
 		*	Returns the Projection Matrix
 		*/
-		inline glm::mat4 getProjectionMatrix() { return m_projectionMatrix; }
-
-		/** @brief Return the Orthographic Matrix
-		*	@return The Orthographic Matrix
-		*
-		*	Returns the Orthographic Matrix
-		*/
-		inline glm::mat4 getOrthographicMatrix() { return m_orthographicMatrix; }
+		glm::mat4 getProjectionMatrix();
 
 		/** @brief Updates the OpenGL Camera Data Uniform
 		*
@@ -101,18 +96,16 @@ namespace SnowGL
 		*/
 		inline int getViewportHeight() { return m_viewportHeight; }
 
-		/** @brief Sets the camera front 
-		*	@param _front The new camera front value
-		*
-		*	Sets the new front orientation for the camera
-		*/
-		inline void setFront(glm::vec3 _front) { m_front = _front; }
 		/** @brief Gets the camera front 
 		*	@return The front value of the camera
 		*
 		*	Gets the front orientation for the camera
 		*/
 		inline glm::vec3 getFront() { return m_front; }
+
+		// TODO: Doxygen
+		inline void setProjectionMode(const ProjectionMode _mode) { m_projectionMode = _mode; }
+		inline ProjectionMode getProjectionMode() { return m_projectionMode; }
 
 		inline void setPitch(const float &_pitch) { m_pitch = _pitch; }
 		inline void setYaw(const float &_yaw) { m_yaw = _yaw; }
@@ -134,6 +127,8 @@ namespace SnowGL
 		*/
 		void cleanViewMatrix();
 
+		ProjectionMode								m_projectionMode = PROJECTION_PERSPECTIVE;
+
 		float										m_fovRad;						/**< The current FoV in radians */
 		float										m_aspect;						/**< The current Aspect Ratio */
 		int											m_viewportWidth;				/**< Width of the viewport in pixels */
@@ -145,8 +140,8 @@ namespace SnowGL
 		glm::vec3									m_up = glm::vec3(0, 1, 0);
 		glm::vec3									m_front = glm::vec3(0, 0, -1);
 
-		glm::mat4									m_projectionMatrix;				/**< The Projection Matrix */
-		glm::mat4									m_orthographicMatrix;			/**< The Orthographic Matrix */
+		glm::mat4									m_perspectiveProjectionMatrix;				/**< The Perspective Matrix */
+		glm::mat4									m_orthographicProjectionMatrix;				/**< The Orthographic Matrix */
 
 		u_CameraData								m_uniformData;					/**< The struct containing the matrices for the uniform buffer to use */
 	};

@@ -37,6 +37,7 @@ namespace SnowGL
 
 		// window
 		glm::vec2 windowSize;
+		float getAspectRatio() { return windowSize.x / windowSize.y; }
 
 		// performance
 		float deltaTime;

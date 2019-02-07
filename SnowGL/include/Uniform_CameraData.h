@@ -19,6 +19,5 @@ namespace SnowGL
 	{
 		glm::mat4 viewMatrix;			/**< Camera View Matrix data */
 		glm::mat4 projectionMatrix;		/**< Camera Projection Matrix data */
-		glm::mat4 orthographicMatrix;	/**< Camera Projection Matrix data */
 	};
 }

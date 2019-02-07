@@ -4,7 +4,6 @@ layout (std140) uniform u_camera_data
 { 
 	mat4 viewMatrix;
 	mat4 projectionMatrix;
-	mat4 orthographicMatrix;
 };
 
 layout (location = 0) in vec4 in_position;

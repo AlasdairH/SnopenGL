@@ -40,8 +40,23 @@ namespace SnowGL
 
 	void Camera::cleanViewMatrix()
 	{
-		m_projectionMatrix = glm::perspective(m_fovRad, m_aspect, 0.1f, 100.0f);
-		m_orthographicMatrix = glm::ortho(0.0f, (float)m_viewportWidth, 0.0f, (float)m_viewportHeight, -1000.0f, 1000.0f);// *glm::lookAt(transform.getPositionVec3(), glm::vec3(0, 0, 0), glm::vec3(0, 1, 1));;
+		m_perspectiveProjectionMatrix = glm::perspective(m_fovRad, m_aspect, 0.1f, 100.0f);
+		float orthoHeight = glm::degrees(m_fovRad) / 4;
+		float orthoWidth = orthoHeight * ApplicationState::getInstance().getAspectRatio();
+		m_orthographicProjectionMatrix = glm::ortho(-(orthoWidth / 2), orthoWidth / 2, -(orthoHeight / 2), orthoHeight / 2, -1000.0f, 1000.0f);
+	}
+
+	glm::mat4 Camera::getProjectionMatrix()
+	{
+		if (m_projectionMode == PROJECTION_PERSPECTIVE)
+		{
+			
+			return m_perspectiveProjectionMatrix;
+		}
+		else if (m_projectionMode == PROJECTION_ORTHOGRAPHIC)
+		{
+			return m_orthographicProjectionMatrix;
+		}
 	}
 
 	void Camera::updateCameraUniform()
@@ -54,8 +69,5 @@ namespace SnowGL
 		// grab the new matrices
 		m_uniformData.viewMatrix = glm::lookAt(transform.getPosition(), transform.getPosition() + m_front, m_up);
 		m_uniformData.projectionMatrix = getProjectionMatrix();
-		m_uniformData.orthographicMatrix = getOrthographicMatrix();
-
-
 	}
 }

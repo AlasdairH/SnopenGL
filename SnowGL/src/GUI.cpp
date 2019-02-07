@@ -41,19 +41,26 @@ namespace SnowGL
 					ImGui::EndMenu();
 				}
 				if (ImGui::BeginMenu("Scene"))
-				{
-					if (ImGui::MenuItem("Switch Mode")) 
+				{				
+					if (ImGui::MenuItem("Reset Camera Pos")) 
 					{ 
 						// switch mode between view and edit
-						m_state->switchSceneMode();
-					}					
-					if (ImGui::MenuItem("Reset Camera")) 
-					{ 
-						// switch mode between view and edit
-						Camera::activeCamera->setFront(glm::vec3(0, 0, -1));
 						Camera::activeCamera->transform.setPosition(glm::vec3(0, 2, 0));
 					}
-					if (ImGui::MenuItem("Options")) { /* Do stuff */ }
+					if (ImGui::MenuItem("Orthographic Mode"))
+					{
+						Camera::activeCamera->setProjectionMode(PROJECTION_ORTHOGRAPHIC);
+						CONSOLE_MESSAGE("Set camera to PROJECTION_ORTHOGRAPHIC")
+					}
+					if (ImGui::MenuItem("Perspective Mode"))
+					{
+						Camera::activeCamera->setProjectionMode(PROJECTION_PERSPECTIVE);
+						CONSOLE_MESSAGE("Set camera to PROJECTION_PERSPECTIVE")
+					}
+					if (ImGui::MenuItem("Options")) 
+					{ 
+						/* Do stuff */ 
+					}
 					ImGui::EndMenu();
 				}
 				if (m_state->getSceneMode() == MODE_EDIT)
@@ -79,7 +86,7 @@ namespace SnowGL
 
 		bool *open = NULL;
 		// Performance
-		ImGui::SetNextWindowPos(ImVec2(0, 50));
+		//ImGui::SetNextWindowPos(ImVec2(0, 50));
 		ImGui::Begin("Performance", open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings);
 		
 		ImGui::Text("FPS: %f", m_state->framesPerSecond);
@@ -96,7 +103,7 @@ namespace SnowGL
 		ImGui::End();
 
 		// OpenGL
-		ImGui::SetNextWindowPos(ImVec2(0, 200));
+		//ImGui::SetNextWindowPos(ImVec2(0, 200));
 		ImGui::Begin("OpenGL", open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings);
 
 		ImGui::Text("Bound Texture: %s", m_state->curBoundTexture.c_str());
