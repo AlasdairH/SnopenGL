@@ -29,6 +29,8 @@ namespace SnowGL
 
 	void GUI::onUpdate()
 	{
+		ApplicationState &state = ApplicationState::getInstance();
+
 		ImGui_ImplSdlGL3_NewFrame(m_window);
 
 		if (!m_state->isUIHidden)
@@ -41,7 +43,12 @@ namespace SnowGL
 					ImGui::EndMenu();
 				}
 				if (ImGui::BeginMenu("Scene"))
-				{				
+				{			
+					if (ImGui::MenuItem("Switch Camera"))
+					{
+						// switch mode between view and edit
+						state.switchSceneMode();
+					}
 					if (ImGui::MenuItem("Reset Camera Pos")) 
 					{ 
 						// switch mode between view and edit

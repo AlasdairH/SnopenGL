@@ -57,8 +57,6 @@ namespace SnowGL
 
 	void Renderer::render(const GPU_Mesh &_mesh, ShaderProgram &_shaderProgram, const Transform &_transform)
 	{
-		m_frameBuffer->bind();
-
 		// set stencil buffer
 		glStencilFunc(m_sencilFunc, 1, 0xFF);
 		glStencilMask(m_stencilBufferInt);
@@ -70,14 +68,10 @@ namespace SnowGL
 		_mesh.m_IBO->bind();
 
 		glDrawElements(GL_TRIANGLES, _mesh.m_IBO->getCount(), GL_UNSIGNED_INT, 0);
-
-		m_frameBuffer->unBind();
 	}
 
 	void Renderer::render(const Renderable &_renderable)
 	{
-		m_frameBuffer->bind();
-
 		// set stencil buffer
 		glStencilFunc(m_sencilFunc, 1, 0xFF);
 		glStencilMask(m_stencilBufferInt);
@@ -85,20 +79,18 @@ namespace SnowGL
 		_renderable.m_shader->bind();
 		_renderable.m_shader->setUniformMat4f("u_modelMatrix", _renderable.transform.getModelMatrix());
 		_renderable.m_shader->setUniform1i("u_diffuseTexture", 0);
+		_renderable.m_shader->setUniform1i("u_depthMap", 1);
 		_renderable.m_texture->bind(0);
+		m_depthFrameBuffer->getTexture()->bind(1);
 		// access member through friend
 		_renderable.m_mesh->m_VAO->bind();
 		_renderable.m_mesh->m_IBO->bind();
 
 		glDrawElements(GL_TRIANGLES, _renderable.m_mesh->m_IBO->getCount(), GL_UNSIGNED_INT, 0);
-
-		m_frameBuffer->unBind();
 	}
 
 	void Renderer::renderToDepthBuffer(const Renderable & _renderable)
 	{
-		m_depthFrameBuffer->bind();
-
 		// set stencil buffer
 		glStencilFunc(m_sencilFunc, 1, 0xFF);
 		glStencilMask(m_stencilBufferInt);
@@ -111,8 +103,6 @@ namespace SnowGL
 		_renderable.m_mesh->m_IBO->bind();
 
 		glDrawElements(GL_TRIANGLES, _renderable.m_mesh->m_IBO->getCount(), GL_UNSIGNED_INT, 0);
-
-		m_depthFrameBuffer->unBind();
 	}
 
 	void Renderer::setStencilBufferActive(bool _active)

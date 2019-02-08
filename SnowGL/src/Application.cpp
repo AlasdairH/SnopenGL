@@ -36,7 +36,7 @@ int main()
 	camera.transform.translate(glm::vec3(0, 2, 12));
 
 	Camera depthCamera(1280, 720);
-	depthCamera.transform.translate(glm::vec3(0, 10, 0));
+	depthCamera.transform.translate(glm::vec3(0, 5, 0));
 	//depthCamera.setFOV(glm::radians(20.0f));
 	depthCamera.setPitch(-89.9f);
 	depthCamera.setProjectionMode(PROJECTION_ORTHOGRAPHIC);
@@ -49,15 +49,17 @@ int main()
 	cameraDataUniformBuffer->loadData(&camera.getCameraUniformData(), 0, sizeof(u_CameraData));
 
 	// create shader
-	ShaderProgram outlineShader("resources/shaders/Basic.vert", "resources/shaders/BlockColour.frag");
+	//ShaderProgram outlineShader("resources/shaders/Basic.vert", "resources/shaders/BlockColour.frag");
 
 	Transform zeroTransform;
 
-	Renderable editPlane;
-	IOUtilities::loadRenderable(editPlane, "resources/objects/Plane.rnd");
+	Renderable groundPlane;
+	IOUtilities::loadRenderable(groundPlane, "resources/objects/Plane.rnd");
+	groundPlane.getShader()->setUniformBool("u_renderDepthMap", true);
 
-	Renderable mainObject;
-	IOUtilities::loadRenderable(mainObject, "resources/objects/Grenade.rnd");
+	Renderable cube;
+	IOUtilities::loadRenderable(cube, "resources/objects/Grenade.rnd");
+	cube.transform.translate(glm::vec3(0, 1, 0));
 
 	Renderer renderer;
 
@@ -206,7 +208,8 @@ int main()
 			cameraDataUniformBuffer->loadData(&depthCamera.getCameraUniformData(), 0, sizeof(u_CameraData));
 
 			// render all objects
-			renderer.renderToDepthBuffer(mainObject);
+			renderer.renderToDepthBuffer(groundPlane);
+			renderer.renderToDepthBuffer(cube);
 		}
 		renderer.unBindDepthFrameBuffer();
 
@@ -220,11 +223,12 @@ int main()
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 			// render all objects
-			renderer.render(mainObject);
+			renderer.render(groundPlane);
+			renderer.render(cube);
 		}
 		renderer.unBindFrameBuffer();
 
-
+		/*
 		// if the scene is in edit mode
 		if (state.getSceneMode() == MODE_EDIT)
 		{
@@ -247,8 +251,17 @@ int main()
 			renderer.setStencilBufferActive(true);
 			renderer.setDepthTest(true);
 		}
+		*/
 
-		renderer.drawFrameBuffer();
+		if (state.getSceneMode() == MODE_VIEW)
+		{
+			renderer.drawFrameBuffer();
+		}
+		else
+		{
+			renderer.drawDepthFrameBuffer();
+		}
+		
 
 		// GUI
 		gui.onUpdate();

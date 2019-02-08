@@ -60,6 +60,13 @@ namespace SnowGL
 		*/
 		void unBind() const;
 
+		/** @brief Unbinds the FrameBuffer
+		*	@return The colour texure on the frame buffer
+		*
+		*	The colour texture of the frame buffer
+		*/
+		std::shared_ptr<Texture> getTexture();
+
 		/** @brief Verifies the frame buffer is correctly constructed
 		*
 		*	Verifies the frame buffer is correctly constructed

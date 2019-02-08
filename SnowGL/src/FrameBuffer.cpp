@@ -80,6 +80,11 @@ namespace SnowGL
 		glBindFramebuffer(GL_FRAMEBUFFER, 0); // back to default franebuffer
 	}
 
+	std::shared_ptr<Texture> FrameBuffer::getTexture()
+	{
+		return m_texture;
+	}
+
 	bool FrameBuffer::verify()
 	{
 		bind();
@@ -107,10 +112,13 @@ namespace SnowGL
 		m_shaderProgram->bind();
 		m_arrayBuffer->bind();
 
-		glBindTexture(GL_TEXTURE_2D, m_texture->getGLID());
+		m_texture->bind();
 
 		glDisable(GL_DEPTH_TEST);
+
+		// draw
 		glDrawArrays(GL_TRIANGLES, 0, 6);
+
 		glEnable(GL_DEPTH_TEST);
 
 #ifdef DEBUG

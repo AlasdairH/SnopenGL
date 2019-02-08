@@ -2,6 +2,7 @@
 
 uniform sampler2D u_diffuseTexture;
 uniform sampler2D u_depthMap;
+uniform bool u_renderDepthMap = false;
 
 layout(location = 0) out vec4 color;
 
@@ -12,5 +13,12 @@ in vec4 frag_posLightSpace;
 
 void main()
 {
-    color = texture(u_diffuseTexture, frag_texCoord);
+	if(!u_renderDepthMap)
+	{
+		color = texture(u_diffuseTexture, frag_texCoord);
+	}
+    else
+	{
+		color = texture(u_depthMap, frag_texCoord);
+	}
 } 

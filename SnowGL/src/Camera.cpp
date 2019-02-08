@@ -42,7 +42,7 @@ namespace SnowGL
 	{
 		m_perspectiveProjectionMatrix = glm::perspective(m_fovRad, m_aspect, 0.1f, 100.0f);
 		float orthoHeight = glm::degrees(m_fovRad) / 4;
-		float orthoWidth = orthoHeight * ApplicationState::getInstance().getAspectRatio();
+		float orthoWidth = orthoHeight;
 		m_orthographicProjectionMatrix = glm::ortho(-(orthoWidth / 2), orthoWidth / 2, -(orthoHeight / 2), orthoHeight / 2, 0.0f, 10.0f);
 	}
 
