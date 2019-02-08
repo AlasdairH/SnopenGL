@@ -54,7 +54,7 @@ namespace SnowGL
 		*	are accessible through the "friend" class. The object is drawn with the provided shader instead 
 		*	of the shader on the renderable.
 		*/
-		void renderShaderOverride(const Renderable &_renderable, ShaderProgram &_shaderProgram);
+		void renderToDepthBuffer(const Renderable &_renderable);
 
 		/** @brief Sets whether the stencil buffer is active
 		*	@param _active Flag stating whether to write to the stencil buffer or not
@@ -66,7 +66,12 @@ namespace SnowGL
 		inline void bindFrameBuffer() { m_frameBuffer->bind(); }
 		inline void unBindFrameBuffer() { m_frameBuffer->unBind(); }
 
+		inline void bindDepthFrameBuffer() { m_depthFrameBuffer->bind(); }
+		inline void unBindDepthFrameBuffer() { m_depthFrameBuffer->unBind(); }
+
 		void drawFrameBuffer();
+
+		void drawDepthFrameBuffer();
 
 		/** @brief Sets whether depth should be tested when rendering
 		*	@param _active Flag stating whether depth should be tested
@@ -79,6 +84,9 @@ namespace SnowGL
 		GLenum m_sencilFunc = GL_NOTEQUAL;
 		int m_stencilBufferInt = 0x00;
 
-		std::shared_ptr<FrameBuffer>	m_frameBuffer;	/**< The framebuffer that will be rendered to */
+		std::shared_ptr<FrameBuffer>	m_frameBuffer;			/**< The framebuffer that will be rendered to */
+		std::shared_ptr<FrameBuffer>	m_depthFrameBuffer;		/**< The framebuffer that will be rendered to */
+		std::shared_ptr<ShaderProgram>	m_shaderDepthTest;		/**< The framebuffer that will be rendered to */
+
 	};
 }

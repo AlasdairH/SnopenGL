@@ -50,7 +50,6 @@ int main()
 
 	// create shader
 	ShaderProgram outlineShader("resources/shaders/Basic.vert", "resources/shaders/BlockColour.frag");
-	ShaderProgram shaderDepthTest("resources/shaders/depth_test/DepthMap.vert", "resources/shaders/depth_test/DepthMap.frag");
 
 	Transform zeroTransform;
 
@@ -61,16 +60,7 @@ int main()
 	IOUtilities::loadRenderable(mainObject, "resources/objects/Grenade.rnd");
 
 	Renderer renderer;
-	CONSOLE_MESSAGE("Creating Depth FBO");
-	// create a FBO for the depth buffer with a depth rendering shader
-	FrameBuffer depthFBO(1024, 1024, std::make_shared<ShaderProgram>("resources/shaders/depth_test/DepthMapFBO.vert", "resources/shaders/depth_test/DepthMapFBO.frag"));
-	// attach a texture for the depth buffer
-	depthFBO.attach(std::make_shared<Texture>("null", 1024, 1024, TEXTURE_DEPTH, TEXTURE_PIXEL_FLOAT), FBO_TEXTURE_DEPTH);
-	depthFBO.setColourBuffer(GL_NONE);
-#ifdef COMPILE_DEBUG
-	// verify the FBO
-	depthFBO.verify();
-#endif
+
 	GUI gui(window.getWindowPtr());
 
 	ParticleSettings settings;
@@ -208,16 +198,17 @@ int main()
 		renderer.setStencilBufferActive(true);
 
 		// 1st pass: render to depth FBO
-		depthFBO.bind();
+		renderer.bindDepthFrameBuffer();
 		{
 			glClear(GL_DEPTH_BUFFER_BIT);
 
 			depthCamera.updateCameraUniform();
 			cameraDataUniformBuffer->loadData(&depthCamera.getCameraUniformData(), 0, sizeof(u_CameraData));
 
-			renderer.renderShaderOverride(mainObject, shaderDepthTest);
+			// render all objects
+			renderer.renderToDepthBuffer(mainObject);
 		}
-		depthFBO.unBind();
+		renderer.unBindDepthFrameBuffer();
 
 		// switch camera back to main
 		Camera::activeCamera->updateCameraUniform();
@@ -228,6 +219,7 @@ int main()
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
+			// render all objects
 			renderer.render(mainObject);
 		}
 		renderer.unBindFrameBuffer();
@@ -257,7 +249,6 @@ int main()
 		}
 
 		renderer.drawFrameBuffer();
-		//depthFBO.drawToScreen();
 
 		// GUI
 		gui.onUpdate();

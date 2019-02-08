@@ -58,7 +58,7 @@ namespace SnowGL
 						CONSOLE_MESSAGE("Set camera to PROJECTION_PERSPECTIVE")
 					}
 					if (ImGui::MenuItem("Options")) 
-					{ 
+					{
 						/* Do stuff */ 
 					}
 					ImGui::EndMenu();
