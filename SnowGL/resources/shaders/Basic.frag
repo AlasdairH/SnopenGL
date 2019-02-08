@@ -19,6 +19,7 @@ void main()
 	}
     else
 	{
-		color = texture(u_depthMap, frag_texCoord);
+		float depthValue = texture(u_depthMap, frag_texCoord).r;
+		color = vec4(vec3(depthValue), 1.0f);
 	}
 } 
