@@ -3,7 +3,7 @@
 
 namespace SnowGL
 {
-	FrameBuffer::FrameBuffer(const int _width, const int _height)
+	FrameBuffer::FrameBuffer(const int _width, const int _height, std::shared_ptr<ShaderProgram> _shader)
 	{
 		m_width = _width;
 		m_height = _height;
@@ -32,7 +32,7 @@ namespace SnowGL
 		m_arrayBuffer->addBuffer(*m_vertexBuffer, layout1);
 		m_vertexBuffer->loadData(&fbo_vertices, 0, sizeof(fbo_vertices));
 
-		m_shaderProgram = new ShaderProgram("resources/shaders/post_processing/PostProcVert.vert", "resources/shaders/post_processing/PostProcFrag.frag");
+		m_shaderProgram = _shader;
 		m_shaderProgram->setUniform1i("screenTexture", 0);
 
 		glGenFramebuffers(1, &m_frameBufferID);
@@ -48,7 +48,6 @@ namespace SnowGL
 		glDeleteRenderbuffers(1, &m_depthRenderBufferID);
 		delete m_vertexBuffer;
 		delete m_arrayBuffer;
-		delete m_shaderProgram;
 	}
 
 	void FrameBuffer::attach(std::shared_ptr<Texture> _texture, FrameBufferTextureType _type)
@@ -73,6 +72,7 @@ namespace SnowGL
 	void FrameBuffer::bind() const
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferID);
+		glViewport(0, 0, m_width, m_height);
 	}
 
 	void FrameBuffer::unBind() const

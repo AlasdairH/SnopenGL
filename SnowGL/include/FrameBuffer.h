@@ -29,10 +29,11 @@ namespace SnowGL
 		/** @brief FrameBuffer Ctor
 		*	@param _width The width of the FrameBuffer
 		*	@param _height The height of the FrameBuffer
+		*	@param _shader The shader program to use when rendering the frame buffer quad
 		*
 		*	Generates a FrameBuffer with the specified width and height.
 		*/
-		FrameBuffer(const int _width, const int _height);
+		FrameBuffer(const int _width, const int _height, std::shared_ptr<ShaderProgram> _shader);
 		/** @brief FrameBuffer Dtor
 		*
 		*	Deletes the FrameBuffer from memory along with all accompanying objects.
@@ -78,18 +79,18 @@ namespace SnowGL
 		void createDepthRenderBufferAttachment();
 
 	protected:
-		VertexArray					*m_arrayBuffer;				/**< The VertexArray for the full screen mesh */
-		VertexBuffer				*m_vertexBuffer;			/**< The VertexBuffer for the full screen mesh */
-		ShaderProgram				*m_shaderProgram;			/**< The Shader that holds the Post Processing effects */
+		VertexArray						*m_arrayBuffer;				/**< The VertexArray for the full screen mesh */
+		VertexBuffer					*m_vertexBuffer;			/**< The VertexBuffer for the full screen mesh */
+		std::shared_ptr<ShaderProgram>	m_shaderProgram;			/**< The Shader that holds the Post Processing effects */
 			
-		int							m_width;					/**< The width of the FrameBuffer and Accompanying Textures */
-		int							m_height;					/**< The height of the FrameBuffer and Accompanying Textures */
+		int								m_width;					/**< The width of the FrameBuffer and Accompanying Textures */
+		int								m_height;					/**< The height of the FrameBuffer and Accompanying Textures */
 
-		GLuint						m_frameBufferID;			/**< The OpenGL ID of the FrameBuffer */
+		GLuint							m_frameBufferID;			/**< The OpenGL ID of the FrameBuffer */
 			
-		std::shared_ptr<Texture>	m_texture;					/**< The OpenGL ID of the FrameBuffer Texture Attachment */
-		GLuint						m_depthRenderBufferID;		/**< The OpenGL ID of the FrameBuffer Depth RenderBuffer Attachment */
+		std::shared_ptr<Texture>		m_texture;					/**< The OpenGL ID of the FrameBuffer Texture Attachment */
+		GLuint							m_depthRenderBufferID;		/**< The OpenGL ID of the FrameBuffer Depth RenderBuffer Attachment */
 
-		int							m_colourBufferCount = 0;	// TODO: Use
+		int								m_colourBufferCount = 0;	// TODO: Use
 	};
 }

@@ -209,5 +209,9 @@
     <None Include="resources\shaders\BlockColour.frag" />
     <None Include="resources\shaders\post_processing\PostProcVert.vert" />
     <None Include="resources\shaders\post_processing\PostProcFrag.frag" />
+    <None Include="resources\shaders\depth_test\DepthMap.frag" />
+    <None Include="resources\shaders\depth_test\DepthMap.vert" />
+    <None Include="resources\shaders\depth_test\DepthMapFBO.frag" />
+    <None Include="resources\shaders\depth_test\DepthMapFBO.vert" />
   </ItemGroup>
 </Project>

@@ -229,6 +229,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\Basic.frag" />
+    <None Include="resources\shaders\depth_test\DepthMap.frag" />
+    <None Include="resources\shaders\depth_test\DepthMap.vert" />
+    <None Include="resources\shaders\depth_test\DepthMapFBO.frag" />
+    <None Include="resources\shaders\depth_test\DepthMapFBO.vert" />
     <None Include="resources\shaders\particle\particle.vert" />
     <None Include="resources\shaders\particle\particle.frag" />
     <None Include="resources\shaders\BlockColour.frag" />

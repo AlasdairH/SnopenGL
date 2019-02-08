@@ -26,6 +26,6 @@ void main()
 
 	mat4 MVP = projectionMatrix * viewMatrix * u_modelMatrix;
 	//MVP = orthographicMatrix * viewMatrix * u_modelMatrix;
-	out_worldSpacePosition = MVP * vec4(position.x, position.y, position.z, 1.0);
+	out_worldSpacePosition = MVP * vec4(position, 1.0);
     gl_Position = out_worldSpacePosition;
 }

@@ -36,10 +36,10 @@ int main()
 	camera.transform.translate(glm::vec3(0, 2, 12));
 
 	Camera depthCamera(1280, 720);
-	depthCamera.transform.translate(glm::vec3(0, 15, 0));
+	depthCamera.transform.translate(glm::vec3(0, 10, 0));
+	//depthCamera.setFOV(glm::radians(20.0f));
 	depthCamera.setPitch(-89.9f);
 	depthCamera.setProjectionMode(PROJECTION_ORTHOGRAPHIC);
-	//Camera::activeCamera = &depthCamera;
 
 	// create a camera data uniform buffer
 	std::shared_ptr<VertexBuffer> cameraDataUniformBuffer = std::make_shared<VertexBuffer>(BUFFER_UNIFORM);
@@ -50,22 +50,23 @@ int main()
 
 	// create shader
 	ShaderProgram outlineShader("resources/shaders/Basic.vert", "resources/shaders/BlockColour.frag");
+	ShaderProgram shaderDepthTest("resources/shaders/depth_test/DepthMap.vert", "resources/shaders/depth_test/DepthMap.frag");
 
 	Transform zeroTransform;
 
-	//Renderable groundPlane(openGLMesh, shader, texture);
 	Renderable editPlane;
 	IOUtilities::loadRenderable(editPlane, "resources/objects/Plane.rnd");
 
 	Renderable mainObject;
-	IOUtilities::loadRenderable(mainObject, "resources/objects/Cube.rnd");
+	IOUtilities::loadRenderable(mainObject, "resources/objects/Grenade.rnd");
 
 	Renderer renderer;
 	CONSOLE_MESSAGE("Creating Depth FBO");
-	// create a FBO for the depth buffer
-	FrameBuffer depthFBO(1024, 1024);
+	// create a FBO for the depth buffer with a depth rendering shader
+	FrameBuffer depthFBO(1024, 1024, std::make_shared<ShaderProgram>("resources/shaders/depth_test/DepthMapFBO.vert", "resources/shaders/depth_test/DepthMapFBO.frag"));
 	// attach a texture for the depth buffer
 	depthFBO.attach(std::make_shared<Texture>("null", 1024, 1024, TEXTURE_DEPTH, TEXTURE_PIXEL_FLOAT), FBO_TEXTURE_DEPTH);
+	depthFBO.setColourBuffer(GL_NONE);
 #ifdef COMPILE_DEBUG
 	// verify the FBO
 	depthFBO.verify();
@@ -204,20 +205,33 @@ int main()
 		}
 		
 		glStencilMask(1);
-		renderer.bindFrameBuffer();
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		renderer.setStencilBufferActive(true);
 
-		//snow.updateParticles(state.deltaTime);
+		// 1st pass: render to depth FBO
+		depthFBO.bind();
+		{
+			glClear(GL_DEPTH_BUFFER_BIT);
 
-		renderer.unBindFrameBuffer();
+			depthCamera.updateCameraUniform();
+			cameraDataUniformBuffer->loadData(&depthCamera.getCameraUniformData(), 0, sizeof(u_CameraData));
 
-	
+			renderer.renderShaderOverride(mainObject, shaderDepthTest);
+		}
+		depthFBO.unBind();
+
+		// switch camera back to main
 		Camera::activeCamera->updateCameraUniform();
 		cameraDataUniformBuffer->loadData(&Camera::activeCamera->getCameraUniformData(), 0, sizeof(u_CameraData));
 
-		// first pass
-		renderer.setStencilBufferActive(true);
-		renderer.render(mainObject);
+		// 2nd pass: rendering to frame buffer
+		renderer.bindFrameBuffer();
+		{
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+			renderer.render(mainObject);
+		}
+		renderer.unBindFrameBuffer();
+
 
 		// if the scene is in edit mode
 		if (state.getSceneMode() == MODE_EDIT)
@@ -243,6 +257,7 @@ int main()
 		}
 
 		renderer.drawFrameBuffer();
+		//depthFBO.drawToScreen();
 
 		// GUI
 		gui.onUpdate();

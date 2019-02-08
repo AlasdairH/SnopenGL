@@ -40,14 +40,21 @@ namespace SnowGL
 		*/
 		void render(const GPU_Mesh &_mesh, ShaderProgram &_shaderProgram, const Transform &_transform);
 		/** @brief Renders an object to the screen
-		*	@param _mesh The mesh to render
-		*	@param _shaderProgram The shader to render the mesh with
-		*	@param _transform The transform to apply to the mesh
+		*	@param _renderable The renderable to render
 		*
 		*	Renders the GPU_Mesh with the shader program and transform. GPU_Mesh protected variables
 		*	are accessible through the "friend" class.
 		*/
 		void render(const Renderable &_renderable);
+		/** @brief Renders an object to the screen with the shader overridden with a specified parameter
+		*	@param _renderable The renderable to render
+		*	@param _shaderProgram The shader to render the object with
+		*
+		*	Renders the GPU_Mesh with the shader program and transform. GPU_Mesh protected variables
+		*	are accessible through the "friend" class. The object is drawn with the provided shader instead 
+		*	of the shader on the renderable.
+		*/
+		void renderShaderOverride(const Renderable &_renderable, ShaderProgram &_shaderProgram);
 
 		/** @brief Sets whether the stencil buffer is active
 		*	@param _active Flag stating whether to write to the stencil buffer or not

@@ -28,7 +28,7 @@ namespace SnowGL
 		glViewport(0, 0, state.windowSize.x, state.windowSize.y);
 
 		// create a frame buffer
-		m_frameBuffer = std::make_shared<FrameBuffer>(state.windowSize.x, state.windowSize.y);
+		m_frameBuffer = std::make_shared<FrameBuffer>(state.windowSize.x, state.windowSize.y, std::make_shared<ShaderProgram>("resources/shaders/post_processing/PostProcVert.vert", "resources/shaders/post_processing/PostProcFrag.frag"));
 		// attach a depth render buffer
 		m_frameBuffer->createDepthRenderBufferAttachment();
 		// attach a colour buffer texture
@@ -61,8 +61,6 @@ namespace SnowGL
 
 	void Renderer::render(const Renderable &_renderable)
 	{
-		m_frameBuffer->bind();
-
 		// set stencil buffer
 		glStencilFunc(m_sencilFunc, 1, 0xFF);
 		glStencilMask(m_stencilBufferInt);
@@ -75,8 +73,22 @@ namespace SnowGL
 		_renderable.m_mesh->m_IBO->bind();
 
 		glDrawElements(GL_TRIANGLES, _renderable.m_mesh->m_IBO->getCount(), GL_UNSIGNED_INT, 0);
+	}
 
-		m_frameBuffer->unBind();
+	void Renderer::renderShaderOverride(const Renderable & _renderable, ShaderProgram & _shaderProgram)
+	{
+		// set stencil buffer
+		glStencilFunc(m_sencilFunc, 1, 0xFF);
+		glStencilMask(m_stencilBufferInt);
+
+		_shaderProgram.bind();
+		_shaderProgram.setUniformMat4f("u_modelMatrix", _renderable.transform.getModelMatrix());
+		_renderable.m_texture->bind();
+		// access member through friend
+		_renderable.m_mesh->m_VAO->bind();
+		_renderable.m_mesh->m_IBO->bind();
+
+		glDrawElements(GL_TRIANGLES, _renderable.m_mesh->m_IBO->getCount(), GL_UNSIGNED_INT, 0);
 	}
 
 	void Renderer::setStencilBufferActive(bool _active)
