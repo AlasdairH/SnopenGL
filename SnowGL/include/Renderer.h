@@ -91,5 +91,6 @@ namespace SnowGL
 
 		glm::mat4						m_depthSpaceMatrix;		/**< The depth space matrix */
 
+		std::shared_ptr<Texture>		m_snowTexture;
 	};
 }

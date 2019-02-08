@@ -52,6 +52,8 @@ namespace SnowGL
 
 		m_shaderDepthTest = std::make_shared<ShaderProgram>("resources/shaders/depth_test/DepthMap.vert", "resources/shaders/depth_test/DepthMap.frag");
 
+		m_snowTexture = std::make_shared<Texture>("Snow", "resources/textures/snow.png");
+
 		CONSOLE_MESSAGE("Finished creating renderer");
 	}
 
@@ -85,11 +87,13 @@ namespace SnowGL
 		_renderable.m_shader->setUniform1i("u_diffuseTexture", 0);
 		// set depth map sample point
 		_renderable.m_shader->setUniform1i("u_depthMap", 1);
+		_renderable.m_shader->setUniform1i("u_snowTexture", 2);
 
 
 
 		_renderable.m_texture->bind(0);
 		m_depthFrameBuffer->getTexture()->bind(1);
+		m_snowTexture->bind(2);
 		// access member through friend
 		_renderable.m_mesh->m_VAO->bind();
 		_renderable.m_mesh->m_IBO->bind();

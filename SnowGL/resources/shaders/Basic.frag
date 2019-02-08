@@ -2,10 +2,10 @@
 
 uniform sampler2D u_diffuseTexture;
 uniform sampler2D u_depthMap;
+uniform sampler2D u_snowTexture;
 
 uniform vec3 u_lightPos = vec3(0, 5, 0);
-uniform vec3 u_lightColour = vec3(1, 1, 1);
-
+uniform vec3 u_lightColour = vec3(0.5f);
 
 layout (location = 4) in vec2 frag_texCoord;
 layout (location = 5) in vec3 frag_normal;
@@ -28,25 +28,38 @@ float calculateOcclusion(vec4 fragPosDepthSpace)
 	float bias = 0.005;
     float shadow = currentDepth - bias > closestDepth ? 1.0f : 0.0f;
 
+	if(projCoords.z > 1.0)
+        shadow = 0.0;
+
     return shadow;
 }
 
 void main()
 {
+	// colour pass
 	float shadow = calculateOcclusion(frag_posDepthSpace);
-	// 0 = not in shadow
-	// 1 = in shadow
-	shadow = 1.0f - shadow;
+	// 1 = not in shadow
+	// 0 = in shadow
 
-	vec3 colour = texture(u_diffuseTexture, frag_texCoord).xyz;
-	vec3 ambient = 0.15f * colour;
+	vec3 colour;
+	if(shadow == 1.0f)
+	{
+		colour = texture(u_diffuseTexture, frag_texCoord).xyz;
+	}
+	else
+	{
+		colour = texture(u_snowTexture, frag_texCoord).xyz;
+	}
+
+	vec3 ambient = 0.40f * colour;
 
 	// diffuse
 	vec3 lightDir = normalize(u_lightPos - frag_pos);
 	float diff = max(dot(lightDir, frag_normal), 0.0);
 	vec3 diffuse = diff * u_lightColour;
 		
-	vec3 lighting = (ambient + shadow * diffuse) * colour;   
+	vec3 lighting = (ambient + (1.0f - shadow) * diffuse) * colour;
+
 
 	outputColour = vec4(lighting, 1.0f);
 } 
