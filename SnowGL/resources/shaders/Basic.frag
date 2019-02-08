@@ -2,7 +2,6 @@
 
 uniform sampler2D u_diffuseTexture;
 uniform sampler2D u_depthMap;
-uniform bool u_renderDepthMap = false;
 
 uniform vec3 u_lightPos = vec3(0, 5, 0);
 uniform vec3 u_lightColour = vec3(1, 1, 1);
@@ -34,28 +33,20 @@ float calculateOcclusion(vec4 fragPosDepthSpace)
 
 void main()
 {
-	if(!u_renderDepthMap)
-	{
-		float shadow = calculateOcclusion(frag_posDepthSpace);
-		// 0 = not in shadow
-		// 1 = in shadow
-		shadow = 1.0f - shadow;
+	float shadow = calculateOcclusion(frag_posDepthSpace);
+	// 0 = not in shadow
+	// 1 = in shadow
+	shadow = 1.0f - shadow;
 
-		vec3 colour = texture(u_diffuseTexture, frag_texCoord).xyz;
-		vec3 ambient = 0.15f * colour;
+	vec3 colour = texture(u_diffuseTexture, frag_texCoord).xyz;
+	vec3 ambient = 0.15f * colour;
 
-		// diffuse
-		vec3 lightDir = normalize(u_lightPos - frag_pos);
-		float diff = max(dot(lightDir, frag_normal), 0.0);
-		vec3 diffuse = diff * u_lightColour;
+	// diffuse
+	vec3 lightDir = normalize(u_lightPos - frag_pos);
+	float diff = max(dot(lightDir, frag_normal), 0.0);
+	vec3 diffuse = diff * u_lightColour;
 		
-		vec3 lighting = (ambient + shadow * diffuse) * colour;   
+	vec3 lighting = (ambient + shadow * diffuse) * colour;   
 
-		outputColour = vec4(lighting, 1.0f);
-	}
-    else
-	{
-		float depthValue = texture(u_depthMap, frag_texCoord).r;
-		outputColour = vec4(vec3(depthValue), 1.0f);
-	}
+	outputColour = vec4(lighting, 1.0f);
 } 

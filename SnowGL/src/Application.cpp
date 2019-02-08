@@ -55,7 +55,6 @@ int main()
 
 	Renderable groundPlane;
 	IOUtilities::loadRenderable(groundPlane, "resources/objects/Plane.rnd");
-	//groundPlane.getShader()->setUniformBool("u_renderDepthMap", true);
 
 	Renderable cube;
 	IOUtilities::loadRenderable(cube, "resources/objects/Grenade.rnd");
