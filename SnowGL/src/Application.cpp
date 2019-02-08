@@ -55,11 +55,11 @@ int main()
 
 	Renderable groundPlane;
 	IOUtilities::loadRenderable(groundPlane, "resources/objects/Plane.rnd");
-	groundPlane.getShader()->setUniformBool("u_renderDepthMap", true);
+	//groundPlane.getShader()->setUniformBool("u_renderDepthMap", true);
 
 	Renderable cube;
 	IOUtilities::loadRenderable(cube, "resources/objects/Grenade.rnd");
-	cube.transform.translate(glm::vec3(0, 1, 0));
+	cube.transform.translate(glm::vec3(0, 0, 0));
 
 	Renderer renderer;
 
@@ -206,6 +206,7 @@ int main()
 
 			depthCamera.updateCameraUniform();
 			cameraDataUniformBuffer->loadData(&depthCamera.getCameraUniformData(), 0, sizeof(u_CameraData));
+			renderer.setDepthSpaceMatrix(depthCamera.getCameraUniformData().projectionMatrix * depthCamera.getCameraUniformData().viewMatrix);
 
 			// render all objects
 			renderer.renderToDepthBuffer(groundPlane);

@@ -12,20 +12,20 @@ layout (location = 2) in vec3 normal;
 
 layout (location = 3) out vec4 out_worldSpacePosition;
 
-out vec2 frag_texCoord;
-out vec3 frag_normal;
-out vec3 frag_pos;
-out vec4 frag_posLightSpace;
+layout (location = 4) out vec2 frag_texCoord;
+layout (location = 5) out vec3 frag_normal;
+layout (location = 6) out vec3 frag_pos;
+layout (location = 7) out vec4 frag_posDepthSpace;
 
 uniform mat4 u_modelMatrix;
-uniform mat4 u_lightSpaceMatrix;
+uniform mat4 u_depthSpaceMatrix;
 
 void main()
 {
 	frag_texCoord = texCoord;
 	frag_normal = transpose(inverse(mat3(u_modelMatrix))) * normal;
 	frag_pos = vec3(u_modelMatrix * vec4(position, 1.0));
-	frag_posLightSpace = u_lightSpaceMatrix * vec4(frag_pos, 1.0);
+	frag_posDepthSpace = u_depthSpaceMatrix * vec4(frag_pos.xyz, 1.0);
 
 	mat4 MVP = projectionMatrix * viewMatrix * u_modelMatrix;
 	//MVP = orthographicMatrix * viewMatrix * u_modelMatrix;

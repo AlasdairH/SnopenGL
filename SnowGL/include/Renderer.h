@@ -48,7 +48,6 @@ namespace SnowGL
 		void render(const Renderable &_renderable);
 		/** @brief Renders an object to the screen with the shader overridden with a specified parameter
 		*	@param _renderable The renderable to render
-		*	@param _shaderProgram The shader to render the object with
 		*
 		*	Renders the GPU_Mesh with the shader program and transform. GPU_Mesh protected variables
 		*	are accessible through the "friend" class. The object is drawn with the provided shader instead 
@@ -69,6 +68,8 @@ namespace SnowGL
 		inline void bindDepthFrameBuffer() { m_depthFrameBuffer->bind(); }
 		inline void unBindDepthFrameBuffer() { m_depthFrameBuffer->unBind(); }
 
+		inline void setDepthSpaceMatrix(glm::mat4 _matrix) { m_depthSpaceMatrix = _matrix; }
+
 		void drawFrameBuffer();
 
 		void drawDepthFrameBuffer();
@@ -87,6 +88,8 @@ namespace SnowGL
 		std::shared_ptr<FrameBuffer>	m_frameBuffer;			/**< The framebuffer that will be rendered to */
 		std::shared_ptr<FrameBuffer>	m_depthFrameBuffer;		/**< The framebuffer that will be rendered to */
 		std::shared_ptr<ShaderProgram>	m_shaderDepthTest;		/**< The framebuffer that will be rendered to */
+
+		glm::mat4						m_depthSpaceMatrix;		/**< The depth space matrix */
 
 	};
 }

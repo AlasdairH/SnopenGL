@@ -4,22 +4,58 @@ uniform sampler2D u_diffuseTexture;
 uniform sampler2D u_depthMap;
 uniform bool u_renderDepthMap = false;
 
-layout(location = 0) out vec4 color;
+uniform vec3 u_lightPos = vec3(0, 5, 0);
+uniform vec3 u_lightColour = vec3(1, 1, 1);
 
-in vec2 frag_texCoord;
-in vec3 frag_normal;
-in vec3 frag_pos;
-in vec4 frag_posLightSpace;
+
+layout (location = 4) in vec2 frag_texCoord;
+layout (location = 5) in vec3 frag_normal;
+layout (location = 6) in vec3 frag_pos;
+layout (location = 7) in vec4 frag_posDepthSpace;
+
+out vec4 outputColour;
+
+float calculateOcclusion(vec4 fragPosDepthSpace)
+{
+    // perform perspective divide
+    vec3 projCoords = fragPosDepthSpace.xyz / fragPosDepthSpace.w;
+    // transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+    // get closest depth value from light's perspective (using [0,1] range fragPosDepth as coords)
+    float closestDepth = texture(u_depthMap, projCoords.xy).r; 
+    // get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+    // check whether current frag pos is in shadow
+	float bias = 0.005;
+    float shadow = currentDepth - bias > closestDepth ? 1.0f : 0.0f;
+
+    return shadow;
+}
 
 void main()
 {
 	if(!u_renderDepthMap)
 	{
-		color = texture(u_diffuseTexture, frag_texCoord);
+		float shadow = calculateOcclusion(frag_posDepthSpace);
+		// 0 = not in shadow
+		// 1 = in shadow
+		shadow = 1.0f - shadow;
+
+		vec3 colour = texture(u_diffuseTexture, frag_texCoord).xyz;
+		vec3 ambient = 0.15f * colour;
+
+		// diffuse
+		vec3 lightDir = normalize(u_lightPos - frag_pos);
+		float diff = max(dot(lightDir, frag_normal), 0.0);
+		vec3 diffuse = diff * u_lightColour;
+		
+		vec3 lighting = (ambient + shadow * diffuse) * colour;   
+
+		outputColour = vec4(lighting, 1.0f);
 	}
     else
 	{
 		float depthValue = texture(u_depthMap, frag_texCoord).r;
-		color = vec4(vec3(depthValue), 1.0f);
+		outputColour = vec4(vec3(depthValue), 1.0f);
 	}
 } 
