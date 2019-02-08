@@ -27,7 +27,17 @@ namespace SnowGL
 
 		glViewport(0, 0, state.windowSize.x, state.windowSize.y);
 
+		// create a frame buffer
 		m_frameBuffer = std::make_shared<FrameBuffer>(state.windowSize.x, state.windowSize.y);
+		// attach a depth render buffer
+		m_frameBuffer->createDepthRenderBufferAttachment();
+		// attach a colour buffer texture
+		m_frameBuffer->attach(std::make_shared<Texture>("null", state.windowSize.x, state.windowSize.y, TEXTURE_RGB, TEXTURE_PIXEL_UBYTE), FBO_TEXTURE_COLOUR);
+#ifdef COMPILE_DEBUG
+		// check it all worked
+		m_frameBuffer->verify();
+#endif
+		CONSOLE_MESSAGE("Finished creating renderer");
 	}
 
 	void Renderer::render(const GPU_Mesh &_mesh, ShaderProgram &_shaderProgram, const Transform &_transform)

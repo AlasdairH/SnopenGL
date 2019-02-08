@@ -16,6 +16,8 @@
 
 namespace SnowGL
 {
+	enum FrameBufferTextureType { FBO_TEXTURE_COLOUR = GL_COLOR_ATTACHMENT0, FBO_TEXTURE_DEPTH = GL_DEPTH_ATTACHMENT };
+
 	/*! @class FrameBuffer
 	*	@brief Abstraction of an OpenGL FrameBuffer
 	*
@@ -37,6 +39,15 @@ namespace SnowGL
 		*/
 		~FrameBuffer();
 
+		void attach(std::shared_ptr<Texture> _texture, FrameBufferTextureType _type);
+
+		/** @brief Sets the colour buffer to draw into and read from
+		*	@param _buffer The colour buffer to draw and read
+		*
+		*	When colors are written to the frame buffer, they are written into the color buffers specified by this function.
+		*/
+		void setColourBuffer(GLenum _buffer);
+
 		/** @brief Binds the FrameBuffer
 		*
 		*	Binds the framebuffer for drawing to
@@ -48,24 +59,25 @@ namespace SnowGL
 		*/
 		void unBind() const;
 
+		/** @brief Verifies the frame buffer is correctly constructed
+		*
+		*	Verifies the frame buffer is correctly constructed
+		*/
+		bool verify();
+
 		/** @brief Draws the FrameBuffer to the fullscreen vertices
 		*
 		*	Unbinds the FrameBuffer
 		*/
 		void drawToScreen();
 
-	protected:
-		/** @brief Create a Texture Attachment
-		*
-		*	Creates an OpenGL Texture for the FrameBuffer to draw the colours to. This can be used anywhere in the program.
-		*/
-		void createTextureAttachment();
 		/** @brief Create a Depth RenderBuffer Attachment
 		*
 		*	This creates a depth render buffer for sampling the depth of the drawn scene.
 		*/
 		void createDepthRenderBufferAttachment();
 
+	protected:
 		VertexArray					*m_arrayBuffer;				/**< The VertexArray for the full screen mesh */
 		VertexBuffer				*m_vertexBuffer;			/**< The VertexBuffer for the full screen mesh */
 		ShaderProgram				*m_shaderProgram;			/**< The Shader that holds the Post Processing effects */
@@ -75,7 +87,9 @@ namespace SnowGL
 
 		GLuint						m_frameBufferID;			/**< The OpenGL ID of the FrameBuffer */
 			
-		GLuint						m_textureID;				/**< The OpenGL ID of the FrameBuffer Texture Attachment */
+		std::shared_ptr<Texture>	m_texture;					/**< The OpenGL ID of the FrameBuffer Texture Attachment */
 		GLuint						m_depthRenderBufferID;		/**< The OpenGL ID of the FrameBuffer Depth RenderBuffer Attachment */
+
+		int							m_colourBufferCount = 0;	// TODO: Use
 	};
 }

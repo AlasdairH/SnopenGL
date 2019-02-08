@@ -58,9 +58,18 @@ int main()
 	IOUtilities::loadRenderable(editPlane, "resources/objects/Plane.rnd");
 
 	Renderable mainObject;
-	IOUtilities::loadRenderable(mainObject, "resources/objects/Grenade.rnd");
+	IOUtilities::loadRenderable(mainObject, "resources/objects/Cube.rnd");
 
 	Renderer renderer;
+	CONSOLE_MESSAGE("Creating Depth FBO");
+	// create a FBO for the depth buffer
+	FrameBuffer depthFBO(1024, 1024);
+	// attach a texture for the depth buffer
+	depthFBO.attach(std::make_shared<Texture>("null", 1024, 1024, TEXTURE_DEPTH, TEXTURE_PIXEL_FLOAT), FBO_TEXTURE_DEPTH);
+#ifdef COMPILE_DEBUG
+	// verify the FBO
+	depthFBO.verify();
+#endif
 	GUI gui(window.getWindowPtr());
 
 	ParticleSettings settings;
@@ -68,12 +77,12 @@ int main()
 	settings.lifetimeMax = 10.0f;
 	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	settings.colourEnd = glm::vec4(0.79f, 0.90f, 0.88f, 1.0f);
-	settings.particlesPerSecond = 1000;
+	settings.particlesPerSecond = 1;
 	settings.globalWind = glm::vec3(0.0f);
 
-	ParticleSystem snow(settings);
-	snow.initialise();
-	gui.setSelectedParticleSystem(std::make_shared<ParticleSystem>(snow));
+	//ParticleSystem snow(settings);
+	//snow.initialise();
+	//gui.setSelectedParticleSystem(std::make_shared<ParticleSystem>(snow));
 
 	bool quit = false;
 	SceneMode mode = MODE_VIEW;
@@ -82,7 +91,6 @@ int main()
 
 	SDL_ShowCursor(SDL_DISABLE);
 	
-
 	// fps counter variables
 	int frames = 0;
 	float fps = 0.0f;
@@ -199,7 +207,7 @@ int main()
 		renderer.bindFrameBuffer();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-		snow.updateParticles(state.deltaTime);
+		//snow.updateParticles(state.deltaTime);
 
 		renderer.unBindFrameBuffer();
 
