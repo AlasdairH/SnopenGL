@@ -69,12 +69,12 @@ int main()
 	settings.lifetimeMax = 10.0f;
 	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	settings.colourEnd = glm::vec4(0.79f, 0.90f, 0.88f, 1.0f);
-	settings.particlesPerSecond = 1;
+	settings.particlesPerSecond = 1000;
 	settings.globalWind = glm::vec3(0.0f);
 
-	//ParticleSystem snow(settings);
-	//snow.initialise();
-	//gui.setSelectedParticleSystem(std::make_shared<ParticleSystem>(snow));
+	ParticleSystem snow(settings);
+	snow.initialise();
+	gui.setSelectedParticleSystem(std::make_shared<ParticleSystem>(snow));
 
 	bool quit = false;
 	SceneMode mode = MODE_VIEW;
@@ -221,6 +221,8 @@ int main()
 		renderer.bindFrameBuffer();
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+			snow.updateParticles(state.deltaTime);
 
 			// render all objects
 			renderer.render(groundPlane);

@@ -57,7 +57,7 @@ void main()
 	if(u_simTime >= in_startTime)
 	{
 		float age = u_simTime - in_startTime;
-		// remove if through lessthan
+		// TODO: remove if through lessthan
 		if(out_position.y <= 0)
 		{
 			out_velocity = vec3(0.0f);
