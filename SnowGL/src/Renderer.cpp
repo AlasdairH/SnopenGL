@@ -21,9 +21,6 @@ namespace SnowGL
 		glStencilFunc(m_sencilFunc, 1, 0xFF);
 		glStencilMask(m_stencilBufferInt);
 
-		glPointSize(5);
-
-		//glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 		ApplicationState &state = ApplicationState::getInstance();

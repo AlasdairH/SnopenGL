@@ -136,13 +136,12 @@ void main()
 		else
 		{
 			// particle is alive and well so update it
-			out_velocity += vec3(0.0f, -0.98f, 0.0f);
+			out_velocity += vec3(0.0f, -0.38f, 0.0f);
 			out_velocity += u_globalWind;
 
 			out_position = vec4(in_position.xyz + (out_velocity * u_deltaTime * u_deltaTime), 1.0f);
 
 			float agePerc = age / in_lifetime;
-
 			particleColour = mix(u_startColour, u_endColour, agePerc);
 
 			// ------------------------- intersection test -------------------------
@@ -163,7 +162,6 @@ void main()
 					out_velocity = 0.8 * reflect_vector(out_velocity, n);
 				}
 			}
-			
 		}
 	}
 

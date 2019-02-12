@@ -93,7 +93,7 @@ int main()
 	settings.lifetimeMax = 5.0f;
 	settings.colourStart = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
 	settings.colourEnd = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-	settings.particlesPerSecond = 100;
+	settings.particlesPerSecond = 1000;
 	settings.globalWind = glm::vec3(0.0f);
 
 	ParticleSystem snow(settings);

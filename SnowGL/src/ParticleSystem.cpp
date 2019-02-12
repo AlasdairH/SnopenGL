@@ -15,7 +15,9 @@ namespace SnowGL
 
 	bool ParticleSystem::initialise()
 	{
-		CONSOLE_MESSAGE("Initialising Snowfall Particle System")
+		CONSOLE_MESSAGE("Initialising Snowfall Particle System");
+
+		glPointSize(m_pointSize);
 
 		m_tfShader = std::make_shared<ShaderProgram>();
 
@@ -58,7 +60,7 @@ namespace SnowGL
 
 				for (int j = 0; j < m_numParticles; ++j)
 				{
-					buffer[j].currentPosition = glm::vec4(Utils::randFloat(-spread, spread), 10, Utils::randFloat(-spread, spread), 1);
+					buffer[j].currentPosition = glm::vec4(Utils::randFloat(-spread, spread), 5, Utils::randFloat(-spread, spread), 1);
 					buffer[j].startPosition = buffer[j].currentPosition;
 					buffer[j].velocity = glm::vec3(0, 0, 0);
 					buffer[j].delay = (j / (float)m_numParticles) * m_settings->lifetimeMax;

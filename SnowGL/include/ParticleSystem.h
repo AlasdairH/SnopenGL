@@ -80,6 +80,9 @@ namespace SnowGL
 		*/
 		inline std::shared_ptr<ParticleSettings> getSettingsPtr() { return m_settings; }
 
+		inline int getPointSize() { return m_pointSize; }
+		inline void setPointSize(int _size) { m_pointSize = _size; glPointSize(m_pointSize); }
+
 	protected:
 		// TODO: doxygen
 
@@ -99,5 +102,7 @@ namespace SnowGL
 		float								m_simTime = 0;
 
 		Transform							m_transform;
+
+		int									m_pointSize = 1;
 	};
 }

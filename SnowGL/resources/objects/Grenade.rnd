@@ -3,5 +3,5 @@ SHADER_VERT resources/shaders/Basic.vert
 SHADER_FRAG resources/shaders/Basic.frag
 TFB_VARYING out_worldSpacePosition
 TEXTURE mk2_diffuse resources/textures/base.png
-MESH resources/models/Cube.obj
+MESH resources/models/MK2.obj
 TRANSFORM 0 0 0 0 0 0 1 1 1
