@@ -99,8 +99,7 @@ namespace SnowGL
 		//CONSOLE_MESSAGE(m_simTime);
 		m_tfShader->setUniform1f("u_deltaTime", _deltaTime);
 		m_tfShader->setUniform1f("u_simTime", m_simTime);
-		m_tfShader->setUniform1f("u_triangleCount", _vertexCount / 3);
-
+		m_tfShader->setUniform1f("u_triangleCount", _vertexCount);
 
 		m_tfShader->bind();
 		m_tfShader->setUniformMat4f("u_modelMatrix", m_transform.getModelMatrix());

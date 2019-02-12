@@ -55,7 +55,8 @@ int main()
 	IOUtilities::loadRenderable(groundPlane, "resources/objects/Plane.rnd");
 
 	Renderable cube;
-	IOUtilities::loadRenderable(cube, "resources/objects/Grenade.rnd");
+	//IOUtilities::loadRenderable(cube, "resources/objects/Grenade.rnd");
+	IOUtilities::loadRenderable(cube, "resources/objects/Plane.rnd");
 	cube.transform.translate(glm::vec3(0, 0, 0));
 
 	int vertexCount = cube.getVertexCount() + groundPlane.getVertexCount();
@@ -226,7 +227,7 @@ int main()
 
 
 			// render all objects
-			groundPlane.getGPUMesh()->getVBO()->bindBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0);
+			groundPlane.getGPUMesh()->getVBO()->bindBase(GL_TRANSFORM_FEEDBACK_BUFFER, 3);
 			glBeginTransformFeedback(GL_TRIANGLES);
 			renderer.render(groundPlane);
 			//renderer.render(cube);
