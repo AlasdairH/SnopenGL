@@ -53,15 +53,22 @@ int main()
 
 	Renderable groundPlane;
 	IOUtilities::loadRenderable(groundPlane, "resources/objects/Plane.rnd");
-	groundPlane.transform.translate(glm::vec3(0, -5, 0));
+	groundPlane.transform.translate(glm::vec3(0, 0, 0));
 
 	Renderable cube;
-	//IOUtilities::loadRenderable(cube, "resources/objects/Grenade.rnd");
-	IOUtilities::loadRenderable(cube, "resources/objects/Plane.rnd");
+	IOUtilities::loadRenderable(cube, "resources/objects/Grenade.rnd");
+	CONSOLE_MESSAGE("Creating TFB VAO and VBO");
+	VertexArray meshFeedbackArray;
+	VertexBuffer meshFeedbackBuffer(BUFFER_ARRAY_TEXTURE);
+	VertexBufferLayout layout;
+	layout.push<float>(1);
+	meshFeedbackArray.addBuffer(meshFeedbackBuffer, layout);
+
 	cube.transform.translate(glm::vec3(0, 0, 0));
 
-	int vertexCount = cube.getVertexCount() + groundPlane.getVertexCount();
-	vertexCount = groundPlane.getVertexCount();
+	//int vertexCount = cube.getVertexCount() + groundPlane.getVertexCount();
+	int vertexCount = cube.getVertexCount();
+	//vertexCount += groundPlane.getVertexCount();
 	CONSOLE_MESSAGE("Scene vertex count: " << vertexCount);
 
 	Renderer renderer;
@@ -69,11 +76,11 @@ int main()
 	GUI gui(window.getWindowPtr());
 
 	ParticleSettings settings;
-	settings.lifetimeMin = 6.0f;
-	settings.lifetimeMax = 6.0f;
-	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	settings.colourEnd = glm::vec4(0.79f, 0.90f, 0.88f, 1.0f);
-	settings.particlesPerSecond = 1000;
+	settings.lifetimeMin = 5.0f;
+	settings.lifetimeMax = 5.0f;
+	settings.colourStart = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+	settings.colourEnd = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	settings.particlesPerSecond = 10000;
 	settings.globalWind = glm::vec3(0.0f);
 
 	ParticleSystem snow(settings);
@@ -85,7 +92,7 @@ int main()
 
 	float cameraMoveSpeed;
 
-	SDL_ShowCursor(SDL_DISABLE);
+	//SDL_ShowCursor(SDL_DISABLE);
 	
 	// fps counter variables
 	int frames = 0;
@@ -212,8 +219,8 @@ int main()
 			renderer.setDepthSpaceMatrix(depthCamera.getCameraUniformData().projectionMatrix * depthCamera.getCameraUniformData().viewMatrix);
 
 			// render all objects
-			renderer.renderToDepthBuffer(groundPlane);
-			renderer.renderToDepthBuffer(cube);
+			//renderer.renderToDepthBuffer(groundPlane);
+			//renderer.renderToDepthBuffer(cube);
 		}
 		renderer.unBindDepthFrameBuffer();
 
@@ -226,15 +233,15 @@ int main()
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-
-			// render all objects
-			groundPlane.getGPUMesh()->getVBO()->bindBase(GL_TRANSFORM_FEEDBACK_BUFFER, 3);
-			glBeginTransformFeedback(GL_TRIANGLES);
-			renderer.render(groundPlane);
+			// render with transform feedback going to meshFeedbackBuffer
+			renderer.render(cube, meshFeedbackArray, meshFeedbackBuffer);
 			//renderer.render(cube);
-			glEndTransformFeedback();
 
+			// update and render snow
 			snow.updateParticles(state.deltaTime, vertexCount);
+
+			// render the ground plane
+			//renderer.render(groundPlane);
 		}
 		renderer.unBindFrameBuffer();
 
@@ -274,8 +281,8 @@ int main()
 		
 
 		// GUI
-		gui.onUpdate();
-		gui.onRender();
+		//gui.onUpdate();
+		//gui.onRender();
 
 		window.swapBuffer();
 	}

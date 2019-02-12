@@ -1,7 +1,7 @@
 #version 430 core
 
 // textures
-layout (location = 0) uniform  sampler2D u_diffuseTexture;
+layout (location = 0) uniform sampler2D u_diffuseTexture;
 layout (location = 1) uniform sampler2D u_depthMap;
 layout (location = 2) uniform sampler2D u_snowTexture;
 

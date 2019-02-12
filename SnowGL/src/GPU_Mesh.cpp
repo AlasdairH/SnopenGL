@@ -7,7 +7,7 @@ namespace SnowGL
 	{
 		// create the necessary buffers and arrays
 		m_VAO = std::make_shared<VertexArray>();
-		m_VBO = std::make_shared<VertexBuffer>(BUFFER_ARRAY_TEXTURE);
+		m_VBO = std::make_shared<VertexBuffer>(BUFFER_ARRAY);
 		m_IBO = std::make_shared<VertexBuffer>(BUFFER_ELEMENT_ARRAY);
 	}
 

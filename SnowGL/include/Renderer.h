@@ -46,6 +46,15 @@ namespace SnowGL
 		*	are accessible through the "friend" class.
 		*/
 		void render(const Renderable &_renderable);
+		/** @brief Renders an object to the screen
+		*	@param _renderable The renderable to render
+		*	@param _tfbArray The array containing the buffer to feedback into 
+		*	@param _tfbBuffer The buffer to feedback into 
+		*
+		*	Renders the GPU_Mesh with the shader program and transform. GPU_Mesh protected variables
+		*	are accessible through the "friend" class.
+		*/
+		void render(const Renderable &_renderable, VertexArray &_tfbArray, VertexBuffer &_tfbBuffer);
 		/** @brief Renders an object to the screen with the shader overridden with a specified parameter
 		*	@param _renderable The renderable to render
 		*

@@ -41,12 +41,14 @@ namespace SnowGL
 		}
 		else if (m_vertexBufferType == BUFFER_ARRAY_TEXTURE)
 		{
+
 			m_usage = GL_DYNAMIC_COPY;
 			glGenTextures(1, &m_vertexBufferTextureID);
 			bind();
 			loadData(NULL, 1024 * 1024 * sizeof(glm::vec4));
 			glBindTexture(GL_TEXTURE_BUFFER, m_vertexBufferTextureID);
 			glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, m_vertexBufferID);
+
 			m_vertexBufferType = BUFFER_ARRAY;
 		}
 

@@ -19,7 +19,7 @@ namespace SnowGL
 
 		m_tfShader = std::make_shared<ShaderProgram>();
 
-		float spread = 10.0f;
+		float spread = 1.0f;
 
 		Shader tfVert(SHADER_VERTEX);
 		tfVert.load("resources/shaders/particle/particle.vert");
@@ -97,11 +97,11 @@ namespace SnowGL
 	{
 		m_simTime += _deltaTime;
 		//CONSOLE_MESSAGE(m_simTime);
+		m_tfShader->bind();
 		m_tfShader->setUniform1f("u_deltaTime", _deltaTime);
 		m_tfShader->setUniform1f("u_simTime", m_simTime);
 		m_tfShader->setUniform1i("u_triangleCount", _vertexCount);
 
-		m_tfShader->bind();
 		m_tfShader->setUniformMat4f("u_modelMatrix", m_transform.getModelMatrix());
 
 		m_tfVAO[m_currVAO]->bind();
