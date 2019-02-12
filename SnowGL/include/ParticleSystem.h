@@ -66,17 +66,11 @@ namespace SnowGL
 
 		/** @brief Renderer Ctor
 		*	@param _deltaTime The update deltaTime
+		*	@param _vertexCount The number of vertices in the scene
 		*
 		*	Performs the transform feedback operation for simulating particles
 		*/
-		void updateParticles(float _deltaTime);
-		/** @brief Renderer Ctor
-		*	@param _deltaTime The update deltaTime
-		// TODO: Particle Renderer
-		*
-		*	Performs the transform feedback operation for simulating particles
-		*/
-		void render(int _deltaTime, const glm::mat4 & _VP, const glm::vec3 & _cameraPos);
+		void updateParticles(float _deltaTime, int _vertexCount);
 
 		/** @brief Gets the partcle settings
 		*	@return A pointer to the particles settings
@@ -88,7 +82,6 @@ namespace SnowGL
 
 	protected:
 		// TODO: doxygen
-		void renderParticles(const glm::mat4 & _VP, const glm::vec3 & _cameraPos);
 
 		std::shared_ptr<ParticleSettings>	m_settings;
 

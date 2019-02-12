@@ -72,6 +72,13 @@ namespace SnowGL
 		*/
 		inline std::shared_ptr<ShaderProgram> getShader() { return m_shader; }
 
+		/** @brief Gets the vertex count of the object
+		*	@return The vertex count
+		*
+		*	Returns the number of vertices on the object
+		*/
+		inline int getVertexCount() { return m_mesh->getVertexCount(); }
+
 	protected:
 		std::shared_ptr<GPU_Mesh>			m_mesh;		/**< The mesh */
 		std::shared_ptr<ShaderProgram>		m_shader;	/**< The shader */

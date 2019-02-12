@@ -58,13 +58,17 @@ int main()
 	IOUtilities::loadRenderable(cube, "resources/objects/Grenade.rnd");
 	cube.transform.translate(glm::vec3(0, 0, 0));
 
+	int vertexCount = cube.getVertexCount() + groundPlane.getVertexCount();
+	vertexCount = groundPlane.getVertexCount();
+	CONSOLE_MESSAGE("Scene vertex count: " << vertexCount);
+
 	Renderer renderer;
 
 	GUI gui(window.getWindowPtr());
 
 	ParticleSettings settings;
-	settings.lifetimeMin = 10.0f;
-	settings.lifetimeMax = 10.0f;
+	settings.lifetimeMin = 6.0f;
+	settings.lifetimeMax = 6.0f;
 	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	settings.colourEnd = glm::vec4(0.79f, 0.90f, 0.88f, 1.0f);
 	settings.particlesPerSecond = 1000;
@@ -220,11 +224,15 @@ int main()
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-			snow.updateParticles(state.deltaTime);
 
 			// render all objects
+			groundPlane.getGPUMesh()->getVBO()->bindBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0);
+			glBeginTransformFeedback(GL_TRIANGLES);
 			renderer.render(groundPlane);
-			renderer.render(cube);
+			//renderer.render(cube);
+			glEndTransformFeedback();
+
+			snow.updateParticles(state.deltaTime, vertexCount);
 		}
 		renderer.unBindFrameBuffer();
 

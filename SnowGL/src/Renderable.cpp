@@ -14,5 +14,4 @@ namespace SnowGL
 		m_shader = std::make_shared<ShaderProgram>(_shader);
 		m_texture = std::make_shared<Texture>(_texture);
 	}
-
 }
