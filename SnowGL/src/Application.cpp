@@ -28,7 +28,7 @@ int main()
 
 	InitManager::initSDL();
 
-	Window window("SnowGL");
+	Window window("SnopenGL");
 
 	InitManager::initOpenGL();
 
