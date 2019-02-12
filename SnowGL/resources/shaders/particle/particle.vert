@@ -112,10 +112,6 @@ void main()
 	{
 		float age = u_simTime - in_startTime;
 		// TODO: remove if through lessthan
-		if(out_position.y <= 0)
-		{
-			out_velocity = vec3(0.0f);
-		}
 		if(age > in_lifetime)
 		{
 			// particle is past it's lifetime

@@ -39,6 +39,9 @@ namespace SnowGL
 		*/
 		void setMesh(const Mesh &_mesh);
 
+		// TODO: Doxygen
+		inline std::shared_ptr<VertexBuffer> getVBO() { return m_VBO; }
+
 		/** @brief Gets the vertex count of the object
 		*	@return The vertex count
 		*

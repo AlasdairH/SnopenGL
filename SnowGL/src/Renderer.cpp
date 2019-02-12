@@ -89,8 +89,6 @@ namespace SnowGL
 		_renderable.m_shader->setUniform1i("u_depthMap", 1);
 		_renderable.m_shader->setUniform1i("u_snowTexture", 2);
 
-		_renderable.m_mesh->m_VBO->bindBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0);
-
 		_renderable.m_texture->bind(0);
 		m_depthFrameBuffer->getTexture()->bind(1);
 		m_snowTexture->bind(2);
