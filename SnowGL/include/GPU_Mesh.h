@@ -39,9 +39,18 @@ namespace SnowGL
 		*/
 		void setMesh(const Mesh &_mesh);
 
+		/** @brief Gets the vertex count of the object
+		*	@return The vertex count
+		*
+		*	Returns the number of vertices on the object
+		*/
+		inline int getVertexCount() { return m_vertexCount; }
+
 	protected:
-		std::shared_ptr<VertexArray>	m_VAO;		/**< The Vertex Array Object */
-		std::shared_ptr<VertexBuffer>	m_VBO;		/**< The Vertex Buffer Object which contains interleaved vertex data */
-		std::shared_ptr<VertexBuffer>	m_IBO;		/**< The index buffer data for the model */
+		std::shared_ptr<VertexArray>	m_VAO;				/**< The Vertex Array Object */
+		std::shared_ptr<VertexBuffer>	m_VBO;				/**< The Vertex Buffer Object which contains interleaved vertex data */
+		std::shared_ptr<VertexBuffer>	m_IBO;				/**< The index buffer data for the model */
+
+		int								m_vertexCount = -1;	/**< The number of vertices of the model */
 	};
 }

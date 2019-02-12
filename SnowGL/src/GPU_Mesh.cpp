@@ -19,5 +19,7 @@ namespace SnowGL
 		// load data to VBOs
 		m_VBO->loadData(_mesh.vertices.data(), _mesh.layout.getStride() * _mesh.vertices.size());
 		m_IBO->loadData(_mesh.indices.data(), (GLuint)_mesh.indices.size(), sizeof(unsigned int) * _mesh.indices.size());
+
+		m_vertexCount = _mesh.vertices.size();
 	}
 }

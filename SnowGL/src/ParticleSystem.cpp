@@ -93,25 +93,13 @@ namespace SnowGL
 		CONSOLE_MESSAGE("Particle settings applied to shader")
 	}
 
-	void ParticleSystem::render(int _deltaTime, const glm::mat4 &_VP, const glm::vec3 &_cameraPos)
-	{
-
-		updateParticles(_deltaTime);
-
-		renderParticles(_VP, _cameraPos);
-	}
-
-	void ParticleSystem::renderParticles(const glm::mat4 & _VP, const glm::vec3 & _cameraPos)
-	{
-		// todo: Render billboards
-	}
-
-	void ParticleSystem::updateParticles(float _deltaTime)
+	void ParticleSystem::updateParticles(float _deltaTime, int _vertexCount)
 	{
 		m_simTime += _deltaTime;
 		//CONSOLE_MESSAGE(m_simTime);
 		m_tfShader->setUniform1f("u_deltaTime", _deltaTime);
 		m_tfShader->setUniform1f("u_simTime", m_simTime);
+		m_tfShader->setUniform1f("u_triangleCount", _vertexCount / 3);
 
 
 		m_tfShader->bind();

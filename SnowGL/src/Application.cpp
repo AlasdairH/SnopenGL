@@ -222,11 +222,13 @@ int main()
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-			snow.updateParticles(state.deltaTime);
+			snow.updateParticles(state.deltaTime, cube.getVertexCount() + groundPlane.getVertexCount());
 
 			// render all objects
+			//glBeginTransformFeedback(GL_TRIANGLES);
 			renderer.render(groundPlane);
 			renderer.render(cube);
+			//glEndTransformFeedback();
 		}
 		renderer.unBindFrameBuffer();
 
