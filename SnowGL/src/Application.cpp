@@ -53,6 +53,7 @@ int main()
 
 	Renderable groundPlane;
 	IOUtilities::loadRenderable(groundPlane, "resources/objects/Plane.rnd");
+	groundPlane.transform.translate(glm::vec3(0, -5, 0));
 
 	Renderable cube;
 	//IOUtilities::loadRenderable(cube, "resources/objects/Grenade.rnd");

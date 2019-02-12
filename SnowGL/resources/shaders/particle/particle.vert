@@ -6,16 +6,11 @@ layout (std140) uniform u_camera_data
 	mat4 projectionMatrix;
 };
 
-uniform int u_triangleCount;
-uniform samplerBuffer u_geometryTBO;
-
 layout (location = 0) in vec4 in_position;
 layout (location = 1) in vec4 in_startPosition;
 layout (location = 2) in vec3 in_velocity;
 layout (location = 3) in float in_startTime;
 layout (location = 4) in float in_lifetime;
-
-
 
 // rendering
 uniform mat4 u_modelMatrix;
@@ -44,7 +39,6 @@ out vec4 particleColour;
 
 bool intersect(vec3 origin, vec3 direction, vec3 v0, vec3 v1, vec3 v2, out vec3 point)
 {
-	particleColour = vec4(1.0f, 0.0f, 0.0f, 1.0f);
 	vec3 u, v, n;
 	vec3 w0, w;
 	float r, a, b;
@@ -115,42 +109,6 @@ vec4 when_eq(vec4 x, vec4 y)
 vec4 when_gt(vec4 x, vec4 y) 
 {
 	return max(sign(x - y), 0.0);
-}
-
-bool intersect(vec3 origin, vec3 direction, vec3 v0, vec3 v1, vec3 v2, out vec3 point)
-{
-vec3 u, v, n;
-	vec3 w0, w;
-	float r, a, b;
-	u = (v1 - v2);
-	v = (v2 - v0);
-	n = cross(u, v);
-	w0 = origin - v0;
-	a = -dot(n, w0);
-	b = dot(n, direction);
-	r = a / b;
-	if (r < 0.0 || r > 1.0)
-		return false;
-
-	point = origin + r * direction;
-	float uu, uv, vv, wu, wv, D;
-	uu = dot(u, u);
-	uv = dot(u, v);
-	vv = dot(v, v);
-	w= point - v0;
-	wu = dot(w, u);
-	wv = dot(w, v);
-	D = uv * uv - uu * vv;
-	float s, t;
-	s = (uv * wv - vv * wu) / D;
-	if (s < 0.0 || s > 1.0)
-		return false;
-
-	t = (uv * wu - uu * wv) / D;
-	if (t < 0.0 || (s + t) > 1.0)
-		return false;
-		
-	return true;
 }
 
 void main()

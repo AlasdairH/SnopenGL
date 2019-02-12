@@ -13,7 +13,11 @@
 
 namespace SnowGL
 {
-	enum VertexBufferType { BUFFER_ARRAY = GL_ARRAY_BUFFER, BUFFER_ELEMENT_ARRAY = GL_ELEMENT_ARRAY_BUFFER, BUFFER_UNIFORM = GL_UNIFORM_BUFFER, BUFFER_TRANSFORM_FEEDBACK = GL_TRANSFORM_FEEDBACK_BUFFER };
+	enum VertexBufferType {
+		BUFFER_ARRAY = GL_ARRAY_BUFFER, BUFFER_ELEMENT_ARRAY = GL_ELEMENT_ARRAY_BUFFER,
+		BUFFER_UNIFORM = GL_UNIFORM_BUFFER, BUFFER_TRANSFORM_FEEDBACK = GL_TRANSFORM_FEEDBACK_BUFFER,
+		BUFFER_ARRAY_TEXTURE = GL_TEXTURE_BUFFER
+	};
 
 	/*! @class VertexBuffer
 	*	@brief An abstraction of an OpenGL Vertex Bufer Object (VBO).
@@ -113,9 +117,10 @@ namespace SnowGL
 		void bindBase(GLuint _base, GLuint _index);
 
 	protected:
-		VertexBufferType	m_vertexBufferType;			/**< The type of Vertex Buffer (BUFFER_ARRAY, BUFFER_ELEMENT_ARRAY, etc)  */
-		GLuint				m_count;					/**< The number of items of data there is in the buffer */
-		GLuint				m_vertexBufferID;			/**< The Vertex Buffer ID */
+		VertexBufferType	m_vertexBufferType;				/**< The type of Vertex Buffer (BUFFER_ARRAY, BUFFER_ELEMENT_ARRAY, etc)  */
+		GLuint				m_count;						/**< The number of items of data there is in the buffer */
+		GLuint				m_vertexBufferID;				/**< The Vertex Buffer ID */
+		GLuint				m_vertexBufferTextureID = 0;	/**< The Vertex Buffer Texture ID (if one exists) */
 
 		GLuint				m_usage = GL_STATIC_DRAW;	/**< The usage pattern for the buffer */
 	};
