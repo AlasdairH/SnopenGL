@@ -39,6 +39,7 @@ out vec4 particleColour;
 
 bool intersect(vec3 origin, vec3 direction, vec3 v0, vec3 v1, vec3 v2, out vec3 point)
 {
+	particleColour = vec4(1.0f, 0.0f, 0.0f, 1.0f);
 	vec3 u, v, n;
 	vec3 w0, w;
 	float r, a, b;
@@ -48,7 +49,7 @@ bool intersect(vec3 origin, vec3 direction, vec3 v0, vec3 v1, vec3 v2, out vec3 
 	n = cross(u, v);
 	if (length(n) < 0.1)
 	{
-		particleColour = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+		//particleColour = vec4(1.0f, 0.0f, 0.0f, 1.0f);
 		return false;
 	}
 
@@ -92,6 +93,7 @@ bool intersect(vec3 origin, vec3 direction, vec3 v0, vec3 v1, vec3 v2, out vec3 
 		return false;
 	}
 
+	particleColour = vec4(0.0f, 1.0f, 0.0f, 1.0f);
 	return true;
 }
 
@@ -151,6 +153,7 @@ void main()
 	int i;
 	for (i = 0; i < u_triangleCount; i++)
 	{
+		//particleColour = vec4(1.0f, 0.0f, 0.0f, 1.0f);
 		v0 = texelFetch(geometry_tbo, i * 3).xyz;
 		v1 = texelFetch(geometry_tbo, i * 3 + 1).xyz;
 		v2 = texelFetch(geometry_tbo, i * 3 + 2).xyz;
