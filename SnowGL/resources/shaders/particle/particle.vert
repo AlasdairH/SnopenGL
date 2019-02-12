@@ -46,18 +46,25 @@ bool intersect(vec3 origin, vec3 direction, vec3 v0, vec3 v1, vec3 v2, out vec3 
 	u = (v1 - v0);
 	v = (v2 - v0);
 	n = cross(u, v);
-	 if (length(n) < 0.1)
-		 return false;
+	if (length(n) < 0.1)
+	{
+		particleColour = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+		return false;
+	}
 
 	w0 = origin - v0;
 	a = -dot(n, w0);
 	b = dot(n, direction);
 	if (abs(b) < 0.1)
+	{
 		return false;
+	}
 
 	r = a / b;
 	if (r < 0.0 || r > 1.0)
+	{
 		return false;
+	}
 
 	point = origin + r * direction;
 
@@ -75,10 +82,15 @@ bool intersect(vec3 origin, vec3 direction, vec3 v0, vec3 v1, vec3 v2, out vec3 
 
 	s = (uv * wv - vv * wu) / D;
 	if (s < 0.0 || s > 1.0)
+	{
 		return false;
+	}
+
 	t = (uv * wu - uu * wv) / D;
 	if (t < 0.0 || (s + t) > 1.0)
+	{
 		return false;
+	}
 
 	return true;
 }
