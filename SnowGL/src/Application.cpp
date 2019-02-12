@@ -58,11 +58,24 @@ int main()
 	Renderable cube;
 	IOUtilities::loadRenderable(cube, "resources/objects/Grenade.rnd");
 	CONSOLE_MESSAGE("Creating TFB VAO and VBO");
-	VertexArray meshFeedbackArray;
-	VertexBuffer meshFeedbackBuffer(BUFFER_ARRAY_TEXTURE);
-	VertexBufferLayout layout;
-	layout.push<float>(1);
-	meshFeedbackArray.addBuffer(meshFeedbackBuffer, layout);
+
+	GLuint geometry_vbo;
+	GLuint geometry_tex;
+	GLuint render_vao;
+
+	glGenBuffers(1, &geometry_vbo);
+	glGenTextures(1, &geometry_tex);
+	glBindBuffer(GL_TEXTURE_BUFFER, geometry_vbo);
+	glBufferData(GL_TEXTURE_BUFFER, 1024 * 1024 * sizeof(glm::vec4), NULL, GL_DYNAMIC_COPY);
+	glBindTexture(GL_TEXTURE_BUFFER, geometry_tex);
+	glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, geometry_vbo);
+
+	glGenVertexArrays(1, &render_vao);
+	glBindVertexArray(render_vao);
+	glBindBuffer(GL_ARRAY_BUFFER, geometry_vbo);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+	glEnableVertexAttribArray(0);
+
 
 	cube.transform.translate(glm::vec3(0, 0, 0));
 
@@ -80,7 +93,7 @@ int main()
 	settings.lifetimeMax = 5.0f;
 	settings.colourStart = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
 	settings.colourEnd = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-	settings.particlesPerSecond = 10000;
+	settings.particlesPerSecond = 100;
 	settings.globalWind = glm::vec3(0.0f);
 
 	ParticleSystem snow(settings);
@@ -182,7 +195,7 @@ int main()
 		{
 			Camera::activeCamera->transform.translate(glm::vec3(0, -1, 0) * cameraMoveSpeed * state.deltaTime);
 		}
-		
+
 		while (SDL_PollEvent(&incomingEvent))
 		{
 			if (incomingEvent.type == SDL_QUIT)
@@ -191,6 +204,7 @@ int main()
 			}
 			if (incomingEvent.type == SDL_KEYDOWN)
 			{
+				std::vector<glm::vec4> bufferData;
 				//Select surfaces based on key press
 				switch (incomingEvent.key.keysym.sym)
 				{
@@ -199,6 +213,15 @@ int main()
 					break; 
 				case SDLK_SPACE:
 					state.isUIHidden = !state.isUIHidden;
+					break;
+				case SDLK_b:
+					glBindBuffer(GL_ARRAY_BUFFER, geometry_vbo);
+					bufferData.resize(vertexCount);
+					glGetBufferSubData(GL_ARRAY_BUFFER, 0, vertexCount * sizeof(glm::vec4), &bufferData[0]);
+					for (int i = 0; i < bufferData.size(); ++i)
+					{
+						CONSOLE_MESSAGE(bufferData[i].x << ", " << bufferData[i].y << ", " << bufferData[i].z);
+					}
 					break;
 				default:
 					break;
@@ -234,7 +257,8 @@ int main()
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 			// render with transform feedback going to meshFeedbackBuffer
-			renderer.render(cube, meshFeedbackArray, meshFeedbackBuffer);
+			renderer.render(cube, render_vao, geometry_vbo);
+
 			//renderer.render(cube);
 
 			// update and render snow
@@ -281,8 +305,8 @@ int main()
 		
 
 		// GUI
-		//gui.onUpdate();
-		//gui.onRender();
+		gui.onUpdate();
+		gui.onRender();
 
 		window.swapBuffer();
 	}

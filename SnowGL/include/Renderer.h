@@ -54,7 +54,7 @@ namespace SnowGL
 		*	Renders the GPU_Mesh with the shader program and transform. GPU_Mesh protected variables
 		*	are accessible through the "friend" class.
 		*/
-		void render(const Renderable &_renderable, VertexArray &_tfbArray, VertexBuffer &_tfbBuffer);
+		void render(const Renderable &_renderable, GLuint &_tfbArray, GLuint &_tfbBuffer);
 		/** @brief Renders an object to the screen with the shader overridden with a specified parameter
 		*	@param _renderable The renderable to render
 		*

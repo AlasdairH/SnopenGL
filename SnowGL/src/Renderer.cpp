@@ -21,6 +21,8 @@ namespace SnowGL
 		glStencilFunc(m_sencilFunc, 1, 0xFF);
 		glStencilMask(m_stencilBufferInt);
 
+		glPointSize(5);
+
 		//glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -100,7 +102,7 @@ namespace SnowGL
 		glDrawElements(GL_TRIANGLES, _renderable.m_mesh->m_IBO->getCount(), GL_UNSIGNED_INT, 0);
 	}
 
-	void Renderer::render(const Renderable &_renderable, VertexArray &_tfbArray, VertexBuffer &_tfbBuffer)
+	void Renderer::render(const Renderable &_renderable, GLuint &_tfbArray, GLuint &_tfbBuffer)
 	{
 		// set stencil buffer
 		glStencilFunc(m_sencilFunc, 1, 0xFF);
@@ -121,8 +123,8 @@ namespace SnowGL
 		m_depthFrameBuffer->getTexture()->bind(1);
 		m_snowTexture->bind(2);
 
-		_tfbArray.bind();
-		_tfbBuffer.bindBase(GL_TRANSFORM_FEEDBACK, 0);
+		glBindVertexArray(_tfbArray);
+		glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, _tfbBuffer);
 
 		// access member through friend
 		_renderable.m_mesh->m_VAO->bind();

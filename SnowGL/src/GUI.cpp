@@ -112,7 +112,7 @@ namespace SnowGL
 			//ImGui::SetNextWindowPos(ImVec2(0, 200));
 			ImGui::Begin("OpenGL", open, ImGuiWindowFlags_AlwaysAutoResize);
 
-			ImGui::Text("Bound Texture: %s", m_state->curBoundTexture.c_str());
+			ImGui::SliderFloat("Point Size", &m_selectedParticleSystem->getSettingsPtr()->globalWind.x, -1.0f, 1.0f, "%.2f");
 
 			ImGui::End();
 

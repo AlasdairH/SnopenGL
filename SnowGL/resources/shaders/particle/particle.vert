@@ -20,8 +20,8 @@ layout (location = 7) out vec3 out_velocity;
 layout (location = 8) out float out_startTime;
 layout (location = 9) out float out_lifetime;
 
-//layout (location = 10) uniform int u_triangleCount;
-//layout (location = 11) uniform samplerBuffer geometry_tbo;
+layout (location = 10) uniform int u_triangleCount;
+layout (location = 11) uniform samplerBuffer geometry_tbo;
 
 // rendering
 layout (location = 12) uniform mat4 u_modelMatrix;
@@ -146,13 +146,12 @@ void main()
 			particleColour = mix(u_startColour, u_endColour, agePerc);
 
 			// ------------------------- intersection test -------------------------
-			/*
+			
 			vec3 v0, v1, v2;
 			vec3 point;
 			int i;
 			for (i = 0; i < u_triangleCount; i++)
 			{
-				//particleColour = vec4(1.0f, 0.0f, 0.0f, 1.0f);
 				v0 = texelFetch(geometry_tbo, i * 3).xyz;
 				v1 = texelFetch(geometry_tbo, i * 3 + 1).xyz;
 				v2 = texelFetch(geometry_tbo, i * 3 + 2).xyz;
@@ -164,7 +163,7 @@ void main()
 					out_velocity = 0.8 * reflect_vector(out_velocity, n);
 				}
 			}
-			*/
+			
 		}
 	}
 
