@@ -29,10 +29,12 @@ void main()
 	frag_pos = vec3(u_modelMatrix * vec4(position, 1.0));
 	frag_posDepthSpace = u_depthSpaceMatrix * vec4(frag_pos.xyz, 1.0);
 
-	mat4 MVP = projectionMatrix * viewMatrix * u_modelMatrix;
-	//MVP = orthographicMatrix * viewMatrix * u_modelMatrix;
-	out_worldSpacePosition = MVP * vec4(position, 1.0);
+	vec4 pos = (u_modelMatrix * (vec4(position, 1.0f) * vec4(1.0f)));
+	out_worldSpacePosition = pos;
 
+	mat4 VP = projectionMatrix * viewMatrix;
 
-    gl_Position = out_worldSpacePosition;
+    //gl_Position = out_worldSpacePosition;
+	//gl_Position = MVP * vec4(position, 1.0f);
+	gl_Position = VP * pos;
 }

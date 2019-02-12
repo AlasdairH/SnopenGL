@@ -4,4 +4,4 @@ SHADER_FRAG resources/shaders/Basic.frag
 TFB_VARYING out_worldSpacePosition
 TEXTURE mk2_diffuse resources/textures/base.png
 MESH resources/models/MK2.obj
-TRANSFORM 0 2 0 0 0 0 1 1 1
+TRANSFORM 0 1.5 0 0 0 0 1 1 1
