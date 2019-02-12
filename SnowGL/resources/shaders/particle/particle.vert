@@ -36,8 +36,76 @@ out vec3 out_velocity;
 out float out_startTime;
 out float out_lifetime;
 
+uniform samplerBuffer geometry_tbo;
+uniform int u_triangleCount;
+
 // fragment shader inputs
 out vec4 particleColour;
+
+bool intersect(vec3 origin, vec3 direction, vec3 v0, vec3 v1, vec3 v2, out vec3 point)
+{
+	particleColour = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	vec3 u, v, n;
+	vec3 w0, w;
+	float r, a, b;
+
+	u = (v1 - v0);
+	v = (v2 - v0);
+	n = cross(u, v);
+	if (length(n) < 0.1)
+	{
+		//particleColour = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+		return false;
+	}
+
+	w0 = origin - v0;
+	a = -dot(n, w0);
+	b = dot(n, direction);
+	if (abs(b) < 0.1)
+	{
+		return false;
+	}
+
+	r = a / b;
+	if (r < 0.0 || r > 1.0)
+	{
+		return false;
+	}
+
+	point = origin + r * direction;
+
+	float uu, uv, vv, wu, wv, D;
+
+	uu = dot(u, u);
+	uv = dot(u, v);
+	vv = dot(v, v);
+	w = point - v0;
+	wu = dot(w, u);
+	wv = dot(w, v);
+	D = uv * uv - uu * vv;
+
+	float s, t;
+
+	s = (uv * wv - vv * wu) / D;
+	if (s < 0.0 || s > 1.0)
+	{
+		return false;
+	}
+
+	t = (uv * wu - uu * wv) / D;
+	if (t < 0.0 || (s + t) > 1.0)
+	{
+		return false;
+	}
+
+	particleColour = vec4(0.0f, 1.0f, 0.0f, 1.0f);
+	return true;
+}
+
+vec3 reflect_vector(vec3 v, vec3 n)
+{
+	return v - 2.0 * dot(v, n) * n;
+}
 
 vec4 when_eq(vec4 x, vec4 y) 
 {
@@ -99,10 +167,6 @@ void main()
 	{
 		float age = u_simTime - in_startTime;
 		// TODO: remove if through lessthan
-		if(out_position.y <= 0)
-		{
-			out_velocity = vec3(0.0f);
-		}
 		if(age > in_lifetime)
 		{
 			// particle is past it's lifetime
@@ -121,6 +185,24 @@ void main()
 			float agePerc = age / in_lifetime;
 
 			particleColour = mix(u_startColour, u_endColour, agePerc);
+		}
+	}
+
+	// intersection test
+	vec3 v0, v1, v2;
+	vec3 point;
+	int i;
+	for (i = 0; i < u_triangleCount; i++)
+	{
+		//particleColour = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+		v0 = texelFetch(geometry_tbo, i * 3).xyz;
+		v1 = texelFetch(geometry_tbo, i * 3 + 1).xyz;
+		v2 = texelFetch(geometry_tbo, i * 3 + 2).xyz;
+		if (intersect(in_position.xyz, in_position.xyz - out_position.xyz, v0, v1, v2, point))
+		{
+			vec3 n = normalize(cross(v1 - v0, v2 - v0));
+			out_position = vec4(point + reflect_vector(out_position.xyz - point, n), 1.0);
+			out_velocity = 0.8 * reflect_vector(out_velocity, n);
 		}
 	}
 

@@ -48,7 +48,9 @@ void main()
 	}
 	else
 	{
-		colour = texture(u_snowTexture, frag_texCoord).xyz;
+		
+		//colour = texture(u_snowTexture, frag_texCoord).xyz;
+		colour = texture(u_diffuseTexture, frag_texCoord).xyz;
 	}
 
 	vec3 ambient = 0.40f * colour;

@@ -28,18 +28,16 @@ int main()
 
 	InitManager::initSDL();
 
-	Window window("SnowGL");
+	Window window("SnopenGL");
 
 	InitManager::initOpenGL();
 
-	Camera camera(1280, 720);
-	camera.transform.translate(glm::vec3(0, 2, 12));
+	Camera camera(state.windowSize.x, state.windowSize.y, PROJECTION_PERSPECTIVE);
+	camera.transform.translate(glm::vec3(0, 2, 18));
 
-	Camera depthCamera(1280, 720);
+	Camera depthCamera(1024, 1024, PROJECTION_ORTHOGRAPHIC);
 	depthCamera.transform.translate(glm::vec3(0, 5, 0));
-	//depthCamera.setFOV(glm::radians(20.0f));
 	depthCamera.setPitch(-89.9f);
-	depthCamera.setProjectionMode(PROJECTION_ORTHOGRAPHIC);
 
 	// create a camera data uniform buffer
 	std::shared_ptr<VertexBuffer> cameraDataUniformBuffer = std::make_shared<VertexBuffer>(BUFFER_UNIFORM);
@@ -57,16 +55,21 @@ int main()
 	IOUtilities::loadRenderable(groundPlane, "resources/objects/Plane.rnd");
 
 	Renderable cube;
-	IOUtilities::loadRenderable(cube, "resources/objects/Grenade.rnd");
+	//IOUtilities::loadRenderable(cube, "resources/objects/Grenade.rnd");
+	IOUtilities::loadRenderable(cube, "resources/objects/Plane.rnd");
 	cube.transform.translate(glm::vec3(0, 0, 0));
+
+	int vertexCount = cube.getVertexCount() + groundPlane.getVertexCount();
+	vertexCount = groundPlane.getVertexCount();
+	CONSOLE_MESSAGE("Scene vertex count: " << vertexCount);
 
 	Renderer renderer;
 
 	GUI gui(window.getWindowPtr());
 
 	ParticleSettings settings;
-	settings.lifetimeMin = 10.0f;
-	settings.lifetimeMax = 10.0f;
+	settings.lifetimeMin = 6.0f;
+	settings.lifetimeMax = 6.0f;
 	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	settings.colourEnd = glm::vec4(0.79f, 0.90f, 0.88f, 1.0f);
 	settings.particlesPerSecond = 1000;
@@ -222,11 +225,15 @@ int main()
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-			snow.updateParticles(state.deltaTime);
 
 			// render all objects
+			groundPlane.getGPUMesh()->getVBO()->bindBase(GL_TRANSFORM_FEEDBACK_BUFFER, 3);
+			glBeginTransformFeedback(GL_TRIANGLES);
 			renderer.render(groundPlane);
-			renderer.render(cube);
+			//renderer.render(cube);
+			glEndTransformFeedback();
+
+			snow.updateParticles(state.deltaTime, vertexCount);
 		}
 		renderer.unBindFrameBuffer();
 
