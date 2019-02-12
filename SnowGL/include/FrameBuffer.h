@@ -16,6 +16,8 @@
 
 namespace SnowGL
 {
+	enum FrameBufferTextureType { FBO_TEXTURE_COLOUR = GL_COLOR_ATTACHMENT0, FBO_TEXTURE_DEPTH = GL_DEPTH_ATTACHMENT };
+
 	/*! @class FrameBuffer
 	*	@brief Abstraction of an OpenGL FrameBuffer
 	*
@@ -27,15 +29,25 @@ namespace SnowGL
 		/** @brief FrameBuffer Ctor
 		*	@param _width The width of the FrameBuffer
 		*	@param _height The height of the FrameBuffer
+		*	@param _shader The shader program to use when rendering the frame buffer quad
 		*
 		*	Generates a FrameBuffer with the specified width and height.
 		*/
-		FrameBuffer(const int _width, const int _height);
+		FrameBuffer(const int _width, const int _height, std::shared_ptr<ShaderProgram> _shader);
 		/** @brief FrameBuffer Dtor
 		*
 		*	Deletes the FrameBuffer from memory along with all accompanying objects.
 		*/
 		~FrameBuffer();
+
+		void attach(std::shared_ptr<Texture> _texture, FrameBufferTextureType _type);
+
+		/** @brief Sets the colour buffer to draw into and read from
+		*	@param _buffer The colour buffer to draw and read
+		*
+		*	When colors are written to the frame buffer, they are written into the color buffers specified by this function.
+		*/
+		void setColourBuffer(GLenum _buffer);
 
 		/** @brief Binds the FrameBuffer
 		*
@@ -48,34 +60,44 @@ namespace SnowGL
 		*/
 		void unBind() const;
 
+		/** @brief Unbinds the FrameBuffer
+		*	@return The colour texure on the frame buffer
+		*
+		*	The colour texture of the frame buffer
+		*/
+		std::shared_ptr<Texture> getTexture();
+
+		/** @brief Verifies the frame buffer is correctly constructed
+		*
+		*	Verifies the frame buffer is correctly constructed
+		*/
+		bool verify();
+
 		/** @brief Draws the FrameBuffer to the fullscreen vertices
 		*
 		*	Unbinds the FrameBuffer
 		*/
 		void drawToScreen();
 
-	protected:
-		/** @brief Create a Texture Attachment
-		*
-		*	Creates an OpenGL Texture for the FrameBuffer to draw the colours to. This can be used anywhere in the program.
-		*/
-		void createTextureAttachment();
 		/** @brief Create a Depth RenderBuffer Attachment
 		*
 		*	This creates a depth render buffer for sampling the depth of the drawn scene.
 		*/
 		void createDepthRenderBufferAttachment();
 
-		VertexArray					*m_arrayBuffer;				/**< The VertexArray for the full screen mesh */
-		VertexBuffer				*m_vertexBuffer;			/**< The VertexBuffer for the full screen mesh */
-		ShaderProgram				*m_shaderProgram;			/**< The Shader that holds the Post Processing effects */
+	protected:
+		VertexArray						*m_arrayBuffer;				/**< The VertexArray for the full screen mesh */
+		VertexBuffer					*m_vertexBuffer;			/**< The VertexBuffer for the full screen mesh */
+		std::shared_ptr<ShaderProgram>	m_shaderProgram;			/**< The Shader that holds the Post Processing effects */
 			
-		int							m_width;					/**< The width of the FrameBuffer and Accompanying Textures */
-		int							m_height;					/**< The height of the FrameBuffer and Accompanying Textures */
+		int								m_width;					/**< The width of the FrameBuffer and Accompanying Textures */
+		int								m_height;					/**< The height of the FrameBuffer and Accompanying Textures */
 
-		GLuint						m_frameBufferID;			/**< The OpenGL ID of the FrameBuffer */
+		GLuint							m_frameBufferID;			/**< The OpenGL ID of the FrameBuffer */
 			
-		GLuint						m_textureID;				/**< The OpenGL ID of the FrameBuffer Texture Attachment */
-		GLuint						m_depthRenderBufferID;		/**< The OpenGL ID of the FrameBuffer Depth RenderBuffer Attachment */
+		std::shared_ptr<Texture>		m_texture;					/**< The OpenGL ID of the FrameBuffer Texture Attachment */
+		GLuint							m_depthRenderBufferID;		/**< The OpenGL ID of the FrameBuffer Depth RenderBuffer Attachment */
+
+		int								m_colourBufferCount = 0;	// TODO: Use
 	};
 }

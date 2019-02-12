@@ -65,6 +65,13 @@ namespace SnowGL
 		*/
 		inline std::shared_ptr<GPU_Mesh> getGPUMesh() { return m_mesh; }
 
+		/** @brief Gets the objects shader
+		*	@return The Shader of the object
+		*
+		*	Gets a shared pointer to the object's Sahder
+		*/
+		inline std::shared_ptr<ShaderProgram> getShader() { return m_shader; }
+
 	protected:
 		std::shared_ptr<GPU_Mesh>			m_mesh;		/**< The mesh */
 		std::shared_ptr<ShaderProgram>		m_shader;	/**< The shader */

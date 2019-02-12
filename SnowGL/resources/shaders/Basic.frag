@@ -1,32 +1,65 @@
 #version 430 core
 
 uniform sampler2D u_diffuseTexture;
+uniform sampler2D u_depthMap;
+uniform sampler2D u_snowTexture;
 
-uniform vec4 u_diffuse = { 1.0f, 0.78f, 0.91f, 1.0f };
-uniform bool u_useTexture = false;
-//uniform vec3 u_cameraPosition;
-uniform mat4 u_m;
+uniform vec3 u_lightPos = vec3(0, 5, 0);
+uniform vec3 u_lightColour = vec3(0.5f);
 
-uniform float u_materialShininess = 0.1f;
-uniform vec3 u_materialSpecularCol = { 1.0f, 1.0f, 1.0f };
+layout (location = 4) in vec2 frag_texCoord;
+layout (location = 5) in vec3 frag_normal;
+layout (location = 6) in vec3 frag_pos;
+layout (location = 7) in vec4 frag_posDepthSpace;
 
-uniform vec3 u_lightPosition = { 0, 0, 0 };
+out vec4 outputColour;
 
-uniform vec3 u_viewPos = { 0, 2, 0 };
+float calculateOcclusion(vec4 fragPosDepthSpace)
+{
+    // perform perspective divide
+    vec3 projCoords = fragPosDepthSpace.xyz / fragPosDepthSpace.w;
+    // transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+    // get closest depth value from light's perspective (using [0,1] range fragPosDepth as coords)
+    float closestDepth = texture(u_depthMap, projCoords.xy).r; 
+    // get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+    // check whether current frag pos is in shadow
+	float bias = 0.005;
+    float shadow = currentDepth - bias > closestDepth ? 1.0f : 0.0f;
 
-layout(location = 0) out vec4 color;
+	if(projCoords.z > 1.0)
+        shadow = 0.0;
 
-in vec2 frag_texCoord;
-in vec3 frag_vert;
-in vec3 frag_normal;
+    return shadow;
+}
 
 void main()
 {
-	//vec4 surfaceColor;
-	//surfaceColor = u_diffuse;
+	// colour pass
+	float shadow = calculateOcclusion(frag_posDepthSpace);
+	// 1 = not in shadow
+	// 0 = in shadow
 
-    //vec3 fragPosition = vec3(u_m * vec4(frag_vert, 1));
+	vec3 colour;
+	if(shadow == 1.0f)
+	{
+		colour = texture(u_diffuseTexture, frag_texCoord).xyz;
+	}
+	else
+	{
+		colour = texture(u_snowTexture, frag_texCoord).xyz;
+	}
 
-    color = texture(u_diffuseTexture, frag_texCoord);
-    //color =	vec4(color.x, color.y, color.z, 1.0f);
+	vec3 ambient = 0.40f * colour;
+
+	// diffuse
+	vec3 lightDir = normalize(u_lightPos - frag_pos);
+	float diff = max(dot(lightDir, frag_normal), 0.0);
+	vec3 diffuse = diff * u_lightColour;
+		
+	vec3 lighting = (ambient + (1.0f - shadow) * diffuse) * colour;
+
+
+	outputColour = vec4(lighting, 1.0f);
 } 

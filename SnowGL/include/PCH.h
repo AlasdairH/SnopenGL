@@ -29,8 +29,22 @@
 #include "IOUtilities.h"
 #include "CompileSettings.h"
 
+#ifdef COMPILE_DEBUG
 #define CONSOLE_MESSAGE(_text) std::cout << "MESSAGE: " << _text << std::endl;
 #define CONSOLE_WARNING(_text) std::cout << "WARNING: " << _text << std::endl;
 #define CONSOLE_ERROR(_text) std::cout << "ERROR: " << _text << std::endl;
+#endif
+
+#ifdef COMPILE_RELEASE_LOGGING
+#define CONSOLE_MESSAGE(_text) std::cout << "MESSAGE: " << _text << std::endl;
+#define CONSOLE_WARNING(_text) std::cout << "WARNING: " << _text << std::endl;
+#define CONSOLE_ERROR(_text) std::cout << "ERROR: " << _text << std::endl;
+#endif
+
+#ifdef COMPILE_RELEASE
+#define CONSOLE_MESSAGE(_text);
+#define CONSOLE_WARNING(_text) std::cout << "WARNING: " << _text << std::endl;
+#define CONSOLE_ERROR(_text) std::cout << "ERROR: " << _text << std::endl;
+#endif
 
 #define TICK_INTERVAL 30

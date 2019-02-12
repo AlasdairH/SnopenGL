@@ -39,6 +39,8 @@ namespace SnowGL
 
 		std::string objFile = loadText(_filepath);
 
+		CONSOLE_MESSAGE("Parsing mesh file: " << _filepath);
+
 		unsigned int cursor = 0;
 
 		std::unordered_map<int, glm::vec3> verticesMap;
