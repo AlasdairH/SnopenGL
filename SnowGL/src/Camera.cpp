@@ -13,13 +13,15 @@ namespace SnowGL
 		init();
 	}
 
-	Camera::Camera(const int _resolutionWidth, const int _resolutionHeight)
+	Camera::Camera(const int _resolutionWidth, const int _resolutionHeight, ProjectionMode _projection)
 	{
 		m_fovRad = 0.7f;
 		setAspectRatio(_resolutionWidth / (float)_resolutionHeight);
 
 		m_viewportWidth = _resolutionWidth;
 		m_viewportHeight = _resolutionHeight;
+
+		m_projectionMode = _projection;
 
 		init();
 	}

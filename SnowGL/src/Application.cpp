@@ -32,14 +32,12 @@ int main()
 
 	InitManager::initOpenGL();
 
-	Camera camera(1280, 720);
+	Camera camera(state.windowSize.x, state.windowSize.y, PROJECTION_PERSPECTIVE);
 	camera.transform.translate(glm::vec3(0, 2, 12));
 
-	Camera depthCamera(1280, 720);
+	Camera depthCamera(1024, 1024, PROJECTION_ORTHOGRAPHIC);
 	depthCamera.transform.translate(glm::vec3(0, 5, 0));
-	//depthCamera.setFOV(glm::radians(20.0f));
 	depthCamera.setPitch(-89.9f);
-	depthCamera.setProjectionMode(PROJECTION_ORTHOGRAPHIC);
 
 	// create a camera data uniform buffer
 	std::shared_ptr<VertexBuffer> cameraDataUniformBuffer = std::make_shared<VertexBuffer>(BUFFER_UNIFORM);

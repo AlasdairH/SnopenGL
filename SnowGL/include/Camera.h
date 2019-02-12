@@ -33,10 +33,11 @@ namespace SnowGL
 		/** @brief Camera Ctor
 		*	@param _resolutionWidth The width of the camera's resolution
 		*	@param _resolutionHeight The height of the camera's resolution
+		*	@param _projection The projection mode of the camera, orthographic or perspective
 		*
 		*	Creates a camera at the world 0, 0, 0 with a standard FoV at the specified resolution
 		*/
-		Camera(const int _resolutionWidth, const int _resolutionHeight);
+		Camera(const int _resolutionWidth, const int _resolutionHeight, ProjectionMode _projection);
 		/** @brief Camera Dtor
 		*
 		*	Removes the camera
