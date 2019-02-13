@@ -14,6 +14,7 @@ namespace SnowGL
 		float		particlesPerSecond;		// The number of particles emitted per second
 		float		lifetimeMin;			// min lifetime in seconds
 		float		lifetimeMax;			// max lifetime in seconds
+		float		collisionMultiplier;	// max lifetime in seconds
 
 		glm::vec3	globalWind;
 

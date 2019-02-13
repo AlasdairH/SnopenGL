@@ -91,12 +91,13 @@ int main()
 	GUI gui(window.getWindowPtr());
 
 	ParticleSettings settings;
-	settings.lifetimeMin = 6.5f;
-	settings.lifetimeMax = 6.5f;
+	settings.lifetimeMin = 8.5f;
+	settings.lifetimeMax = 8.5f;
 	settings.colourStart = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
 	settings.colourEnd = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-	settings.particlesPerSecond = 1000;
+	settings.particlesPerSecond = 5000;
 	settings.globalWind = glm::vec3(0.0f);
+	settings.collisionMultiplier = 100.0f;
 
 	ParticleSystem snow(settings);
 	snow.initialise();
@@ -167,6 +168,10 @@ int main()
 		if (keyboardState[SDL_SCANCODE_LSHIFT])
 		{
 			cameraMoveSpeed = 10;
+		}
+		else if (keyboardState[SDL_SCANCODE_LCTRL])
+		{
+			cameraMoveSpeed = 1;
 		}
 		else
 		{

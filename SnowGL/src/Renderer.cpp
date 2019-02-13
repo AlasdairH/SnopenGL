@@ -21,7 +21,7 @@ namespace SnowGL
 		glStencilFunc(m_sencilFunc, 1, 0xFF);
 		glStencilMask(m_stencilBufferInt);
 
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 		ApplicationState &state = ApplicationState::getInstance();
 
@@ -122,10 +122,13 @@ namespace SnowGL
 		_renderable.m_mesh->m_VAO->bind();
 		_renderable.m_mesh->m_IBO->bind();
 
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		
 		glBeginTransformFeedback(GL_TRIANGLES);
 		glDrawElements(GL_TRIANGLES, _renderable.m_mesh->m_IBO->getCount(), GL_UNSIGNED_INT, 0);
 		glEndTransformFeedback();
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
 	void Renderer::renderToDepthBuffer(const Renderable & _renderable)

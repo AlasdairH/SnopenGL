@@ -132,11 +132,6 @@ namespace SnowGL
 				ImGui::SameLine();
 				ImGui::SliderFloat("z", &m_selectedParticleSystem->getSettingsPtr()->globalWind.z, -1.0f, 1.0f, "%.2f");
 
-				if (ImGui::Button("Apply"))
-				{
-					m_selectedParticleSystem->applySettingsToShader();
-				}
-				ImGui::SameLine();
 				if (ImGui::Button("Reset"))
 				{
 					m_selectedParticleSystem->getSettingsPtr()->globalWind = glm::vec3(0);
@@ -144,6 +139,16 @@ namespace SnowGL
 				}
 
 				ImGui::Separator();
+
+				ImGui::SliderFloat("Collision Multiplier", &m_selectedParticleSystem->getSettingsPtr()->collisionMultiplier, 1.0f, 10000.0f, "%.2f");
+
+				ImGui::Separator();
+
+				if (ImGui::Button("Apply"))
+				{
+					m_selectedParticleSystem->applySettingsToShader();
+				}
+				ImGui::SameLine();
 
 				ImGui::End();
 			}
