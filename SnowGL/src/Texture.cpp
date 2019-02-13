@@ -96,9 +96,7 @@ namespace SnowGL
 
 	void Texture::bind(GLuint _slot) const
 	{
-		ApplicationState &state = ApplicationState::getInstance();
 		glActiveTexture(GL_TEXTURE0 + _slot);
 		glBindTexture(GL_TEXTURE_2D, m_textureID);
-		state.curBoundTexture = m_name;
 	}
 }

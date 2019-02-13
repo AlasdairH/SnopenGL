@@ -21,7 +21,7 @@ namespace SnowGL
 		glStencilFunc(m_sencilFunc, 1, 0xFF);
 		glStencilMask(m_stencilBufferInt);
 
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
 		ApplicationState &state = ApplicationState::getInstance();
 
@@ -83,11 +83,6 @@ namespace SnowGL
 		_renderable.m_shader->setUniformMat4f("u_modelMatrix", _renderable.transform.getModelMatrix());
 		// set the depth space matrix
 		_renderable.m_shader->setUniformMat4f("u_depthSpaceMatrix", m_depthSpaceMatrix);
-		// set diffuse texture sample point
-		_renderable.m_shader->setUniform1i("u_diffuseTexture", 0);
-		// set depth map sample point
-		_renderable.m_shader->setUniform1i("u_depthMap", 1);
-		_renderable.m_shader->setUniform1i("u_snowTexture", 2);
 
 		_renderable.m_texture->bind(0);
 		m_depthFrameBuffer->getTexture()->bind(1);

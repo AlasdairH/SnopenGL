@@ -1,9 +1,9 @@
 #version 430 core
 
 // textures
-layout (location = 0) uniform sampler2D u_diffuseTexture;
-layout (location = 1) uniform sampler2D u_depthMap;
-layout (location = 2) uniform sampler2D u_snowTexture;
+uniform sampler2D u_diffuseTexture;
+uniform sampler2D u_depthMap;
+uniform sampler2D u_snowTexture;
 
 layout (location = 4) in vec2 frag_texCoord;
 layout (location = 5) in vec3 frag_normal;

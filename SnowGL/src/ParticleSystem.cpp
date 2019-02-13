@@ -21,7 +21,7 @@ namespace SnowGL
 
 		m_tfShader = std::make_shared<ShaderProgram>();
 
-		float spread = 1.0f;
+		float spread = 0.8f;
 
 		Shader tfVert(SHADER_VERTEX);
 		tfVert.load("resources/shaders/particle/particle.vert");
@@ -62,7 +62,7 @@ namespace SnowGL
 				{
 					buffer[j].currentPosition = glm::vec4(Utils::randFloat(-spread, spread), 5, Utils::randFloat(-spread, spread), 1);
 					buffer[j].startPosition = buffer[j].currentPosition;
-					buffer[j].velocity = glm::vec3(0, 0, 0);
+					buffer[j].velocity = glm::vec3(0, -50.0f, 0);
 					buffer[j].delay = (j / (float)m_numParticles) * m_settings->lifetimeMax;
 					buffer[j].lifetime = Utils::randFloat(m_settings->lifetimeMin, m_settings->lifetimeMax);
 				}
@@ -95,14 +95,18 @@ namespace SnowGL
 		CONSOLE_MESSAGE("Particle settings applied to shader")
 	}
 
-	void ParticleSystem::updateParticles(float _deltaTime, int _vertexCount)
+	void ParticleSystem::updateParticles(float _deltaTime, int _triangleCount)
 	{
 		m_simTime += _deltaTime;
 		//CONSOLE_MESSAGE(m_simTime);
 		m_tfShader->bind();
 		m_tfShader->setUniform1f("u_deltaTime", _deltaTime);
 		m_tfShader->setUniform1f("u_simTime", m_simTime);
-		m_tfShader->setUniform1i("u_triangleCount", _vertexCount);
+		m_tfShader->setUniform1i("u_triangleCount", _triangleCount);
+
+		glActiveTexture(GL_TEXTURE0 + 11);
+		glBindTexture(GL_TEXTURE_BUFFER, m_wsGeomTextureBuffer);
+		m_tfShader->setUniform1i("geometry_tbo", 11);
 
 		m_tfShader->setUniformMat4f("u_modelMatrix", m_transform.getModelMatrix());
 

@@ -66,11 +66,11 @@ namespace SnowGL
 
 		/** @brief Renderer Ctor
 		*	@param _deltaTime The update deltaTime
-		*	@param _vertexCount The number of vertices in the scene
+		*	@param _triangleCount The number of triangles in the scene
 		*
 		*	Performs the transform feedback operation for simulating particles
 		*/
-		void updateParticles(float _deltaTime, int _vertexCount);
+		void updateParticles(float _deltaTime, int _triangleCount);
 
 		/** @brief Gets the partcle settings
 		*	@return A pointer to the particles settings
@@ -80,8 +80,10 @@ namespace SnowGL
 		*/
 		inline std::shared_ptr<ParticleSettings> getSettingsPtr() { return m_settings; }
 
-		inline int getPointSize() { return m_pointSize; }
-		inline void setPointSize(int _size) { m_pointSize = _size; glPointSize(m_pointSize); }
+		inline void setPointSize(float _size) { m_pointSize = _size; glPointSize(m_pointSize); }	
+		inline float getPointSize() { return m_pointSize; }
+
+		inline void setWsGeom(GLuint _tex, GLuint _ary) { m_wsGeomTextureBuffer = _tex; m_wsGeomArrayBuffer = _ary; }
 
 	protected:
 		// TODO: doxygen
@@ -95,6 +97,8 @@ namespace SnowGL
 		std::shared_ptr<VertexBuffer>		m_tfVBO[2];				/**< The Vertex Buffers for particle data */
 
 		std::shared_ptr<ShaderProgram>		m_tfShader;				/**< The transform Feedback shader */
+		GLuint								m_wsGeomArrayBuffer;
+		GLuint								m_wsGeomTextureBuffer;
 
 		int									m_numParticles;			/**< THe number of particles */
 
@@ -103,6 +107,6 @@ namespace SnowGL
 
 		Transform							m_transform;
 
-		int									m_pointSize = 1;
+		float								m_pointSize = 1.0f;
 	};
 }

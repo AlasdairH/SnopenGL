@@ -30,10 +30,12 @@ layout (location = 12) uniform mat4 u_modelMatrix;
 layout (location = 13) uniform vec4 u_startColour = vec4(1.0f, 0.07f, 0.58f, 1.0f);
 layout (location = 14) uniform vec4 u_endColour = vec4(1.0f, 0.07f, 0.58f, 1.0f);
 layout (location = 15) uniform vec3 u_globalWind = vec3(0.00f, 0.0f, 0.0f);
+layout (location = 16) uniform vec3 u_initialVelocity = vec3(0, -50.0f, 0);
+layout (location = 17) uniform float u_collisionMultiplier = 10.0f;
 
 // timing
-layout (location = 16) uniform float u_deltaTime = 1.0f;
-layout (location = 17) uniform float u_simTime = 0.0f;
+uniform float u_deltaTime = 1.0f;
+uniform float u_simTime = 0.0f;
 
 // fragment shader inputs
 out vec4 particleColour;
@@ -49,7 +51,6 @@ bool intersect(vec3 origin, vec3 direction, vec3 v0, vec3 v1, vec3 v2, out vec3 
 	n = cross(u, v);
 	if (length(n) < 0.1)
 	{
-		//particleColour = vec4(1.0f, 0.0f, 0.0f, 1.0f);
 		return false;
 	}
 
@@ -93,7 +94,7 @@ bool intersect(vec3 origin, vec3 direction, vec3 v0, vec3 v1, vec3 v2, out vec3 
 		return false;
 	}
 
-	particleColour = vec4(0.0f, 1.0f, 0.0f, 1.0f);
+	//particleColour = vec4(1.0f, 0.0f, 0.0f, 1.0f);
 	return true;
 }
 
@@ -122,6 +123,8 @@ void main()
 	out_startTime = in_startTime;
     out_lifetime = in_lifetime;
 
+	vec4 newPosition = out_position;
+
 	if(u_simTime >= in_startTime)
 	{
 		float age = u_simTime - in_startTime;
@@ -130,13 +133,13 @@ void main()
 		{
 			// particle is past it's lifetime
 			out_position = out_startPosition;
-			out_velocity = vec3(0.0f);
+			out_velocity = u_initialVelocity;
 			out_startTime = u_simTime;
 		}
 		else
 		{
 			// particle is alive and well so update it
-			out_velocity += vec3(0.0f, -0.38f, 0.0f);
+			//out_velocity += vec3(0.0f, -0.38f, 0.0f);
 			out_velocity += u_globalWind;
 
 			out_position = vec4(in_position.xyz + (out_velocity * u_deltaTime * u_deltaTime), 1.0f);
@@ -145,7 +148,6 @@ void main()
 			particleColour = mix(u_startColour, u_endColour, agePerc);
 
 			// ------------------------- intersection test -------------------------
-			
 			vec3 v0, v1, v2;
 			vec3 point;
 			int i;
@@ -154,12 +156,12 @@ void main()
 				v0 = texelFetch(geometry_tbo, i * 3).xyz;
 				v1 = texelFetch(geometry_tbo, i * 3 + 1).xyz;
 				v2 = texelFetch(geometry_tbo, i * 3 + 2).xyz;
-				if (intersect(in_position.xyz, in_position.xyz - out_position.xyz, v0, v1, v2, point))
+
+				if (intersect(in_position.xyz, (in_position.xyz - out_position.xyz) * u_collisionMultiplier, v0, v1, v2, point))
 				{
-					particleColour = vec4(1.0f, 0.0f, 0.0f, 1.0f);
 					vec3 n = normalize(cross(v1 - v0, v2 - v0));
-					out_position = vec4(point + reflect_vector(out_position.xyz - point, n), 1.0);
-					out_velocity = 0.8 * reflect_vector(out_velocity, n);
+					out_position = in_position;
+					out_velocity = vec3(0, 0, 0);
 				}
 			}
 		}

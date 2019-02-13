@@ -112,8 +112,8 @@ namespace SnowGL
 			//ImGui::SetNextWindowPos(ImVec2(0, 200));
 			ImGui::Begin("OpenGL", open, ImGuiWindowFlags_AlwaysAutoResize);
 
-			int pointSize = m_selectedParticleSystem->getPointSize();
-			ImGui::SliderInt("Point Size", &pointSize, 0, 10);
+			float pointSize = m_selectedParticleSystem->getPointSize();
+			ImGui::SliderFloat("Point Size", &pointSize, 1.0f, 10.0f);
 			m_selectedParticleSystem->setPointSize(pointSize);
 
 			ImGui::End();

@@ -33,7 +33,7 @@ int main()
 	InitManager::initOpenGL();
 
 	Camera camera(state.windowSize.x, state.windowSize.y, PROJECTION_PERSPECTIVE);
-	camera.transform.translate(glm::vec3(0, 2, 18));
+	camera.transform.translate(glm::vec3(0, 0, 18));
 
 	Camera depthCamera(1024, 1024, PROJECTION_ORTHOGRAPHIC);
 	depthCamera.transform.translate(glm::vec3(0, 5, 0));
@@ -56,7 +56,7 @@ int main()
 	groundPlane.transform.translate(glm::vec3(0, 0, 0));
 
 	Renderable cube;
-	IOUtilities::loadRenderable(cube, "resources/objects/Grenade.rnd");
+	IOUtilities::loadRenderable(cube, "resources/objects/Cube.rnd");
 	CONSOLE_MESSAGE("Creating TFB VAO and VBO");
 
 	GLuint geometry_vbo;
@@ -81,16 +81,18 @@ int main()
 
 	//int vertexCount = cube.getVertexCount() + groundPlane.getVertexCount();
 	int vertexCount = cube.getVertexCount();
+	int triangleCount = vertexCount / 3;
 	//vertexCount += groundPlane.getVertexCount();
 	CONSOLE_MESSAGE("Scene vertex count: " << vertexCount);
+	CONSOLE_MESSAGE("Scene triangle count: " << triangleCount);
 
 	Renderer renderer;
 
 	GUI gui(window.getWindowPtr());
 
 	ParticleSettings settings;
-	settings.lifetimeMin = 5.0f;
-	settings.lifetimeMax = 5.0f;
+	settings.lifetimeMin = 6.5f;
+	settings.lifetimeMax = 6.5f;
 	settings.colourStart = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
 	settings.colourEnd = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 	settings.particlesPerSecond = 1000;
@@ -98,6 +100,8 @@ int main()
 
 	ParticleSystem snow(settings);
 	snow.initialise();
+	snow.setWsGeom(geometry_tex, geometry_vbo);
+	snow.setPointSize(10);
 	gui.setSelectedParticleSystem(std::make_shared<ParticleSystem>(snow));
 
 	bool quit = false;
@@ -220,7 +224,7 @@ int main()
 					glGetBufferSubData(GL_ARRAY_BUFFER, 0, vertexCount * sizeof(glm::vec4), &bufferData[0]);
 					for (int i = 0; i < bufferData.size(); ++i)
 					{
-						CONSOLE_MESSAGE(bufferData[i].x << ", " << bufferData[i].y << ", " << bufferData[i].z);
+						CONSOLE_MESSAGE(i << ": " << bufferData[i].x << ", " << bufferData[i].y << ", " << bufferData[i].z);
 					}
 					break;
 				default:
@@ -262,7 +266,7 @@ int main()
 			//renderer.render(cube);
 
 			// update and render snow
-			snow.updateParticles(state.deltaTime, vertexCount);
+			snow.updateParticles(state.deltaTime, triangleCount);
 
 			// render the ground plane
 			//renderer.render(groundPlane);
