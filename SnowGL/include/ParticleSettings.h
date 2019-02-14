@@ -21,6 +21,8 @@ namespace SnowGL
 		glm::vec4	colourStart;			// the start colour in RGBA
 		glm::vec4	colourEnd;				// the end colour in RGBA
 
+		glm::vec3	initialVelocity = glm::vec3(0.0f);	// the end colour in RGBA
+
 		/** @brief Required particle count getter
 		*	@return The maxiumum number of particles that would be required for the system
 		*

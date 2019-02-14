@@ -62,7 +62,7 @@ namespace SnowGL
 				{
 					buffer[j].currentPosition = glm::vec4(Utils::randFloat(-spread, spread), 5, Utils::randFloat(-spread, spread), 1);
 					buffer[j].startPosition = buffer[j].currentPosition;
-					buffer[j].velocity = glm::vec3(0, -50.0f, 0);
+					buffer[j].velocity = m_settings->initialVelocity;
 					buffer[j].delay = (j / (float)m_numParticles) * m_settings->lifetimeMax;
 					buffer[j].lifetime = Utils::randFloat(m_settings->lifetimeMin, m_settings->lifetimeMax);
 				}
@@ -93,6 +93,7 @@ namespace SnowGL
 		m_tfShader->setUniform4f("u_endColour", m_settings->colourEnd);
 		m_tfShader->setUniform3f("u_globalWind", m_settings->globalWind);
 		m_tfShader->setUniform1f("u_collisionMultiplier", m_settings->collisionMultiplier);
+		m_tfShader->setUniform3f("u_initialVelocity", m_settings->initialVelocity);
 		CONSOLE_MESSAGE("Particle settings applied to shader")
 	}
 
@@ -105,9 +106,9 @@ namespace SnowGL
 		m_tfShader->setUniform1f("u_simTime", m_simTime);
 		m_tfShader->setUniform1i("u_triangleCount", _triangleCount);
 
-		glActiveTexture(GL_TEXTURE0 + 11);
+		m_tfShader->setUniform1i("geometry_tbo", 0);
+		glActiveTexture(GL_TEXTURE0 + 0);
 		glBindTexture(GL_TEXTURE_BUFFER, m_wsGeomTextureBuffer);
-		m_tfShader->setUniform1i("geometry_tbo", 11);
 
 		m_tfShader->setUniformMat4f("u_modelMatrix", m_transform.getModelMatrix());
 

@@ -6,32 +6,32 @@ layout (std140) uniform u_camera_data
 	mat4 projectionMatrix;
 };
 
+uniform int u_triangleCount;
+uniform samplerBuffer geometry_tbo;
+
 // transform feedback inputs
-layout (location = 0) in vec4 in_position;
-layout (location = 1) in vec4 in_startPosition;
-layout (location = 2) in vec3 in_velocity;
-layout (location = 3) in float in_startTime;
-layout (location = 4) in float in_lifetime;
+in vec4 in_position;
+in vec4 in_startPosition;
+in vec3 in_velocity;
+in float in_startTime;
+in float in_lifetime;
 
 // transform feedback outputs
-layout (location = 5) out vec4 out_position;
-layout (location = 6) out vec4 out_startPosition;
-layout (location = 7) out vec3 out_velocity;
-layout (location = 8) out float out_startTime;
-layout (location = 9) out float out_lifetime;
-
-layout (location = 10) uniform int u_triangleCount;
-layout (location = 11) uniform samplerBuffer geometry_tbo;
+out vec4 out_position;
+out vec4 out_startPosition;
+out vec3 out_velocity;
+out float out_startTime;
+out float out_lifetime;
 
 // rendering
 layout (location = 12) uniform mat4 u_modelMatrix;
 
 // particle system
-layout (location = 13) uniform vec4 u_startColour = vec4(1.0f, 0.07f, 0.58f, 1.0f);
-layout (location = 14) uniform vec4 u_endColour = vec4(1.0f, 0.07f, 0.58f, 1.0f);
-layout (location = 15) uniform vec3 u_globalWind = vec3(0.0f, 0.0f, 0.0f);
-layout (location = 16) uniform vec3 u_initialVelocity = vec3(0, -0.001f, 0);
-layout (location = 17) uniform float u_collisionMultiplier = 1.0f;
+uniform vec4 u_startColour = vec4(1.0f, 0.07f, 0.58f, 1.0f);
+uniform vec4 u_endColour = vec4(1.0f, 0.07f, 0.58f, 1.0f);
+uniform vec3 u_globalWind = vec3(0.0f, 0.0f, 0.0f);
+uniform vec3 u_initialVelocity = vec3(0, -0.5f, 0);
+uniform float u_collisionMultiplier = 1.0f;
 
 // timing
 uniform float u_deltaTime = 1.0f;
@@ -140,7 +140,7 @@ void main()
 		{
 			// particle is alive and well so update it
 			//out_velocity += vec3(0.0f, -0.38f, 0.0f);
-			out_velocity += u_globalWind;
+			out_velocity += u_globalWind * u_deltaTime;
 
 			out_position = vec4(in_position.xyz + (out_velocity * u_deltaTime), 1.0f);
 
@@ -165,6 +165,11 @@ void main()
 				}
 			}
 		}
+	}
+
+	if(out_velocity == vec3(0, 0, 0))
+	{
+		particleColour = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 	mat4 MVP = projectionMatrix * viewMatrix * u_modelMatrix;
