@@ -140,9 +140,8 @@ void main()
 		else
 		{
 			// particle is alive and well so update it
-			//out_velocity += vec3(0.0f, -0.38f, 0.0f);
-			out_velocity += u_globalWind * u_deltaTime;
 
+			out_velocity += u_globalWind * u_deltaTime;
 			out_position = vec4(in_position.xyz + (out_velocity * u_deltaTime), 1.0f);
 
 			float agePerc = age / in_lifetime;
@@ -160,8 +159,11 @@ void main()
 
 				if (intersect(in_position.xyz, (in_position.xyz - out_position.xyz) * u_collisionMultiplier, v0, v1, v2, point))
 				{
-					vec3 n = normalize(cross(v1 - v0, v2 - v0));
+					//vec3 n = normalize(cross(v1 - v0, v2 - v0));
+					out_position = vec4(point.x, in_position.y, point.z, 1.0f);
 					out_position = in_position;
+					out_position = vec4(point.xyz, 1.0f);
+					//out_position = in_position;
 					out_velocity = vec3(0, 0, 0);
 				}
 			}

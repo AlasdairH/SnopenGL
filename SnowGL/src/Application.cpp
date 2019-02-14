@@ -91,14 +91,14 @@ int main()
 	GUI gui(window.getWindowPtr());
 
 	ParticleSettings settings;
-	settings.lifetimeMin = 8.5f;
-	settings.lifetimeMax = 8.5f;
-	settings.colourStart = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-	settings.colourEnd = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	settings.lifetimeMin = 7.0f;
+	settings.lifetimeMax = 7.0f;
+	settings.colourStart = glm::vec4(0.0f, 1.0f, 0.0f, 0.5f);
+	settings.colourEnd = glm::vec4(1.0f, 0.0f, 0.0f, 0.5f);
 	settings.collisionDebugColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	settings.particlesPerSecond = 50000;
+	settings.particlesPerSecond = 10000;
 	settings.globalWind = glm::vec3(0.0f);
-	settings.collisionMultiplier = 100.0f;
+	settings.collisionMultiplier = 1.0f;
 	settings.initialVelocity = glm::vec3(0, -1.0f, 0);
 
 	ParticleSystem snow(settings);
