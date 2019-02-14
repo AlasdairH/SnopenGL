@@ -140,7 +140,7 @@ namespace SnowGL
 
 				ImGui::Separator();
 
-				ImGui::SliderFloat("Collision Multiplier", &m_selectedParticleSystem->getSettingsPtr()->collisionMultiplier, 1.0f, 10000.0f, "%.2f");
+				ImGui::SliderFloat("Collision Multiplier", &m_selectedParticleSystem->getSettingsPtr()->collisionMultiplier, 1.0f, 10000.0f);
 
 				ImGui::Separator();
 

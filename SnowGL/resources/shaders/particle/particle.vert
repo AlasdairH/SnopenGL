@@ -29,9 +29,9 @@ layout (location = 12) uniform mat4 u_modelMatrix;
 // particle system
 layout (location = 13) uniform vec4 u_startColour = vec4(1.0f, 0.07f, 0.58f, 1.0f);
 layout (location = 14) uniform vec4 u_endColour = vec4(1.0f, 0.07f, 0.58f, 1.0f);
-layout (location = 15) uniform vec3 u_globalWind = vec3(0.00f, 0.0f, 0.0f);
-layout (location = 16) uniform vec3 u_initialVelocity = vec3(0, -50.0f, 0);
-layout (location = 17) uniform float u_collisionMultiplier = 10.0f;
+layout (location = 15) uniform vec3 u_globalWind = vec3(0.0f, 0.0f, 0.0f);
+layout (location = 16) uniform vec3 u_initialVelocity = vec3(0, -0.001f, 0);
+layout (location = 17) uniform float u_collisionMultiplier = 1.0f;
 
 // timing
 uniform float u_deltaTime = 1.0f;
@@ -142,7 +142,7 @@ void main()
 			//out_velocity += vec3(0.0f, -0.38f, 0.0f);
 			out_velocity += u_globalWind;
 
-			out_position = vec4(in_position.xyz + (out_velocity * u_deltaTime * u_deltaTime), 1.0f);
+			out_position = vec4(in_position.xyz + (out_velocity * u_deltaTime), 1.0f);
 
 			float agePerc = age / in_lifetime;
 			particleColour = mix(u_startColour, u_endColour, agePerc);
