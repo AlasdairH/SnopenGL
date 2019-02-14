@@ -91,6 +91,7 @@ namespace SnowGL
 	{
 		m_tfShader->setUniform4f("u_startColour", m_settings->colourStart);
 		m_tfShader->setUniform4f("u_endColour", m_settings->colourEnd);
+		m_tfShader->setUniform4f("u_collisionColour", m_settings->collisionDebugColour);
 		m_tfShader->setUniform3f("u_globalWind", m_settings->globalWind);
 		m_tfShader->setUniform1f("u_collisionMultiplier", m_settings->collisionMultiplier);
 		m_tfShader->setUniform3f("u_initialVelocity", m_settings->initialVelocity);

@@ -20,6 +20,7 @@ namespace SnowGL
 
 		glm::vec4	colourStart;			// the start colour in RGBA
 		glm::vec4	colourEnd;				// the end colour in RGBA
+		glm::vec4	collisionDebugColour;	// colour of any particles colliding
 
 		glm::vec3	initialVelocity = glm::vec3(0.0f);	// the end colour in RGBA
 

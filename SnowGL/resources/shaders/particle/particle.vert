@@ -29,6 +29,7 @@ layout (location = 12) uniform mat4 u_modelMatrix;
 // particle system
 uniform vec4 u_startColour = vec4(1.0f, 0.07f, 0.58f, 1.0f);
 uniform vec4 u_endColour = vec4(1.0f, 0.07f, 0.58f, 1.0f);
+uniform vec4 u_collisionColour = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 uniform vec3 u_globalWind = vec3(0.0f, 0.0f, 0.0f);
 uniform vec3 u_initialVelocity = vec3(0, -0.5f, 0);
 uniform float u_collisionMultiplier = 1.0f;
@@ -169,7 +170,7 @@ void main()
 
 	if(out_velocity == vec3(0, 0, 0))
 	{
-		particleColour = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		particleColour = u_collisionColour;
 	}
 
 	mat4 MVP = projectionMatrix * viewMatrix * u_modelMatrix;
