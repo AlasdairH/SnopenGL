@@ -59,6 +59,7 @@ namespace SnowGL
 		{
 			return m_orthographicProjectionMatrix;
 		}
+		return m_perspectiveProjectionMatrix;
 	}
 
 	void Camera::updateCameraUniform()
