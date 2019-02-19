@@ -96,7 +96,7 @@ int main()
 	settings.colourStart = glm::vec4(0.0f, 1.0f, 0.0f, 0.5f);
 	settings.colourEnd = glm::vec4(1.0f, 0.0f, 0.0f, 0.5f);
 	settings.collisionDebugColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	settings.particlesPerSecond = 10000;
+	settings.particlesPerSecond = 5000;
 	settings.globalWind = glm::vec3(0.0f);
 	settings.collisionMultiplier = 1.0f;
 	settings.initialVelocity = glm::vec3(0, -1.0f, 0);
