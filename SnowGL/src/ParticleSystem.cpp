@@ -106,8 +106,6 @@ namespace SnowGL
 		m_tfShader->setUniform1f("u_deltaTime", _deltaTime);
 		m_tfShader->setUniform1f("u_simTime", m_simTime);
 		m_tfShader->setUniform1i("u_triangleCount", _triangleCount);
-		m_settings->collisionMultiplier = (_triangleCount / 2) + 1;
-		m_tfShader->setUniform1f("u_collisionMultiplier", m_settings->collisionMultiplier);
 
 		m_tfShader->setUniform1i("geometry_tbo", 0);
 		glActiveTexture(GL_TEXTURE0 + 0);
