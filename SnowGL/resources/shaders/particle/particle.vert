@@ -50,18 +50,22 @@ bool intersect(vec3 origin, vec3 direction, vec3 v0, vec3 v1, vec3 v2, out vec3 
 	u = (v1 - v0);
 	v = (v2 - v0);
 	n = cross(u, v);
+	/*
 	if (length(n) < 0.1)
 	{
 		return false;
 	}
+	*/
 
 	w0 = origin - v0;
 	a = -dot(n, w0);
 	b = dot(n, direction);
+	/*
 	if (abs(b) < 0.1)
 	{
 		return false;
 	}
+	*/
 
 	r = a / b;
 	if (r < 0.0 || r > 1.0)
@@ -95,7 +99,6 @@ bool intersect(vec3 origin, vec3 direction, vec3 v0, vec3 v1, vec3 v2, out vec3 
 		return false;
 	}
 
-	//particleColour = vec4(1.0f, 0.0f, 0.0f, 1.0f);
 	return true;
 }
 
@@ -141,7 +144,7 @@ void main()
 		{
 			// particle is alive and well so update it
 
-			out_velocity += u_globalWind * u_deltaTime;
+			//out_velocity += u_globalWind;
 			out_position = vec4(in_position.xyz + (out_velocity * u_deltaTime), 1.0f);
 
 			float agePerc = age / in_lifetime;
@@ -160,10 +163,7 @@ void main()
 				if (intersect(in_position.xyz, (in_position.xyz - out_position.xyz) * u_collisionMultiplier, v0, v1, v2, point))
 				{
 					//vec3 n = normalize(cross(v1 - v0, v2 - v0));
-					out_position = vec4(point.x, in_position.y, point.z, 1.0f);
-					out_position = in_position;
 					out_position = vec4(point.xyz, 1.0f);
-					//out_position = in_position;
 					out_velocity = vec3(0, 0, 0);
 				}
 			}
