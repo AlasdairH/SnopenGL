@@ -88,7 +88,16 @@ namespace SnowGL
 		*
 		*	Gets the buffer ID
 		*/
-		inline GLuint getBufferID() const { return m_vertexBufferID; }
+		inline GLuint getGLID() { return m_vertexBufferID; }
+		/** @brief Returns OpenGL ID of the vertex buffer texture
+		*	@return The texture ID
+		*
+		*	Gets the buffer texture ID
+		*/
+		inline GLuint getTextureGLID() { return m_vertexBufferTextureID; }
+
+		// TODO: Doxygen
+		void addTextureBuffer();
 
 		/** @brief Binds the VBO.
 		*
@@ -120,7 +129,7 @@ namespace SnowGL
 		VertexBufferType	m_vertexBufferType;				/**< The type of Vertex Buffer (BUFFER_ARRAY, BUFFER_ELEMENT_ARRAY, etc)  */
 		GLuint				m_count;						/**< The number of items of data there is in the buffer */
 		GLuint				m_vertexBufferID;				/**< The Vertex Buffer ID */
-		GLuint				m_vertexBufferTextureID = 0;	/**< The Vertex Buffer Texture ID (if one exists) */
+		GLuint				m_vertexBufferTextureID;		/**< The Vertex Buffer Texture ID (if one exists) */
 
 		GLuint				m_usage = GL_STATIC_DRAW;	/**< The usage pattern for the buffer */
 	};

@@ -74,28 +74,7 @@ namespace SnowGL
 
 	void Renderer::render(const Renderable &_renderable)
 	{
-		// set stencil buffer
-		glStencilFunc(m_sencilFunc, 1, 0xFF);
-		glStencilMask(m_stencilBufferInt);
 
-		_renderable.m_shader->bind();
-		// set model matrix
-		_renderable.m_shader->setUniformMat4f("u_modelMatrix", _renderable.transform.getModelMatrix());
-		// set the depth space matrix
-		_renderable.m_shader->setUniformMat4f("u_depthSpaceMatrix", m_depthSpaceMatrix);
-
-		_renderable.m_texture->bind(0);
-		m_depthFrameBuffer->getTexture()->bind(1);
-		m_snowTexture->bind(2);
-		// access member through friend
-		_renderable.m_mesh->m_VAO->bind();
-		_renderable.m_mesh->m_IBO->bind();
-
-		glDrawElements(GL_TRIANGLES, _renderable.m_mesh->m_IBO->getCount(), GL_UNSIGNED_INT, 0);
-	}
-
-	void Renderer::render(const Renderable &_renderable, GLuint &_tfbArray, GLuint &_tfbBuffer)
-	{
 		// set stencil buffer
 		glStencilFunc(m_sencilFunc, 1, 0xFF);
 		glStencilMask(m_stencilBufferInt);
@@ -111,24 +90,21 @@ namespace SnowGL
 		_renderable.m_shader->setUniform1i("u_depthMap", 1);
 		_renderable.m_shader->setUniform1i("u_snowTexture", 2);
 
+
+
+
 		_renderable.m_texture->bind(0);
 		m_depthFrameBuffer->getTexture()->bind(1);
 		m_snowTexture->bind(2);
-
-		glBindVertexArray(_tfbArray);
-		glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, _tfbBuffer);
 
 		// access member through friend
 		_renderable.m_mesh->m_VAO->bind();
 		_renderable.m_mesh->m_IBO->bind();
 
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		
-		glBeginTransformFeedback(GL_TRIANGLES);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glDrawElements(GL_TRIANGLES, _renderable.m_mesh->m_IBO->getCount(), GL_UNSIGNED_INT, 0);
-		glEndTransformFeedback();
 
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
 	void Renderer::renderToDepthBuffer(const Renderable & _renderable)

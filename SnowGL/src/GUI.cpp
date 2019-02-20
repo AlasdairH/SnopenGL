@@ -124,6 +124,9 @@ namespace SnowGL
 				//ImGui::SetNextWindowPos(ImVec2(0, 400));
 				ImGui::Begin("Particle System", open, ImGuiWindowFlags_AlwaysAutoResize);
 
+				ImGui::Text("Particle count: %i", m_selectedParticleSystem->getSettingsPtr()->getMaxParticles());
+				ImGui::Separator();
+				
 				ImGui::Text("Global Wind");
 				ImGui::PushItemWidth(80);
 				ImGui::SliderFloat("x", &m_selectedParticleSystem->getSettingsPtr()->globalWind.x, -1.0f, 1.0f, "%.2f");

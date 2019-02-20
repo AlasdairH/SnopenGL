@@ -33,7 +33,7 @@ int main()
 	InitManager::initOpenGL();
 
 	Camera camera(state.windowSize.x, state.windowSize.y, PROJECTION_PERSPECTIVE);
-	camera.transform.translate(glm::vec3(0, 0, 18));
+	camera.transform.translate(glm::vec3(0, 3, 18));
 
 	Camera depthCamera(1024, 1024, PROJECTION_ORTHOGRAPHIC);
 	depthCamera.transform.translate(glm::vec3(0, 5, 0));
@@ -57,34 +57,20 @@ int main()
 
 	Renderable cube;
 	IOUtilities::loadRenderable(cube, "resources/objects/Cube.rnd");
-	CONSOLE_MESSAGE("Creating TFB VAO and VBO");
+	cube.transform.translate(glm::vec3(0, 1, 0));
 
-	GLuint geometry_vbo;
-	GLuint geometry_tex;
-	GLuint render_vao;
+	VertexBuffer vboGeometry(BUFFER_ARRAY);
+	vboGeometry.addTextureBuffer();
 
-	glGenBuffers(1, &geometry_vbo);
-	glGenTextures(1, &geometry_tex);
-	glBindBuffer(GL_TEXTURE_BUFFER, geometry_vbo);
-	glBufferData(GL_TEXTURE_BUFFER, 1024 * 1024 * sizeof(glm::vec4), NULL, GL_DYNAMIC_COPY);
-	glBindTexture(GL_TEXTURE_BUFFER, geometry_tex);
-	glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, geometry_vbo);
+	VertexArray vaoGeometry;
+	VertexBufferLayout layout;
+	layout.push<glm::vec4>(1);
+	vaoGeometry.addBuffer(vboGeometry, layout);
 
-	glGenVertexArrays(1, &render_vao);
-	glBindVertexArray(render_vao);
-	glBindBuffer(GL_ARRAY_BUFFER, geometry_vbo);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
-	glEnableVertexAttribArray(0);
-
-
-	cube.transform.translate(glm::vec3(0, 0, 0));
-
-	//int vertexCount = cube.getVertexCount() + groundPlane.getVertexCount();
-	int vertexCount = cube.getVertexCount();
-	int triangleCount = vertexCount / 3;
+	int vertexCount = 0;
 	//vertexCount += groundPlane.getVertexCount();
-	CONSOLE_MESSAGE("Scene vertex count: " << vertexCount);
-	CONSOLE_MESSAGE("Scene triangle count: " << triangleCount);
+	vertexCount += cube.getVertexCount();
+	int triangleCount = vertexCount / 3;
 
 	Renderer renderer;
 
@@ -96,14 +82,14 @@ int main()
 	settings.colourStart = glm::vec4(0.0f, 1.0f, 0.0f, 0.5f);
 	settings.colourEnd = glm::vec4(1.0f, 0.0f, 0.0f, 0.5f);
 	settings.collisionDebugColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	settings.particlesPerSecond = 5000;
+	settings.particlesPerSecond = 50000;
 	settings.globalWind = glm::vec3(0.0f);
-	settings.collisionMultiplier = 1.0f;
+	settings.collisionMultiplier = 2.0f;
 	settings.initialVelocity = glm::vec3(0, -1.0f, 0);
 
 	ParticleSystem snow(settings);
 	snow.initialise();
-	snow.setWsGeom(geometry_tex, geometry_vbo);
+	snow.setWsGeometryBuffer(vboGeometry.getTextureGLID(), vboGeometry.getGLID());
 	snow.setPointSize(10);
 	gui.setSelectedParticleSystem(std::make_shared<ParticleSystem>(snow));
 
@@ -121,6 +107,9 @@ int main()
 	float startTime = runtime.getDuration().count();
 	float lastTime = 0;
 	float deltaTime = 0;
+
+	CONSOLE_MESSAGE("Scene vertex count: " << vertexCount);
+	CONSOLE_MESSAGE("Scene triangle count: " << triangleCount);
 
 	while (state.isRunning)
 	{
@@ -226,6 +215,7 @@ int main()
 					state.isUIHidden = !state.isUIHidden;
 					break;
 				case SDLK_b:
+					/*
 					glBindBuffer(GL_ARRAY_BUFFER, geometry_vbo);
 					bufferData.resize(vertexCount);
 					glGetBufferSubData(GL_ARRAY_BUFFER, 0, vertexCount * sizeof(glm::vec4), &bufferData[0]);
@@ -233,6 +223,7 @@ int main()
 					{
 						CONSOLE_MESSAGE(i << ": " << bufferData[i].x << ", " << bufferData[i].y << ", " << bufferData[i].z);
 					}
+					*/
 					break;
 				default:
 					break;
@@ -268,15 +259,26 @@ int main()
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 			// render with transform feedback going to meshFeedbackBuffer
-			renderer.render(cube, render_vao, geometry_vbo);
+			GLuint vao = vaoGeometry.getGLID();
+			GLuint vbo = vboGeometry.getGLID();
 
-			//renderer.render(cube);
+			
+
+			glBindVertexArray(vao);
+			glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, vbo);
+			
+			cube.m_shader->bind();
+			glBeginTransformFeedback(GL_TRIANGLES);
+
+			//renderer.render(groundPlane, vao, vbo);
+			renderer.render(cube);
+
+			glEndTransformFeedback();
 
 			// update and render snow
 			snow.updateParticles(state.deltaTime, triangleCount);
 
-			// render the ground plane
-			//renderer.render(groundPlane);
+
 		}
 		renderer.unBindFrameBuffer();
 

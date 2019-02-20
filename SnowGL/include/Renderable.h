@@ -81,6 +81,7 @@ namespace SnowGL
 
 	protected:
 		std::shared_ptr<GPU_Mesh>			m_mesh;		/**< The mesh */
+	public: 
 		std::shared_ptr<ShaderProgram>		m_shader;	/**< The shader */
 		std::shared_ptr<Texture>			m_texture;	/**< The texture */
 

@@ -83,7 +83,7 @@ namespace SnowGL
 		inline void setPointSize(float _size) { m_pointSize = _size; glPointSize(m_pointSize); }	
 		inline float getPointSize() { return m_pointSize; }
 
-		inline void setWsGeom(GLuint _tex, GLuint _ary) { m_wsGeomTextureBuffer = _tex; m_wsGeomArrayBuffer = _ary; }
+		inline void setWsGeometryBuffer(GLuint _tex, GLuint _ary) { m_wsGeomTextureBuffer = _tex; m_wsGeomArrayBuffer = _ary; }
 
 	protected:
 		// TODO: doxygen

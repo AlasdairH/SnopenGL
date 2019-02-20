@@ -41,13 +41,12 @@ namespace SnowGL
 		}
 		else if (m_vertexBufferType == BUFFER_ARRAY_TEXTURE)
 		{
-
 			m_usage = GL_DYNAMIC_COPY;
-			glGenTextures(1, &m_vertexBufferTextureID);
-			bind();
-			loadData(NULL, 1024 * 1024 * sizeof(glm::vec4));
+			
+			
 			glBindTexture(GL_TEXTURE_BUFFER, m_vertexBufferTextureID);
-			glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, m_vertexBufferID);
+			glTextureBuffer(m_vertexBufferTextureID, GL_RGBA32F, m_vertexBufferID);
+			CONSOLE_MESSAGE("Created buffer texture with ID: " << m_vertexBufferTextureID)
 
 			m_vertexBufferType = BUFFER_ARRAY;
 		}
@@ -72,6 +71,18 @@ namespace SnowGL
 		m_count = -1;
 		bind();
 		glBufferData(m_vertexBufferType, sizeof(_data), _data, m_usage);
+	}
+
+	void VertexBuffer::addTextureBuffer()
+	{
+		CONSOLE_MESSAGE("Adding texture buffer");
+		glBindBuffer(GL_TEXTURE_BUFFER, m_vertexBufferID);
+		glBufferData(GL_TEXTURE_BUFFER, 1024 * 1024 * sizeof(glm::vec4), NULL, GL_DYNAMIC_COPY);
+
+		glGenTextures(1, &m_vertexBufferTextureID);
+		CONSOLE_MESSAGE("Created texture with GLID " << m_vertexBufferTextureID)
+		glBindTexture(GL_TEXTURE_BUFFER, m_vertexBufferTextureID);
+		glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, m_vertexBufferID);
 	}
 
 	void VertexBuffer::bind() const

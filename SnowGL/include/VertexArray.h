@@ -58,6 +58,13 @@ namespace SnowGL
 		*/
 		inline void unBind() const { glBindVertexArray(0); }
 
+		/** @brief Returns OpenGL ID of the array buffer
+		*	@return The OpenGL ID
+		*
+		*	Gets the buffer ID
+		*/
+		inline GLuint getGLID() { return m_vertexArrayID; }
+
 	protected:
 		GLuint	m_vertexArrayID;		/**< The OpenGL ID of the VAO */
 	};
