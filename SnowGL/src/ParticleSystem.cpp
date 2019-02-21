@@ -21,7 +21,7 @@ namespace SnowGL
 
 		m_tfShader = std::make_shared<ShaderProgram>();
 
-		float spread = 1.8f;
+		float spread = 9.0f;
 
 		Shader tfVert(SHADER_VERTEX);
 		tfVert.load("resources/shaders/particle/particle.vert");

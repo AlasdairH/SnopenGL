@@ -68,7 +68,7 @@ int main()
 	vaoGeometry.addBuffer(vboGeometry, layout);
 
 	int vertexCount = 0;
-	//vertexCount += groundPlane.getVertexCount();
+	vertexCount += groundPlane.getVertexCount();
 	vertexCount += cube.getVertexCount();
 	int triangleCount = vertexCount / 3;
 
@@ -259,13 +259,12 @@ int main()
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 			// render with transform feedback going to meshFeedbackBuffer
-			GLuint vao = vaoGeometry.getGLID();
-			GLuint vbo = vboGeometry.getGLID();
+			GLuint tf_vao = vaoGeometry.getGLID();
+			GLuint tf_vbo = vboGeometry.getGLID();
 
-			
-
-			glBindVertexArray(vao);
-			glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, vbo);
+		
+			glBindVertexArray(tf_vao);
+			glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, tf_vbo);
 			
 			cube.m_shader->bind();
 
