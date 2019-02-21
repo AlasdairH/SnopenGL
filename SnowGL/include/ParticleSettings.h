@@ -24,6 +24,10 @@ namespace SnowGL
 
 		glm::vec3	initialVelocity = glm::vec3(0.0f);	// the end colour in RGBA
 
+		glm::vec3	domainPosition;			// domain position
+		float		domainWidth;
+		float		domainHeight;
+
 		/** @brief Required particle count getter
 		*	@return The maxiumum number of particles that would be required for the system
 		*
