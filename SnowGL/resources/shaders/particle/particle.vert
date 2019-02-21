@@ -131,28 +131,34 @@ void main()
 		else
 		{
 			// particle is alive and well so update it
+			out_velocity += (u_globalWind * u_deltaTime);
 			out_position = vec4(in_position.xyz + (out_velocity * u_deltaTime), 1.0f);
 
 			float agePerc = age / in_lifetime;
 			particleColour = mix(u_startColour, u_endColour, agePerc);
 
 			// ------------------------- intersection test -------------------------
-			vec3 v0, v1, v2;
-			vec3 point;
-			int i;
-			for (i = 0; i < u_triangleCount; i++)
-			{
-				v0 = texelFetch(geometry_tbo, i * 3).xyz;
-				v1 = texelFetch(geometry_tbo, i * 3 + 1).xyz;
-				v2 = texelFetch(geometry_tbo, i * 3 + 2).xyz;
 
-				if (intersect(in_position.xyz, (in_position.xyz - out_position.xyz) * u_collisionMultiplier, v0, v1, v2, point))
+			if(out_position.w != 0.0f)
+			{
+				vec3 v0, v1, v2;
+				vec3 point;
+				int i;
+				for (i = 0; i < u_triangleCount; i++)
 				{
-					//vec3 n = normalize(cross(v1 - v0, v2 - v0));
-					out_position = vec4(point.xyz, 1.0f);
-					out_velocity = vec3(0, 0, 0);
+					v0 = texelFetch(geometry_tbo, i * 3).xyz;
+					v1 = texelFetch(geometry_tbo, i * 3 + 1).xyz;
+					v2 = texelFetch(geometry_tbo, i * 3 + 2).xyz;
+
+					if (intersect(in_position.xyz, (in_position.xyz - out_position.xyz) * u_collisionMultiplier, v0, v1, v2, point))
+					{
+						//vec3 n = normalize(cross(v1 - v0, v2 - v0));
+						out_position = vec4(point.xyz, 0.0f);
+						out_velocity = vec3(0, 0, 0);
+					}
 				}
 			}
+
 		}
 	}
 

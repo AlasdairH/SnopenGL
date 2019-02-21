@@ -82,7 +82,7 @@ int main()
 	settings.colourStart = glm::vec4(0.0f, 1.0f, 0.0f, 0.5f);
 	settings.colourEnd = glm::vec4(1.0f, 0.0f, 0.0f, 0.5f);
 	settings.collisionDebugColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	settings.particlesPerSecond = 50000;
+	settings.particlesPerSecond = 20000;
 	settings.globalWind = glm::vec3(0.0f);
 	settings.collisionMultiplier = 2.0f;
 	settings.initialVelocity = glm::vec3(0, -1.0f, 0);
@@ -268,10 +268,18 @@ int main()
 			glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, vbo);
 			
 			cube.m_shader->bind();
+
 			glBeginTransformFeedback(GL_TRIANGLES);
 
-			//renderer.render(groundPlane, vao, vbo);
+			cube.m_shader->setUniformMat4f("u_modelMatrix", cube.transform.getModelMatrix());
+			cube.m_shader->setUniform1i("u_diffuseTexture", 0);
+			cube.m_texture->bind(0);
 			renderer.render(cube);
+
+			groundPlane.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
+			groundPlane.m_shader->setUniform1i("u_diffuseTexture", 0);
+			groundPlane.m_texture->bind(0);
+			renderer.render(groundPlane);
 
 			glEndTransformFeedback();
 
