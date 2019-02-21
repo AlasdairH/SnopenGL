@@ -56,7 +56,7 @@ int main()
 	groundPlane.transform.translate(glm::vec3(0, 0, 0));
 
 	Renderable cube;
-	IOUtilities::loadRenderable(cube, "resources/objects/Cube.rnd");
+	IOUtilities::loadRenderable(cube, "resources/objects/Barrel.rnd");
 	cube.transform.translate(glm::vec3(0, 1, 0));
 
 	VertexBuffer vboGeometry(BUFFER_ARRAY);
@@ -79,10 +79,10 @@ int main()
 	ParticleSettings settings;
 	settings.lifetimeMin = 7.0f;
 	settings.lifetimeMax = 7.0f;
-	settings.colourStart = glm::vec4(0.0f, 1.0f, 0.0f, 0.5f);
-	settings.colourEnd = glm::vec4(1.0f, 0.0f, 0.0f, 0.5f);
-	settings.collisionDebugColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	settings.particlesPerSecond = 20000;
+	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	settings.colourEnd = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	settings.collisionDebugColour = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	settings.particlesPerSecond = 10000;
 	settings.globalWind = glm::vec3(0.0f);
 	settings.collisionMultiplier = 2.0f;
 	settings.initialVelocity = glm::vec3(0, -1.0f, 0);

@@ -128,6 +128,10 @@ void main()
 			out_velocity = u_initialVelocity;
 			out_startTime = u_simTime;
 		}
+		else if(out_position.w == 0)
+		{
+			particleColour = u_collisionColour;
+		}
 		else
 		{
 			// particle is alive and well so update it
@@ -147,13 +151,15 @@ void main()
 				v1 = texelFetch(geometry_tbo, i * 3 + 1).xyz;
 				v2 = texelFetch(geometry_tbo, i * 3 + 2).xyz;
 
+				
 				if (intersect(in_position.xyz, (in_position.xyz - out_position.xyz) * u_collisionMultiplier, v0, v1, v2, point))
 				{
 					//vec3 n = normalize(cross(v1 - v0, v2 - v0));
 					out_position = vec4(point.xyz, 0.0f);
-					out_position = in_position;
+					//out_position = in_position;
 					out_velocity = vec3(0, 0, 0);
 				}
+				
 			}
 		}
 	}

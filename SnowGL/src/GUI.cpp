@@ -116,6 +116,11 @@ namespace SnowGL
 			ImGui::SliderFloat("Point Size", &pointSize, 1.0f, 10.0f);
 			m_selectedParticleSystem->setPointSize(pointSize);
 
+			if (ImGui::Button("Toggle VSync"))
+			{
+				SDL_GL_SetSwapInterval(!SDL_GL_GetSwapInterval());
+			}
+
 			ImGui::End();
 
 			if (m_selectedParticleSystem != nullptr)

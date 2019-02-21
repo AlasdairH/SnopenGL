@@ -23,6 +23,8 @@ namespace SnowGL
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
+		SDL_GL_SetSwapInterval(1);
+
 		ApplicationState &state = ApplicationState::getInstance();
 
 		glViewport(0, 0, state.windowSize.x, state.windowSize.y);
@@ -159,5 +161,4 @@ namespace SnowGL
 			glDisable(GL_DEPTH_TEST);
 		}
 	}
-
 }
