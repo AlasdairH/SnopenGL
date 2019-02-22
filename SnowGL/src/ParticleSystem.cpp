@@ -29,7 +29,8 @@ namespace SnowGL
 		Shader tfFrag(SHADER_FRAGMENT);
 		tfFrag.load("resources/shaders/particle/particle.frag");
 		m_tfShader->attachShader(tfFrag);
-		std::vector<std::string> tfVaryings{ "out_position", "out_startPosition", "out_velocity", "out_startTime", "out_lifetime" };
+		std::vector<std::string> tfVaryings{ "out_position", "out_startPosition", "out_velocity", "out_startTime", "out_lifetime", "gl_NextBuffer", "out_collisionIndex"};
+		//std::vector<std::string> tfVaryings{ "out_position", "out_startPosition", "out_velocity", "out_startTime", "out_lifetime", "gl_NextBuffer"};
 		m_tfShader->setTransformFeedbackVarying(tfVaryings);
 		m_tfShader->link();
 
@@ -60,7 +61,11 @@ namespace SnowGL
 
 				for (int j = 0; j < m_numParticles; ++j)
 				{
-					buffer[j].currentPosition = glm::vec4(Utils::randFloat(-spread, spread), 5, Utils::randFloat(-spread, spread), 1);
+					// position w = state.
+					// -1 = active
+					// -2 = inactive
+					// >= 0 index of last triangle collision
+					buffer[j].currentPosition = glm::vec4(Utils::randFloat(-spread, spread), 5, Utils::randFloat(-spread, spread), -1);
 					buffer[j].startPosition = buffer[j].currentPosition;
 					buffer[j].velocity = m_settings->initialVelocity;
 					buffer[j].delay = (j / (float)m_numParticles) * m_settings->lifetimeMax;
@@ -83,6 +88,15 @@ namespace SnowGL
 		m_currVBO = (m_currVBO + 1) & 0x1;
 
 		CONSOLE_MESSAGE("Created " << m_numParticles << " particles on the GPU");
+
+		m_collisionVBO = std::make_shared<VertexBuffer>(BUFFER_ARRAY);
+		m_collisionVBO->addTextureBuffer();
+		m_collisionVAO = std::make_shared<VertexArray>();
+		VertexBufferLayout colLayout;
+		layout.push<glm::vec4>(1);
+		m_collisionVAO->addBuffer(*m_collisionVBO, colLayout);
+
+		CONSOLE_MESSAGE("Created buffers for collision data");
 
 		return true;
 	}
@@ -113,8 +127,13 @@ namespace SnowGL
 
 		m_tfShader->setUniformMat4f("u_modelMatrix", m_transform.getModelMatrix());
 
+		m_collisionVAO->bind();
+		m_collisionVBO->bindBase(GL_TRANSFORM_FEEDBACK_BUFFER, 1);
+
 		m_tfVAO[m_currVAO]->bind();
 		m_tfVBO[m_currVBO]->bindBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0);
+
+
 
 		glBeginTransformFeedback(GL_POINTS);
 		glDrawArrays(GL_POINTS, 0, m_numParticles);

@@ -56,19 +56,18 @@ int main()
 	groundPlane.transform.translate(glm::vec3(0, 0, 0));
 
 	Renderable cube;
-	IOUtilities::loadRenderable(cube, "resources/objects/Barrel.rnd");
+	IOUtilities::loadRenderable(cube, "resources/objects/Cube.rnd");
 	cube.transform.translate(glm::vec3(0, 1, 0));
 
 	VertexBuffer vboGeometry(BUFFER_ARRAY);
 	vboGeometry.addTextureBuffer();
-
 	VertexArray vaoGeometry;
 	VertexBufferLayout layout;
 	layout.push<glm::vec4>(1);
 	vaoGeometry.addBuffer(vboGeometry, layout);
 
 	int vertexCount = 0;
-	vertexCount += groundPlane.getVertexCount();
+	//vertexCount += groundPlane.getVertexCount();
 	vertexCount += cube.getVertexCount();
 	int triangleCount = vertexCount / 3;
 
@@ -111,6 +110,9 @@ int main()
 
 	CONSOLE_MESSAGE("Scene vertex count: " << vertexCount);
 	CONSOLE_MESSAGE("Scene triangle count: " << triangleCount);
+
+	std::vector<int> collisionBufferData;
+	collisionBufferData.resize(settings.getMaxParticles());
 
 	while (state.isRunning)
 	{
@@ -205,7 +207,7 @@ int main()
 			}
 			if (incomingEvent.type == SDL_KEYDOWN)
 			{
-				std::vector<glm::vec4> bufferData;
+				
 				//Select surfaces based on key press
 				switch (incomingEvent.key.keysym.sym)
 				{
@@ -216,15 +218,15 @@ int main()
 					state.isUIHidden = !state.isUIHidden;
 					break;
 				case SDLK_b:
-					/*
-					glBindBuffer(GL_ARRAY_BUFFER, geometry_vbo);
-					bufferData.resize(vertexCount);
-					glGetBufferSubData(GL_ARRAY_BUFFER, 0, vertexCount * sizeof(glm::vec4), &bufferData[0]);
-					for (int i = 0; i < bufferData.size(); ++i)
+					
+					glBindBuffer(GL_ARRAY_BUFFER, snow.getCollisionBufferGLID());
+					glGetBufferSubData(GL_ARRAY_BUFFER, 0, settings.getMaxParticles() * sizeof(int), &collisionBufferData[0]);
+					for (int i = 0; i < collisionBufferData.size(); ++i)
 					{
-						CONSOLE_MESSAGE(i << ": " << bufferData[i].x << ", " << bufferData[i].y << ", " << bufferData[i].z);
+						if(collisionBufferData[i] != -1)
+							CONSOLE_MESSAGE(i << ": " << collisionBufferData[i]);
 					}
-					*/
+					
 					break;
 				default:
 					break;
@@ -279,14 +281,12 @@ int main()
 			groundPlane.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
 			groundPlane.m_shader->setUniform1i("u_diffuseTexture", 0);
 			groundPlane.m_texture->bind(0);
-			renderer.render(groundPlane);
+			//renderer.render(groundPlane);
 
 			glEndTransformFeedback();
 
 			// update and render snow
 			snow.updateParticles(state.deltaTime, triangleCount);
-
-
 		}
 		renderer.unBindFrameBuffer();
 

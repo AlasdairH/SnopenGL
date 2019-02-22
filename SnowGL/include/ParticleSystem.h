@@ -85,6 +85,8 @@ namespace SnowGL
 
 		inline void setWsGeometryBuffer(GLuint _tex, GLuint _ary) { m_wsGeomTextureBuffer = _tex; m_wsGeomArrayBuffer = _ary; }
 
+		inline GLuint getCollisionBufferGLID() { return m_collisionVBO->getGLID(); }
+
 	protected:
 		// TODO: doxygen
 
@@ -95,6 +97,9 @@ namespace SnowGL
 		unsigned int						m_currVBO;				/**< The current Vertex Buffer */
 		std::shared_ptr<VertexArray>		m_tfVAO[2];				/**< The Vertex Arrays for particle data */
 		std::shared_ptr<VertexBuffer>		m_tfVBO[2];				/**< The Vertex Buffers for particle data */
+		
+		std::shared_ptr<VertexArray>		m_collisionVAO;			/**< The Vertex Arrays for particle data */
+		std::shared_ptr<VertexBuffer>		m_collisionVBO;			/**< The Vertex Buffers for particle data */
 
 		std::shared_ptr<ShaderProgram>		m_tfShader;				/**< The transform Feedback shader */
 		GLuint								m_wsGeomArrayBuffer;

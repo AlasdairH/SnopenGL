@@ -2,6 +2,6 @@ FILETYPE RENDERABLE
 SHADER_VERT resources/shaders/Basic.vert
 SHADER_FRAG resources/shaders/Basic.frag
 TFB_VARYING out_worldSpacePosition
-TEXTURE mk2_diffuse resources/textures/check.png
+TEXTURE mk2_diffuse resources/textures/White.png
 MESH resources/models/Debug_Plane.obj
 TRANSFORM 0 0 0 0 0 0 1 1 1

@@ -17,11 +17,14 @@ in float in_startTime;
 in float in_lifetime;
 
 // transform feedback outputs
+// buffer 0
 out vec4 out_position;
 out vec4 out_startPosition;
 out vec3 out_velocity;
 out float out_startTime;
 out float out_lifetime;
+// buffer 1
+out int out_collisionIndex;
 
 // rendering
 layout (location = 12) uniform mat4 u_modelMatrix;
@@ -35,7 +38,7 @@ uniform vec3 u_initialVelocity = vec3(0, -0.5f, 0);
 uniform float u_collisionMultiplier = 1.0f;
 
 // timing
-uniform float u_deltaTime = 1.0f;
+uniform float u_deltaTime = 0.016f;
 uniform float u_simTime = 0.0f;
 
 // fragment shader inputs
@@ -109,18 +112,18 @@ void main()
 {
 	particleColour = vec4(u_startColour.xyz, 0.0f);
 
+	// buffer 0
 	out_position = in_position;
 	out_startPosition = in_startPosition;
 	out_velocity = in_velocity;
 	out_startTime = in_startTime;
     out_lifetime = in_lifetime;
-
-	vec4 newPosition = out_position;
+	// buffer 1
+	//out_collisionIndex = -2;
 
 	if(u_simTime >= in_startTime)
 	{
 		float age = u_simTime - in_startTime;
-		// TODO: remove if through lessthan
 		if(age > in_lifetime)
 		{
 			// particle is past it's lifetime
@@ -128,15 +131,15 @@ void main()
 			out_velocity = u_initialVelocity;
 			out_startTime = u_simTime;
 		}
-		else if(out_position.w == 0)
+		else if(out_position.w >= 0.0f)
 		{
-			particleColour = u_collisionColour;
+			particleColour = vec4(0.0, 1.0, 0.0, 1.0);
 		}
 		else
 		{
 			// particle is alive and well so update it
 			out_velocity += (u_globalWind * u_deltaTime);
-			out_position = vec4(in_position.xyz + (out_velocity * u_deltaTime), 1.0f);
+			out_position = vec4(in_position.xyz + (out_velocity * u_deltaTime), out_position.w);
 
 			float agePerc = age / in_lifetime;
 			particleColour = mix(u_startColour, u_endColour, agePerc);
@@ -151,23 +154,18 @@ void main()
 				v1 = texelFetch(geometry_tbo, i * 3 + 1).xyz;
 				v2 = texelFetch(geometry_tbo, i * 3 + 2).xyz;
 
-				
 				if (intersect(in_position.xyz, (in_position.xyz - out_position.xyz) * u_collisionMultiplier, v0, v1, v2, point))
 				{
+					
 					//vec3 n = normalize(cross(v1 - v0, v2 - v0));
-					out_position = vec4(point.xyz, 0.0f);
-					//out_position = in_position;
+					out_position = vec4(point.xyz, i);
 					out_velocity = vec3(0, 0, 0);
 				}
-				
 			}
 		}
 	}
 
-	if(out_velocity == vec3(0, 0, 0))
-	{
-		particleColour = u_collisionColour;
-	}
+	out_collisionIndex = int(out_position.w);
 
 	mat4 MVP = projectionMatrix * viewMatrix * u_modelMatrix;
     gl_Position = MVP * vec4(out_position.x, out_position.y, out_position.z, 1.0);

@@ -31,7 +31,6 @@ void main()
 
 	vec4 pos = (u_modelMatrix * (vec4(position, 1.0f)));
 	out_worldSpacePosition = pos;
-	//out_worldSpacePosition = vec4(1.0f, 2.0f, 3.0f, 4.0f);
 
 	mat4 VP = projectionMatrix * viewMatrix;
 
