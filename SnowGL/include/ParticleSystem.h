@@ -85,27 +85,27 @@ namespace SnowGL
 
 		inline void setWsGeometryBuffer(GLuint _tex, GLuint _ary) { m_wsGeomTextureBuffer = _tex; m_wsGeomArrayBuffer = _ary; }
 
-		inline GLuint getCollisionBufferGLID() { return m_collisionVBO->getGLID(); }
+		inline GLuint getAccumulationBufferGLID() { return m_accumulationBufferVBO->getGLID(); }
 
 	protected:
 		// TODO: doxygen
 
 		std::shared_ptr<ParticleSettings>	m_settings;
 
-		bool								m_isFirstRender;		/**< Flag for if this is the first render */			
-		unsigned int						m_currVAO;				/**< The current Transform Feedback Buffer */
-		unsigned int						m_currVBO;				/**< The current Vertex Buffer */
-		std::shared_ptr<VertexArray>		m_tfVAO[2];				/**< The Vertex Arrays for particle data */
-		std::shared_ptr<VertexBuffer>		m_tfVBO[2];				/**< The Vertex Buffers for particle data */
+		bool								m_isFirstRender;			/**< Flag for if this is the first render */			
+		unsigned int						m_currVAO;					/**< The current Transform Feedback Buffer */
+		unsigned int						m_currVBO;					/**< The current Vertex Buffer */
+		std::shared_ptr<VertexArray>		m_tfVAO[2];					/**< The Vertex Arrays for particle data */
+		std::shared_ptr<VertexBuffer>		m_tfVBO[2];					/**< The Vertex Buffers for particle data */
 		
-		std::shared_ptr<VertexArray>		m_collisionVAO;			/**< The Vertex Arrays for particle data */
-		std::shared_ptr<VertexBuffer>		m_collisionVBO;			/**< The Vertex Buffers for particle data */
+		std::shared_ptr<VertexArray>		m_accumulationBufferVAO;	/**< The Vertex Arrays for particle accumulation data */
+		std::shared_ptr<VertexBuffer>		m_accumulationBufferVBO;	/**< The Vertex Buffers for particle accumulation data */
 
-		std::shared_ptr<ShaderProgram>		m_tfShader;				/**< The transform Feedback shader */
+		std::shared_ptr<ShaderProgram>		m_tfShader;					/**< The transform Feedback shader */
 		GLuint								m_wsGeomArrayBuffer;
 		GLuint								m_wsGeomTextureBuffer;
 
-		int									m_numParticles;			/**< The number of particles */
+		int									m_numParticles;				/**< The number of particles */
 
 		int									m_frameCount = 0;
 		float								m_simTime = 0;

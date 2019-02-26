@@ -60,7 +60,7 @@ int main()
 	//cube.transform.translate(glm::vec3(0, 1, 0));
 
 	VertexBuffer vboGeometry(BUFFER_ARRAY);
-	vboGeometry.addTextureBuffer();
+	vboGeometry.addTextureBuffer(1024 * 1024 * sizeof(glm::vec4));
 	VertexArray vaoGeometry;
 	VertexBufferLayout layout;
 	layout.push<glm::vec4>(1);
@@ -81,12 +81,13 @@ int main()
 	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 0.1f);
 	settings.colourEnd = glm::vec4(1.0f, 1.0f, 1.0f, 0.1f);
 	settings.collisionDebugColour = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-	settings.particlesPerSecond = 10000;
+	settings.particlesPerSecond = 20000;
 	settings.globalWind = glm::vec3(0.0f);
 	settings.collisionMultiplier = 2.0f;
 	settings.initialVelocity = glm::vec3(0, -1.0f, 0);
 	settings.domainWidth = 7;
-	settings.domainHeight = 7;
+	settings.domainHeight = 3;
+	settings.domainPosition = glm::vec3(0, 2, 0);
 	settings.drawDomain = true;
 
 	ParticleSystem snow(settings);
@@ -114,7 +115,7 @@ int main()
 	CONSOLE_MESSAGE("Scene triangle count: " << triangleCount);
 
 	std::vector<int> collisionBufferData;
-	collisionBufferData.resize(settings.getMaxParticles());
+	collisionBufferData.resize(10);
 
 	while (state.isRunning)
 	{
@@ -221,12 +222,11 @@ int main()
 					break;
 				case SDLK_b:
 					
-					glBindBuffer(GL_ARRAY_BUFFER, snow.getCollisionBufferGLID());
-					glGetBufferSubData(GL_ARRAY_BUFFER, 0, settings.getMaxParticles() * sizeof(int), &collisionBufferData[0]);
+					glBindBuffer(GL_ARRAY_BUFFER, snow.getAccumulationBufferGLID());
+					glGetBufferSubData(GL_ARRAY_BUFFER, 0, 10 * sizeof(int), &collisionBufferData[0]);
 					for (int i = 0; i < collisionBufferData.size(); ++i)
 					{
-						if(collisionBufferData[i] != -1)
-							CONSOLE_MESSAGE(i << ": " << collisionBufferData[i]);
+						CONSOLE_MESSAGE(i << ": " << collisionBufferData[i]);
 					}
 					
 					break;

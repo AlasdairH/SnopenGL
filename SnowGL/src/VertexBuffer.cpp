@@ -73,11 +73,11 @@ namespace SnowGL
 		glBufferData(m_vertexBufferType, sizeof(_data), _data, m_usage);
 	}
 
-	void VertexBuffer::addTextureBuffer()
+	void VertexBuffer::addTextureBuffer(unsigned int _size)
 	{
 		CONSOLE_MESSAGE("Adding texture buffer");
 		glBindBuffer(GL_TEXTURE_BUFFER, m_vertexBufferID);
-		glBufferData(GL_TEXTURE_BUFFER, 1024 * 1024 * sizeof(glm::vec4), NULL, GL_DYNAMIC_COPY);
+		glBufferData(GL_TEXTURE_BUFFER, _size, NULL, GL_DYNAMIC_COPY);
 
 		glGenTextures(1, &m_vertexBufferTextureID);
 		CONSOLE_MESSAGE("Created texture with GLID " << m_vertexBufferTextureID)

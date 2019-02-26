@@ -97,7 +97,7 @@ namespace SnowGL
 		inline GLuint getTextureGLID() { return m_vertexBufferTextureID; }
 
 		// TODO: Doxygen
-		void addTextureBuffer();
+		void addTextureBuffer(unsigned int _size);
 
 		/** @brief Binds the VBO.
 		*

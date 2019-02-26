@@ -24,7 +24,7 @@ namespace SnowGL
 
 		glm::vec3	initialVelocity = glm::vec3(0.0f);	// the end colour in RGBA
 
-		glm::vec3	domainPosition;			// domain position
+		glm::vec3	domainPosition = glm::vec3(0.0f);			// domain position
 		float		domainWidth = 5;
 		float		domainHeight = 5;
 

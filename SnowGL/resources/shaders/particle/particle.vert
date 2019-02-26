@@ -8,6 +8,7 @@ layout (std140) uniform u_camera_data
 
 uniform int u_triangleCount;
 uniform samplerBuffer geometry_tbo;
+uniform imageBuffer writeonly u_accumulation_tbo;
 
 // transform feedback inputs
 in vec4 in_position;
@@ -23,8 +24,6 @@ out vec4 out_startPosition;
 out vec3 out_velocity;
 out float out_startTime;
 out float out_lifetime;
-// buffer 1
-out int out_collisionIndex;
 
 // rendering
 layout (location = 12) uniform mat4 u_modelMatrix;
@@ -42,7 +41,7 @@ uniform float u_collisionMultiplier = 1.0f;
 // domain
 uniform float u_domainWidth = 1;
 uniform float u_domainHeight = 1;
-uniform vec3 u_domainCentre = vec3(0, 0, 0);
+uniform vec3 u_domainPosition = vec3(0, 0, 0);
 
 // timing
 uniform float u_deltaTime = 0.016f;
@@ -117,7 +116,7 @@ vec4 when_gt(vec4 x, vec4 y)
 
 void main()
 {
-	particleColour = vec4(u_startColour.xyz, 0.0f);
+	//imageStore(u_accumulation_tbo, 0, vec4(3.0, 2.0, 1.0, 0.0));
 
 	// buffer 0
 	out_position = in_position;
@@ -144,9 +143,9 @@ void main()
 			particleColour = u_collisionColour;
 		}
 		// out of bounds check
-		else if(out_position.x > u_domainWidth + u_domainCentre.x || out_position.x < -u_domainWidth + u_domainCentre.x
-		|| out_position.y > u_domainHeight + u_domainCentre.y || out_position.y < -u_domainHeight + u_domainCentre.y
-		|| out_position.z > u_domainWidth + u_domainCentre.z || out_position.z < -u_domainWidth + u_domainCentre.z
+		else if(out_position.x > u_domainWidth + u_domainPosition.x || out_position.x < -u_domainWidth + u_domainPosition.x
+		|| out_position.y > u_domainHeight + u_domainPosition.y || out_position.y < -u_domainHeight + u_domainPosition.y
+		|| out_position.z > u_domainWidth + u_domainPosition.z || out_position.z < -u_domainWidth + u_domainPosition.z
 		)
 		{
 			particleColour = vec4(0.0, 1.0, 0.0, 0.0);
@@ -181,8 +180,6 @@ void main()
 			}
 		}
 	}
-
-	out_collisionIndex = int(out_position.w);
 
 	mat4 MVP = projectionMatrix * viewMatrix * u_modelMatrix;
     gl_Position = MVP * vec4(out_position.xyz, 1.0);

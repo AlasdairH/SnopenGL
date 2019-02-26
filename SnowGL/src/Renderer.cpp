@@ -21,7 +21,7 @@ namespace SnowGL
 		glStencilFunc(m_sencilFunc, 1, 0xFF);
 		glStencilMask(m_stencilBufferInt);
 
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClearColor(0.19f, 0.54f, 0.93f, 1.0f);
 
 		SDL_GL_SetSwapInterval(1);
 
