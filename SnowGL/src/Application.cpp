@@ -76,10 +76,10 @@ int main()
 	GUI gui(window.getWindowPtr());
 
 	ParticleSettings settings;
-	settings.lifetimeMin = 7.0f;
-	settings.lifetimeMax = 7.0f;
-	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 0.5f);
-	settings.colourEnd = glm::vec4(1.0f, 1.0f, 1.0f, 0.5f);
+	settings.lifetimeMin = 10.0f;
+	settings.lifetimeMax = 10.0f;
+	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 0.1f);
+	settings.colourEnd = glm::vec4(1.0f, 1.0f, 1.0f, 0.1f);
 	settings.collisionDebugColour = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 	settings.particlesPerSecond = 10000;
 	settings.globalWind = glm::vec3(0.0f);
