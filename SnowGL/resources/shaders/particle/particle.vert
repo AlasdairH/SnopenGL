@@ -133,7 +133,7 @@ void main()
 		}
 		else if(out_position.w >= 0.0f)
 		{
-			particleColour = vec4(0.0, 1.0, 0.0, 1.0);
+			particleColour = u_collisionColour;
 		}
 		else
 		{
@@ -153,7 +153,7 @@ void main()
 				v0 = texelFetch(geometry_tbo, i * 3).xyz;
 				v1 = texelFetch(geometry_tbo, i * 3 + 1).xyz;
 				v2 = texelFetch(geometry_tbo, i * 3 + 2).xyz;
-
+				
 				if (intersect(in_position.xyz, (in_position.xyz - out_position.xyz) * u_collisionMultiplier, v0, v1, v2, point))
 				{
 					

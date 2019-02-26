@@ -56,8 +56,8 @@ int main()
 	groundPlane.transform.translate(glm::vec3(0, 0, 0));
 
 	Renderable cube;
-	IOUtilities::loadRenderable(cube, "resources/objects/Cube.rnd");
-	cube.transform.translate(glm::vec3(0, 1, 0));
+	IOUtilities::loadRenderable(cube, "resources/objects/Table.rnd");
+	//cube.transform.translate(glm::vec3(0, 1, 0));
 
 	VertexBuffer vboGeometry(BUFFER_ARRAY);
 	vboGeometry.addTextureBuffer();
@@ -67,7 +67,7 @@ int main()
 	vaoGeometry.addBuffer(vboGeometry, layout);
 
 	int vertexCount = 0;
-	//vertexCount += groundPlane.getVertexCount();
+	vertexCount += groundPlane.getVertexCount();
 	vertexCount += cube.getVertexCount();
 	int triangleCount = vertexCount / 3;
 
@@ -281,7 +281,7 @@ int main()
 			groundPlane.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
 			groundPlane.m_shader->setUniform1i("u_diffuseTexture", 0);
 			groundPlane.m_texture->bind(0);
-			//renderer.render(groundPlane);
+			renderer.render(groundPlane);
 
 			glEndTransformFeedback();
 
