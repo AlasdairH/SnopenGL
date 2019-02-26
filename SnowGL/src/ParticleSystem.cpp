@@ -30,7 +30,6 @@ namespace SnowGL
 		tfFrag.load("resources/shaders/particle/particle.frag");
 		m_tfShader->attachShader(tfFrag);
 		std::vector<std::string> tfVaryings{ "out_position", "out_startPosition", "out_velocity", "out_startTime", "out_lifetime", "gl_NextBuffer", "out_collisionIndex"};
-		//std::vector<std::string> tfVaryings{ "out_position", "out_startPosition", "out_velocity", "out_startTime", "out_lifetime", "gl_NextBuffer"};
 		m_tfShader->setTransformFeedbackVarying(tfVaryings);
 		m_tfShader->link();
 
@@ -89,6 +88,7 @@ namespace SnowGL
 
 		CONSOLE_MESSAGE("Created " << m_numParticles << " particles on the GPU");
 
+		// create a texture buffer for the collision data to be written to
 		m_collisionVBO = std::make_shared<VertexBuffer>(BUFFER_ARRAY);
 		m_collisionVBO->addTextureBuffer();
 		m_collisionVAO = std::make_shared<VertexArray>();

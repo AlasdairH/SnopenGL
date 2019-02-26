@@ -170,7 +170,6 @@ int main()
 		else
 		{
 			cameraMoveSpeed = 5;
-
 		}
 		if (keyboardState[SDL_SCANCODE_W]) 
 		{
