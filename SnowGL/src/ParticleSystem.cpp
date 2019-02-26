@@ -22,6 +22,10 @@ namespace SnowGL
 		m_tfShader = std::make_shared<ShaderProgram>();
 
 		float spread = m_settings->domainWidth;
+		// setup drawable domain
+		m_drawableDomain = std::make_shared<Renderable>();
+		IOUtilities::loadRenderable(*m_drawableDomain, "resources/objects/Cube.rnd");
+		m_domainTransform.scale(glm::vec3(m_settings->domainWidth, m_settings->domainHeight, m_settings->domainWidth) * 2);
 
 		Shader tfVert(SHADER_VERTEX);
 		tfVert.load("resources/shaders/particle/particle.vert");
@@ -42,6 +46,7 @@ namespace SnowGL
 		layout.push<float>(1);		// delay
 		layout.push<float>(1);		// lifetime
 
+
 		for (int i = 0; i < 2; ++i)
 		{
 			// create 2 VAOs and VBOs for ping ponging
@@ -60,11 +65,10 @@ namespace SnowGL
 
 				for (int j = 0; j < m_numParticles; ++j)
 				{
-					// position w = state.
+					// position w = state
 					// -1 = active
-					// -2 = inactive
 					// >= 0 index of last triangle collision
-					buffer[j].currentPosition = glm::vec4(Utils::randFloat(-spread, spread), 5, Utils::randFloat(-spread, spread), -1);
+					buffer[j].currentPosition = glm::vec4(Utils::randFloat(-spread, spread), m_settings->domainHeight, Utils::randFloat(-spread, spread), -1);
 					buffer[j].startPosition = buffer[j].currentPosition;
 					buffer[j].velocity = m_settings->initialVelocity;
 					buffer[j].delay = (j / (float)m_numParticles) * m_settings->lifetimeMax;
@@ -109,6 +113,8 @@ namespace SnowGL
 		m_tfShader->setUniform3f("u_globalWind", m_settings->globalWind);
 		m_tfShader->setUniform1f("u_collisionMultiplier", m_settings->collisionMultiplier);
 		m_tfShader->setUniform3f("u_initialVelocity", m_settings->initialVelocity);
+		m_tfShader->setUniform1f("u_domainWidth", m_settings->domainWidth);
+		m_tfShader->setUniform1f("u_domainHeight", m_settings->domainHeight);
 		CONSOLE_MESSAGE("Particle settings applied to shader")
 	}
 
@@ -144,5 +150,20 @@ namespace SnowGL
 		m_currVBO = (m_currVBO + 1) & 0x1;
 			
 		++m_frameCount;
+
+		
+		if (m_settings->drawDomain)
+		{
+			m_drawableDomain->m_shader->setUniformMat4f("u_modelMatrix", m_domainTransform.getModelMatrix());
+			m_drawableDomain->m_shader->setUniform1i("u_diffuseTexture", 0);
+			m_drawableDomain->m_texture->bind(0);
+			
+			m_drawableDomain->m_mesh->m_IBO->bind();
+			m_drawableDomain->m_mesh->m_VAO->bind();
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glDrawElements(GL_TRIANGLES, m_drawableDomain->m_mesh->m_IBO->getCount(), GL_UNSIGNED_INT, 0);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
+		
 	}
 }

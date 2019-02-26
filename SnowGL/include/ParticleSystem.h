@@ -105,13 +105,18 @@ namespace SnowGL
 		GLuint								m_wsGeomArrayBuffer;
 		GLuint								m_wsGeomTextureBuffer;
 
-		int									m_numParticles;			/**< THe number of particles */
+		int									m_numParticles;			/**< The number of particles */
 
 		int									m_frameCount = 0;
 		float								m_simTime = 0;
 
+		float								m_pointSize = 1.0f;
+
 		Transform							m_transform;
 
-		float								m_pointSize = 1.0f;
+		std::shared_ptr<Renderable>			m_drawableDomain;
+		Transform							m_domainTransform;
+
+		
 	};
 }

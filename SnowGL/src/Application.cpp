@@ -78,14 +78,16 @@ int main()
 	ParticleSettings settings;
 	settings.lifetimeMin = 7.0f;
 	settings.lifetimeMax = 7.0f;
-	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	settings.colourEnd = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 0.5f);
+	settings.colourEnd = glm::vec4(1.0f, 1.0f, 1.0f, 0.5f);
 	settings.collisionDebugColour = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 	settings.particlesPerSecond = 10000;
 	settings.globalWind = glm::vec3(0.0f);
 	settings.collisionMultiplier = 2.0f;
 	settings.initialVelocity = glm::vec3(0, -1.0f, 0);
 	settings.domainWidth = 7;
+	settings.domainHeight = 7;
+	settings.drawDomain = true;
 
 	ParticleSystem snow(settings);
 	snow.initialise();
@@ -215,6 +217,7 @@ int main()
 					break; 
 				case SDLK_SPACE:
 					state.isUIHidden = !state.isUIHidden;
+					snow.getSettingsPtr()->drawDomain = !snow.getSettingsPtr()->drawDomain;
 					break;
 				case SDLK_b:
 					

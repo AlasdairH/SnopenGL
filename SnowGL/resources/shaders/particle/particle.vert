@@ -30,12 +30,19 @@ out int out_collisionIndex;
 layout (location = 12) uniform mat4 u_modelMatrix;
 
 // particle system
+// colour
 uniform vec4 u_startColour = vec4(1.0f, 0.07f, 0.58f, 1.0f);
 uniform vec4 u_endColour = vec4(1.0f, 0.07f, 0.58f, 1.0f);
 uniform vec4 u_collisionColour = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+// environment
 uniform vec3 u_globalWind = vec3(0.0f, 0.0f, 0.0f);
+// movement
 uniform vec3 u_initialVelocity = vec3(0, -0.5f, 0);
 uniform float u_collisionMultiplier = 1.0f;
+// domain
+uniform float u_domainWidth = 1;
+uniform float u_domainHeight = 1;
+uniform vec3 u_domainCentre = vec3(0, 0, 0);
 
 // timing
 uniform float u_deltaTime = 0.016f;
@@ -131,13 +138,24 @@ void main()
 			out_velocity = u_initialVelocity;
 			out_startTime = u_simTime;
 		}
+		// if the collision index of the particle isn't -1 (if it's stuck to something)
 		else if(out_position.w >= 0.0f)
 		{
 			particleColour = u_collisionColour;
 		}
+		// out of bounds check
+		else if(out_position.x > u_domainWidth + u_domainCentre.x || out_position.x < -u_domainWidth + u_domainCentre.x
+		|| out_position.y > u_domainHeight + u_domainCentre.y || out_position.y < -u_domainHeight + u_domainCentre.y
+		|| out_position.z > u_domainWidth + u_domainCentre.z || out_position.z < -u_domainWidth + u_domainCentre.z
+		)
+		{
+			particleColour = vec4(0.0, 1.0, 0.0, 0.0);
+			out_position = vec4(0.0, 0.0, 0.0, 0.0);
+		}
+		
 		else
 		{
-			// particle is alive and well so update it
+			// if we got here the particle is alive and well so update it
 			out_velocity += (u_globalWind * u_deltaTime);
 			out_position = vec4(in_position.xyz + (out_velocity * u_deltaTime), out_position.w);
 
@@ -156,7 +174,6 @@ void main()
 				
 				if (intersect(in_position.xyz, (in_position.xyz - out_position.xyz) * u_collisionMultiplier, v0, v1, v2, point))
 				{
-					
 					//vec3 n = normalize(cross(v1 - v0, v2 - v0));
 					out_position = vec4(point.xyz, i);
 					out_velocity = vec3(0, 0, 0);
@@ -168,5 +185,5 @@ void main()
 	out_collisionIndex = int(out_position.w);
 
 	mat4 MVP = projectionMatrix * viewMatrix * u_modelMatrix;
-    gl_Position = MVP * vec4(out_position.x, out_position.y, out_position.z, 1.0);
+    gl_Position = MVP * vec4(out_position.xyz, 1.0);
 }
