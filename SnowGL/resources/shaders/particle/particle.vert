@@ -8,7 +8,7 @@ layout (std140) uniform u_camera_data
 
 uniform int u_triangleCount;
 uniform samplerBuffer geometry_tbo;
-uniform imageBuffer writeonly u_accumulation_tbo;
+uniform iimageBuffer writeonly u_accumulation_tbo;
 
 // transform feedback inputs
 in vec4 in_position;
@@ -116,7 +116,8 @@ vec4 when_gt(vec4 x, vec4 y)
 
 void main()
 {
-	//imageStore(u_accumulation_tbo, 0, vec4(3.0, 2.0, 1.0, 0.0));
+	imageStore(u_accumulation_tbo, 0, ivec4(4, 3, 2, 1));
+	imageStore(u_accumulation_tbo, 1, ivec4(1, 1, 1, 1));
 
 	// buffer 0
 	out_position = in_position;

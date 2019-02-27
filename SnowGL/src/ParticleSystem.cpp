@@ -94,7 +94,7 @@ namespace SnowGL
 
 		// create a texture buffer for the collision data to be written to
 		m_accumulationBufferVBO = std::make_shared<VertexBuffer>(BUFFER_ARRAY);
-		m_accumulationBufferVBO->addTextureBuffer(1024 * 1024 * sizeof(glm::vec4));
+		m_accumulationBufferVBO->addTextureBuffer(GL_RGBA32I, 10 * sizeof(unsigned int) * 4);
 		m_accumulationBufferVAO = std::make_shared<VertexArray>();
 		VertexBufferLayout colLayout;
 		layout.push<glm::vec4>(1);
@@ -136,9 +136,11 @@ namespace SnowGL
 		m_tfShader->setUniform1i("geometry_tbo", 0);
 		glActiveTexture(GL_TEXTURE0 + 0);
 		glBindTexture(GL_TEXTURE_BUFFER, m_wsGeomTextureBuffer);
+
 		m_tfShader->setUniform1i("u_accumulation_tbo", 1);
-		glActiveTexture(GL_TEXTURE0 + 1);
-		glBindTexture(GL_TEXTURE_BUFFER, m_accumulationBufferVBO->getTextureGLID());
+		// START HERE - https://stackoverflow.com/questions/28704818/how-can-i-write-to-a-texture-buffer-object
+		// 1 - look at texture image unit 1 
+		glBindImageTexture(1, m_accumulationBufferVBO->getTextureGLID(), 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32I);
 
 		m_tfShader->setUniformMat4f("u_modelMatrix", m_transform.getModelMatrix());
 

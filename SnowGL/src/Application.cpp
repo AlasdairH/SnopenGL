@@ -60,7 +60,7 @@ int main()
 	//cube.transform.translate(glm::vec3(0, 1, 0));
 
 	VertexBuffer vboGeometry(BUFFER_ARRAY);
-	vboGeometry.addTextureBuffer(1024 * 1024 * sizeof(glm::vec4));
+	vboGeometry.addTextureBuffer(GL_RGBA32F, 1024 * 1024 * sizeof(glm::vec4));
 	VertexArray vaoGeometry;
 	VertexBufferLayout layout;
 	layout.push<glm::vec4>(1);
@@ -115,7 +115,7 @@ int main()
 	CONSOLE_MESSAGE("Scene triangle count: " << triangleCount);
 
 	std::vector<int> collisionBufferData;
-	collisionBufferData.resize(10);
+	collisionBufferData.resize(12);
 
 	while (state.isRunning)
 	{
@@ -223,10 +223,10 @@ int main()
 				case SDLK_b:
 					
 					glBindBuffer(GL_ARRAY_BUFFER, snow.getAccumulationBufferGLID());
-					glGetBufferSubData(GL_ARRAY_BUFFER, 0, 10 * sizeof(int), &collisionBufferData[0]);
+					glGetBufferSubData(GL_ARRAY_BUFFER, 0, 10 * sizeof(unsigned int) * 4, &collisionBufferData[0]);
 					for (int i = 0; i < collisionBufferData.size(); ++i)
 					{
-						CONSOLE_MESSAGE(i << ": " << collisionBufferData[i]);
+						CONSOLE_MESSAGE(i << " - " << collisionBufferData[i]);
 					}
 					
 					break;
