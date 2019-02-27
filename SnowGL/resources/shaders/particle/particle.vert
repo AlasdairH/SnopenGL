@@ -6,9 +6,17 @@ layout (std140) uniform u_camera_data
 	mat4 projectionMatrix;
 };
 
+/*
+layout (std430, binding = 3) buffer buffer_accumulationBins
+{ 
+	vec4 bin;
+};
+*/
+
 uniform int u_triangleCount;
-uniform samplerBuffer geometry_tbo;
-uniform iimageBuffer writeonly u_accumulation_tbo;
+layout(		 binding = 0) uniform samplerBuffer geometry_tbo;
+layout(r32i, binding = 1) uniform iimageBuffer u_accumulation_tbo;
+//layout(r32i, binding = 1) uniform iimageBuffer u_accumulation_tbo;
 
 // transform feedback inputs
 in vec4 in_position;
@@ -18,7 +26,6 @@ in float in_startTime;
 in float in_lifetime;
 
 // transform feedback outputs
-// buffer 0
 out vec4 out_position;
 out vec4 out_startPosition;
 out vec3 out_velocity;
@@ -26,7 +33,7 @@ out float out_startTime;
 out float out_lifetime;
 
 // rendering
-layout (location = 12) uniform mat4 u_modelMatrix;
+uniform mat4 u_modelMatrix;
 
 // particle system
 // colour
@@ -41,7 +48,10 @@ uniform float u_collisionMultiplier = 1.0f;
 // domain
 uniform float u_domainWidth = 1;
 uniform float u_domainHeight = 1;
+uniform float u_domainDepth = 1;
 uniform vec3 u_domainPosition = vec3(0, 0, 0);
+uniform vec3 u_domainOffset = vec3(0, 0, 0);
+uniform int u_accumulationSampleResolution = 10; // res x res x res
 
 // timing
 uniform float u_deltaTime = 0.016f;
@@ -104,29 +114,28 @@ vec3 reflect_vector(vec3 v, vec3 n)
 	return v - 2.0 * dot(v, n) * n;
 }
 
-vec4 when_eq(vec4 x, vec4 y) 
+int toIndex(ivec3 _pos)
 {
-	return 1.0 - abs(sign(x - y));
+	return int((_pos.z * u_domainWidth * u_domainHeight) + (_pos.y * u_domainWidth) + _pos.x);
 }
 
-vec4 when_gt(vec4 x, vec4 y) 
+vec3 indexTo3D(int _index)
 {
-	return max(sign(x - y), 0.0);
+	int z = int(_index / (u_domainWidth * u_domainHeight));
+	_index -= (z * u_domainWidth * u_domainHeight);
+	int y = int(_index / ceil(u_domainWidth));
+	int x = int(_index % int(ceil(u_domainWidth)));
+	return vec3(x, y, z);
 }
 
 void main()
 {
-	imageStore(u_accumulation_tbo, 0, ivec4(4, 3, 2, 1));
-	imageStore(u_accumulation_tbo, 1, ivec4(1, 1, 1, 1));
-
 	// buffer 0
 	out_position = in_position;
 	out_startPosition = in_startPosition;
 	out_velocity = in_velocity;
 	out_startTime = in_startTime;
     out_lifetime = in_lifetime;
-	// buffer 1
-	//out_collisionIndex = -2;
 
 	if(u_simTime >= in_startTime)
 	{
@@ -145,7 +154,7 @@ void main()
 		}
 		// out of bounds check
 		else if(out_position.x > u_domainWidth + u_domainPosition.x || out_position.x < -u_domainWidth + u_domainPosition.x
-		|| out_position.y > u_domainHeight + u_domainPosition.y || out_position.y < -u_domainHeight + u_domainPosition.y
+		|| out_position.y > u_domainDepth + u_domainPosition.y || out_position.y < -u_domainDepth + u_domainPosition.y
 		|| out_position.z > u_domainWidth + u_domainPosition.z || out_position.z < -u_domainWidth + u_domainPosition.z
 		)
 		{
@@ -177,10 +186,18 @@ void main()
 					//vec3 n = normalize(cross(v1 - v0, v2 - v0));
 					out_position = vec4(point.xyz, i);
 					out_velocity = vec3(0, 0, 0);
+					ivec3 pos = ivec3(floor(out_position.xyz + (u_domainOffset * 2)));
+					int index = toIndex(pos);
+					imageAtomicAdd(u_accumulation_tbo, index, 1);
 				}
 			}
 		}
 	}
+
+	imageStore(u_accumulation_tbo, 0, ivec4(1));
+	imageStore(u_accumulation_tbo, 1, ivec4(1));
+	imageStore(u_accumulation_tbo, 2, ivec4(1));
+	imageStore(u_accumulation_tbo, 3, ivec4(1));
 
 	mat4 MVP = projectionMatrix * viewMatrix * u_modelMatrix;
     gl_Position = MVP * vec4(out_position.xyz, 1.0);

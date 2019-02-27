@@ -25,7 +25,19 @@ namespace SnowGL
 		// setup drawable domain
 		m_drawableDomain = std::make_shared<Renderable>();
 		IOUtilities::loadRenderable(*m_drawableDomain, "resources/objects/Cube.rnd");
-		m_domainTransform.scale(glm::vec3(m_settings->domainWidth, m_settings->domainHeight, m_settings->domainWidth) * 2);
+		m_domainTransform.scale(glm::vec3(m_settings->domainWidth, m_settings->domainDepth, m_settings->domainHeight) * 2);
+
+		glm::vec3 bottomLeft;
+		glm::vec3 topRight;
+		float minLeftFace = m_settings->domainPosition.x - (m_settings->domainWidth / 2);
+		float minBottomFace = m_settings->domainPosition.y - (m_settings->domainDepth / 2);
+		float minBackFace = m_settings->domainPosition.z - (m_settings->domainHeight / 2);
+		if (minLeftFace < 0.0f)
+			m_domainOffset.x = minLeftFace * -1;
+		if (minBottomFace < 0.0f)
+			m_domainOffset.y = minBottomFace * -1;
+		if (minBackFace < 0.0f)
+			m_domainOffset.z = minBackFace * -1;
 
 		Shader tfVert(SHADER_VERTEX);
 		tfVert.load("resources/shaders/particle/particle.vert");
@@ -68,7 +80,7 @@ namespace SnowGL
 					// position w = state
 					// -1 = active
 					// >= 0 index of last triangle collision
-					buffer[j].currentPosition = glm::vec4(Utils::randFloat(-spread, spread), m_settings->domainHeight + m_settings->domainPosition.y, Utils::randFloat(-spread, spread), -1);
+					buffer[j].currentPosition = glm::vec4(Utils::randFloat(-spread, spread), m_settings->domainDepth + m_settings->domainPosition.y, Utils::randFloat(-spread, spread), -1);
 					buffer[j].startPosition = buffer[j].currentPosition;
 					buffer[j].velocity = m_settings->initialVelocity;
 					buffer[j].delay = (j / (float)m_numParticles) * m_settings->lifetimeMax;
@@ -94,7 +106,7 @@ namespace SnowGL
 
 		// create a texture buffer for the collision data to be written to
 		m_accumulationBufferVBO = std::make_shared<VertexBuffer>(BUFFER_ARRAY);
-		m_accumulationBufferVBO->addTextureBuffer(GL_RGBA32I, 10 * sizeof(unsigned int) * 4);
+		m_accumulationBufferVBO->addTextureBuffer(GL_R32I, 1024 * sizeof(int) * 4);
 		m_accumulationBufferVAO = std::make_shared<VertexArray>();
 		VertexBufferLayout colLayout;
 		layout.push<glm::vec4>(1);
@@ -117,12 +129,13 @@ namespace SnowGL
 		m_tfShader->setUniform3f("u_initialVelocity", m_settings->initialVelocity);
 		// domain position / size
 		m_tfShader->setUniform3f("u_domainPosition", m_settings->domainPosition);
+		m_tfShader->setUniform3f("u_domainOffset", m_domainOffset);
 		m_tfShader->setUniform1f("u_domainWidth", m_settings->domainWidth);
 		m_tfShader->setUniform1f("u_domainHeight", m_settings->domainHeight);
+		m_tfShader->setUniform1f("u_domainDepth", m_settings->domainDepth);
 		CONSOLE_MESSAGE("Particle settings applied to shader");
 
-		//m_transform.setPosition(m_settings->domainPosition);
-		m_domainTransform.setPosition(m_settings->domainPosition);
+		m_domainTransform.setPosition(m_settings->domainPosition + m_domainOffset * 2);
 	}
 
 	void ParticleSystem::updateParticles(float _deltaTime, int _triangleCount)
@@ -133,14 +146,10 @@ namespace SnowGL
 		m_tfShader->setUniform1f("u_simTime", m_simTime);
 		m_tfShader->setUniform1i("u_triangleCount", _triangleCount);
 
-		m_tfShader->setUniform1i("geometry_tbo", 0);
 		glActiveTexture(GL_TEXTURE0 + 0);
 		glBindTexture(GL_TEXTURE_BUFFER, m_wsGeomTextureBuffer);
 
-		m_tfShader->setUniform1i("u_accumulation_tbo", 1);
-		// START HERE - https://stackoverflow.com/questions/28704818/how-can-i-write-to-a-texture-buffer-object
-		// 1 - look at texture image unit 1 
-		glBindImageTexture(1, m_accumulationBufferVBO->getTextureGLID(), 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32I);
+		glBindImageTexture(1, m_accumulationBufferVBO->getTextureGLID(), 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32I);
 
 		m_tfShader->setUniformMat4f("u_modelMatrix", m_transform.getModelMatrix());
 

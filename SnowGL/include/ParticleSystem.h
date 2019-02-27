@@ -86,6 +86,9 @@ namespace SnowGL
 		inline void setWsGeometryBuffer(GLuint _tex, GLuint _ary) { m_wsGeomTextureBuffer = _tex; m_wsGeomArrayBuffer = _ary; }
 
 		inline GLuint getAccumulationBufferGLID() { return m_accumulationBufferVBO->getGLID(); }
+		inline GLuint getAccumulationTextureBufferGLID() { return m_accumulationBufferVBO->getTextureGLID(); }
+
+		inline glm::vec3 getDomainOffset() { return m_domainOffset; }
 
 	protected:
 		// TODO: doxygen
@@ -116,6 +119,7 @@ namespace SnowGL
 
 		std::shared_ptr<Renderable>			m_drawableDomain;
 		Transform							m_domainTransform;
+		glm::vec3							m_domainOffset;
 
 		
 	};

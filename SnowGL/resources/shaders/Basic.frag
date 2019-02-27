@@ -9,6 +9,7 @@ layout (location = 4) in vec2 frag_texCoord;
 layout (location = 5) in vec3 frag_normal;
 layout (location = 6) in vec3 frag_pos;
 layout (location = 7) in vec4 frag_posDepthSpace;
+layout (location = 8) in vec4 frag_colour;
 
 uniform vec3 u_lightPos = vec3(0, 5, 0);
 uniform vec3 u_lightColour = vec3(0.5f);
@@ -65,4 +66,5 @@ void main()
 
 
 	outputColour = vec4(lighting, 1.0f);
+	outputColour = frag_colour;
 } 

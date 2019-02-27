@@ -35,7 +35,7 @@ namespace SnowGL
 		{
 			m_usage = GL_DYNAMIC_DRAW;
 		}		
-		else if (m_vertexBufferType == BUFFER_TRANSFORM_FEEDBACK)
+		else if (m_vertexBufferType == BUFFER_TRANSFORM_FEEDBACK || m_vertexBufferType == BUFFER_ARRAY_TEXTURE || m_vertexBufferType == BUFFER_SHADER_STORAGE)
 		{
 			m_usage = GL_DYNAMIC_COPY;
 		}

@@ -57,7 +57,7 @@ int main()
 
 	Renderable cube;
 	IOUtilities::loadRenderable(cube, "resources/objects/Table.rnd");
-	//cube.transform.translate(glm::vec3(0, 1, 0));
+	cube.transform.translate(glm::vec3(0, 0, 0));
 
 	VertexBuffer vboGeometry(BUFFER_ARRAY);
 	vboGeometry.addTextureBuffer(GL_RGBA32F, 1024 * 1024 * sizeof(glm::vec4));
@@ -78,15 +78,16 @@ int main()
 	ParticleSettings settings;
 	settings.lifetimeMin = 10.0f;
 	settings.lifetimeMax = 10.0f;
+	settings.particlesPerSecond = 20000;
 	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 0.1f);
 	settings.colourEnd = glm::vec4(1.0f, 1.0f, 1.0f, 0.1f);
 	settings.collisionDebugColour = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-	settings.particlesPerSecond = 20000;
 	settings.globalWind = glm::vec3(0.0f);
 	settings.collisionMultiplier = 2.0f;
 	settings.initialVelocity = glm::vec3(0, -1.0f, 0);
 	settings.domainWidth = 7;
-	settings.domainHeight = 3;
+	settings.domainHeight = 7;
+	settings.domainDepth = 3;
 	settings.domainPosition = glm::vec3(0, 2, 0);
 	settings.drawDomain = true;
 
@@ -115,7 +116,7 @@ int main()
 	CONSOLE_MESSAGE("Scene triangle count: " << triangleCount);
 
 	std::vector<int> collisionBufferData;
-	collisionBufferData.resize(12);
+	collisionBufferData.resize(7 * 7 * 3);
 
 	while (state.isRunning)
 	{
@@ -221,12 +222,12 @@ int main()
 					snow.getSettingsPtr()->drawDomain = !snow.getSettingsPtr()->drawDomain;
 					break;
 				case SDLK_b:
-					
 					glBindBuffer(GL_ARRAY_BUFFER, snow.getAccumulationBufferGLID());
-					glGetBufferSubData(GL_ARRAY_BUFFER, 0, 10 * sizeof(unsigned int) * 4, &collisionBufferData[0]);
+					glGetBufferSubData(GL_ARRAY_BUFFER, 0, 7 * 7 * 3 * sizeof(int), &collisionBufferData[0]);
 					for (int i = 0; i < collisionBufferData.size(); ++i)
 					{
-						CONSOLE_MESSAGE(i << " - " << collisionBufferData[i]);
+						if(collisionBufferData[i] != 0)
+							CONSOLE_MESSAGE(i << " - " << collisionBufferData[i]);
 					}
 					
 					break;
@@ -277,11 +278,16 @@ int main()
 
 			cube.m_shader->setUniformMat4f("u_modelMatrix", cube.transform.getModelMatrix());
 			cube.m_shader->setUniform1i("u_diffuseTexture", 0);
+			cube.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
+			// bind accumulation buffer
+			glActiveTexture(GL_TEXTURE0 + 20);
+			glBindTexture(GL_TEXTURE_BUFFER, snow.getAccumulationTextureBufferGLID());
 			cube.m_texture->bind(0);
 			renderer.render(cube);
 
 			groundPlane.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
 			groundPlane.m_shader->setUniform1i("u_diffuseTexture", 0);
+			groundPlane.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
 			groundPlane.m_texture->bind(0);
 			renderer.render(groundPlane);
 
@@ -291,31 +297,6 @@ int main()
 			snow.updateParticles(state.deltaTime, triangleCount);
 		}
 		renderer.unBindFrameBuffer();
-
-		/*
-		// if the scene is in edit mode
-		if (state.getSceneMode() == MODE_EDIT)
-		{
-			// render a plane in wire frame mode at the origin
-			outlineShader.setUniform4f("diffuseColour", 0.5f, 0.5f, 0.5f, 1.0f);
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			renderer.render(*editPlane.getGPUMesh(), outlineShader, zeroTransform);
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-			// second pass (scaled) for outline
-			renderer.setStencilBufferActive(false);
-			renderer.setDepthTest(false);
-
-			Transform transformUpscale = editPlane.transform;
-			transformUpscale.scale(glm::vec3(1.05f));
-
-			outlineShader.setUniform4f("diffuseColour", 0.0f, 0.8f, 0.0f, 1.0f);
-			renderer.render(*editPlane.getGPUMesh(), outlineShader, transformUpscale);
-
-			renderer.setStencilBufferActive(true);
-			renderer.setDepthTest(true);
-		}
-		*/
 
 		if (state.getSceneMode() == MODE_VIEW)
 		{

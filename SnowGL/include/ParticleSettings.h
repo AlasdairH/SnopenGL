@@ -27,6 +27,7 @@ namespace SnowGL
 		glm::vec3	domainPosition = glm::vec3(0.0f);			// domain position
 		float		domainWidth = 5;
 		float		domainHeight = 5;
+		float		domainDepth = 5;
 
 		bool		drawDomain;
 
