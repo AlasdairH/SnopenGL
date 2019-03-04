@@ -11,9 +11,6 @@ layout (location = 0) in vec3 position;
 layout (location = 1) in vec2 texCoord;
 layout (location = 2) in vec3 normal;
 
-// world space transform feedback
-layout (location = 3) out vec4 out_worldSpacePosition;
-
 // fragment shader outputs
 layout (location = 4) out vec2 frag_texCoord;
 layout (location = 5) out vec3 frag_normal;
@@ -71,7 +68,6 @@ void main()
 	//vec4 texel = imageLoad(u_accumulationBuffer, 0);
 	//frag_colour = vec4(texel.xyz, 1.0f);
 
-	out_worldSpacePosition = pos;
 	mat4 VP = projectionMatrix * viewMatrix;
 
     //gl_Position = out_worldSpacePosition;

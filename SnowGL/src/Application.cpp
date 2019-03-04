@@ -53,7 +53,8 @@ int main()
 
 	Renderable groundPlane;
 	IOUtilities::loadRenderable(groundPlane, "resources/objects/Plane.rnd");
-	groundPlane.transform.translate(glm::vec3(0, 0, 0));
+	Renderable groundPlane_COLLISION;
+	IOUtilities::loadRenderable(groundPlane_COLLISION, "resources/objects/Plane_Collision.rnd");
 
 	Renderable cube;
 	IOUtilities::loadRenderable(cube, "resources/objects/Table.rnd");
@@ -67,7 +68,7 @@ int main()
 	vaoGeometry.addBuffer(vboGeometry, layout);
 
 	int vertexCount = 0;
-	vertexCount += groundPlane.getVertexCount();
+	vertexCount += groundPlane_COLLISION.getVertexCount();
 	//vertexCount += cube.getVertexCount();
 	int triangleCount = vertexCount / 3;
 
@@ -268,32 +269,38 @@ int main()
 			GLuint tf_vao = vaoGeometry.getGLID();
 			GLuint tf_vbo = vboGeometry.getGLID();
 
-		
+			
 			glBindVertexArray(tf_vao);
 			glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, tf_vbo);
 			
-			cube.m_shader->bind();
+			groundPlane_COLLISION.m_shader->bind();
 
 			glBeginTransformFeedback(GL_TRIANGLES);
+			glEnable(GL_RASTERIZER_DISCARD);
 
-			cube.m_shader->setUniformMat4f("u_modelMatrix", cube.transform.getModelMatrix());
-			cube.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
+			//cube.m_shader->setUniformMat4f("u_modelMatrix", cube.transform.getModelMatrix());
+			//cube.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
 
 			// bind accumulation buffer
 			glBindImageTexture(5, snow.getAccumulationTextureBufferGLID(), 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32I);
 
-			cube.m_texture->bind(0);
+			//cube.m_texture->bind(0);
 			//renderer.render(cube);
+			
+			groundPlane_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
+			renderer.render(groundPlane_COLLISION);
 
-			groundPlane.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
-			groundPlane.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
-			groundPlane.m_texture->bind(0);
-			renderer.render(groundPlane);
-
+			glDisable(GL_RASTERIZER_DISCARD);
 			glEndTransformFeedback();
 
 			// update and render snow
 			snow.updateParticles(state.deltaTime, triangleCount);
+
+			// render visuals for objects
+			groundPlane.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
+			groundPlane.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
+			groundPlane.m_texture->bind(0);
+			renderer.render(groundPlane);
 		}
 		renderer.unBindFrameBuffer();
 

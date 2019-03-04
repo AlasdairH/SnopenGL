@@ -45,7 +45,7 @@ namespace SnowGL
 		*
 		*	Sets the object's mesh
 		*/
-		inline void setMesh(std::shared_ptr<GPU_Mesh> _mesh) { m_mesh = _mesh; }
+		inline void setMesh(std::shared_ptr<GPU_Mesh> _mesh) { m_mesh = _mesh; }		
 		/** @brief Mesh setter
 		*	@param _shader The shader to set
 		*
@@ -78,7 +78,7 @@ namespace SnowGL
 		*
 		*	Returns the number of vertices on the object
 		*/
-		inline int getVertexCount() { return m_mesh->getVertexCount(); }
+		inline int getVertexCount() { return m_mesh->getVertexCount(); }		
 
 	public: 
 		std::shared_ptr<GPU_Mesh>			m_mesh;		/**< The mesh */

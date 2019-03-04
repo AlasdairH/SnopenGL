@@ -199,9 +199,10 @@ namespace SnowGL
 
 		std::string fileText = loadText(_filepath);
 
-		std::shared_ptr<GPU_Mesh>		mesh		= std::make_shared<GPU_Mesh>();
-		std::shared_ptr<ShaderProgram>	shader		= std::make_shared<ShaderProgram>();
-		std::shared_ptr<Texture>		texture		= std::make_shared<Texture>();
+		std::shared_ptr<GPU_Mesh>		mesh			= std::make_shared<GPU_Mesh>();
+		std::shared_ptr<GPU_Mesh>		mesh_collision	= std::make_shared<GPU_Mesh>();
+		std::shared_ptr<ShaderProgram>	shader			= std::make_shared<ShaderProgram>();
+		std::shared_ptr<Texture>		texture			= std::make_shared<Texture>();
 
 		std::vector<std::string>		varyings;
 
@@ -253,6 +254,14 @@ namespace SnowGL
 
 			// MESH path
 			if (line.find("MESH") != std::string::npos)
+			{
+				std::vector<std::string> splitBlock = split(line, ' ');
+				Mesh objMesh;
+				loadMesh(objMesh, splitBlock[1]);
+				mesh->setMesh(objMesh);
+			}			
+			// MESH path
+			if (line.find("MESH_COLLISION") != std::string::npos)
 			{
 				std::vector<std::string> splitBlock = split(line, ' ');
 				Mesh objMesh;
