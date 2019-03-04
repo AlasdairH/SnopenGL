@@ -56,9 +56,11 @@ int main()
 	Renderable groundPlane_COLLISION;
 	IOUtilities::loadRenderable(groundPlane_COLLISION, "resources/objects/Plane_Collision.rnd");
 
-	Renderable cube;
-	IOUtilities::loadRenderable(cube, "resources/objects/Table.rnd");
-	cube.transform.translate(glm::vec3(0, 0, 0));
+	Renderable sceneObject;
+	IOUtilities::loadRenderable(sceneObject, "resources/objects/Table.rnd");
+	sceneObject.transform.translate(glm::vec3(0, 0, 0));
+	Renderable sceneObject_COLLISION;
+	IOUtilities::loadRenderable(sceneObject_COLLISION, "resources/objects/Table_Collision.rnd");
 
 	VertexBuffer vboGeometry(BUFFER_ARRAY);
 	vboGeometry.addTextureBuffer(GL_RGBA32F, 1024 * 1024 * sizeof(glm::vec4));
@@ -69,7 +71,7 @@ int main()
 
 	int vertexCount = 0;
 	vertexCount += groundPlane_COLLISION.getVertexCount();
-	//vertexCount += cube.getVertexCount();
+	vertexCount += sceneObject_COLLISION.getVertexCount();
 	int triangleCount = vertexCount / 3;
 
 	Renderer renderer;
@@ -278,16 +280,13 @@ int main()
 			glBeginTransformFeedback(GL_TRIANGLES);
 			glEnable(GL_RASTERIZER_DISCARD);
 
-			//cube.m_shader->setUniformMat4f("u_modelMatrix", cube.transform.getModelMatrix());
-			//cube.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
-
 			// bind accumulation buffer
 			glBindImageTexture(5, snow.getAccumulationTextureBufferGLID(), 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32I);
 
-			//cube.m_texture->bind(0);
-			//renderer.render(cube);
+			sceneObject_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject_COLLISION.transform.getModelMatrix());
+			renderer.render(sceneObject_COLLISION);
 			
-			groundPlane_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
+			groundPlane_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", groundPlane_COLLISION.transform.getModelMatrix());
 			renderer.render(groundPlane_COLLISION);
 
 			glDisable(GL_RASTERIZER_DISCARD);
@@ -297,6 +296,11 @@ int main()
 			snow.updateParticles(state.deltaTime, triangleCount);
 
 			// render visuals for objects
+			sceneObject.m_shader->setUniformMat4f("u_modelMatrix", sceneObject.transform.getModelMatrix());
+			sceneObject.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
+			sceneObject.m_texture->bind(0);
+			renderer.render(sceneObject);
+
 			groundPlane.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
 			groundPlane.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
 			groundPlane.m_texture->bind(0);

@@ -26,7 +26,7 @@ uniform vec3 u_domainOffset = vec3(0);
 
 // max snow depth
 uniform int u_maxSnowDepth = 1000;
-uniform float u_snowAccumulationSpeed = 0.3f;
+uniform float u_snowAccumulationSpeed = 0.1f;
 
 // model matrix
 uniform mat4 u_modelMatrix;

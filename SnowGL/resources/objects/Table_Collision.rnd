@@ -2,6 +2,5 @@ FILETYPE RENDERABLE
 SHADER_VERT resources/shaders/GeometryFeedback.vert
 SHADER_FRAG resources/shaders/GeometryFeedback.frag
 TFB_VARYING out_worldSpacePosition
-TEXTURE mk2_diffuse resources/textures/wood.png
-MESH resources/models/Table.obj
+MESH resources/models/Table_Collision.obj
 TRANSFORM 0 0 0 0 0 0 1 1 1
