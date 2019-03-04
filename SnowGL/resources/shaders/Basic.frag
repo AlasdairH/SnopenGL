@@ -1,7 +1,7 @@
 #version 430 core
 
 // textures
-uniform sampler2D u_diffuseTexture;
+layout (binding = 0) uniform sampler2D u_diffuseTexture;
 uniform sampler2D u_depthMap;
 uniform sampler2D u_snowTexture;
 
@@ -64,7 +64,6 @@ void main()
 		
 	vec3 lighting = (ambient + (1.0f - shadow) * diffuse) * colour;
 
-
 	outputColour = vec4(lighting, 1.0f);
-	outputColour = frag_colour;
+	//outputColour = frag_colour;
 } 

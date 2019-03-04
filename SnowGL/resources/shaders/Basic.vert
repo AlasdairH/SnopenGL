@@ -29,14 +29,14 @@ uniform vec3 u_domainOffset = vec3(0);
 
 // max snow depth
 uniform int u_maxSnowDepth = 1000;
+uniform float u_snowAccumulationSpeed = 0.3f;
 
 // model matrix
 uniform mat4 u_modelMatrix;
 uniform mat4 u_depthSpaceMatrix;
 
 // textures
-uniform sampler2D u_depthMap;
-layout(location = 20, binding = 20) uniform samplerBuffer u_accumulationBuffer;
+layout(r32i, binding = 5) uniform iimageBuffer u_accumulationBuffer;
 
 int toIndex(ivec3 _pos)
 {
@@ -62,13 +62,14 @@ void main()
 	vec4 pos = (u_modelMatrix * (vec4(position, 1.0f)));
 
 	int accumulationBinIndex = toIndex(ivec3(floor(pos.xyz) + (u_domainOffset * 2)));
-	vec4 snowDepthRGBA = texelFetch(u_accumulationBuffer, accumulationBinIndex);
+	vec4 snowDepthRGBA = imageLoad(u_accumulationBuffer, accumulationBinIndex);
 	int snowDepth = int(snowDepthRGBA.x);
-	float percentageDepth = snowDepth / u_maxSnowDepth;
+	float percentageDepth = float(snowDepth) / float(u_maxSnowDepth);
 
-	//pos += vec4(0, 1, 0, 0) * percentageDepth;
+	pos += vec4(0, 1, 0, 0) * percentageDepth * u_snowAccumulationSpeed;
 
-	vec4 texel = texelFetch(u_accumulationBuffer, 0);
+	//vec4 texel = imageLoad(u_accumulationBuffer, 0);
+	//frag_colour = vec4(texel.xyz, 1.0f);
 
 	out_worldSpacePosition = pos;
 	mat4 VP = projectionMatrix * viewMatrix;
@@ -76,5 +77,4 @@ void main()
     //gl_Position = out_worldSpacePosition;
 	//gl_Position = MVP * vec4(position, 1.0f);
 	gl_Position = VP * pos;
-	frag_colour = vec4(texel.xyz, 1.0f);
 }

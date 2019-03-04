@@ -68,7 +68,7 @@ int main()
 
 	int vertexCount = 0;
 	vertexCount += groundPlane.getVertexCount();
-	vertexCount += cube.getVertexCount();
+	//vertexCount += cube.getVertexCount();
 	int triangleCount = vertexCount / 3;
 
 	Renderer renderer;
@@ -85,7 +85,7 @@ int main()
 	settings.globalWind = glm::vec3(0.0f);
 	settings.collisionMultiplier = 2.0f;
 	settings.initialVelocity = glm::vec3(0, -1.0f, 0);
-	settings.domainWidth = 7;
+	settings.domainWidth = 4;
 	settings.domainHeight = 7;
 	settings.domainDepth = 3;
 	settings.domainPosition = glm::vec3(0, 2, 0);
@@ -277,16 +277,15 @@ int main()
 			glBeginTransformFeedback(GL_TRIANGLES);
 
 			cube.m_shader->setUniformMat4f("u_modelMatrix", cube.transform.getModelMatrix());
-			cube.m_shader->setUniform1i("u_diffuseTexture", 0);
 			cube.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
+
 			// bind accumulation buffer
-			glActiveTexture(GL_TEXTURE0 + 20);
-			glBindTexture(GL_TEXTURE_BUFFER, snow.getAccumulationTextureBufferGLID());
+			glBindImageTexture(5, snow.getAccumulationTextureBufferGLID(), 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32I);
+
 			cube.m_texture->bind(0);
-			renderer.render(cube);
+			//renderer.render(cube);
 
 			groundPlane.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
-			groundPlane.m_shader->setUniform1i("u_diffuseTexture", 0);
 			groundPlane.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
 			groundPlane.m_texture->bind(0);
 			renderer.render(groundPlane);
