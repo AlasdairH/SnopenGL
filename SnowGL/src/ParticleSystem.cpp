@@ -166,7 +166,6 @@ namespace SnowGL
 			
 		++m_frameCount;
 
-		
 		if (m_settings->drawDomain)
 		{
 			m_drawableDomain->m_shader->setUniformMat4f("u_modelMatrix", m_domainTransform.getModelMatrix());
