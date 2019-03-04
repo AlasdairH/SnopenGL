@@ -21,17 +21,16 @@ namespace SnowGL
 
 		m_tfShader = std::make_shared<ShaderProgram>();
 
-		float spread = m_settings->domainWidth;
 		// setup drawable domain
 		m_drawableDomain = std::make_shared<Renderable>();
 		IOUtilities::loadRenderable(*m_drawableDomain, "resources/objects/Cube.rnd");
-		m_domainTransform.scale(glm::vec3(m_settings->domainWidth, m_settings->domainDepth, m_settings->domainHeight) * 2);
+		m_domainTransform.scale(glm::vec3(m_settings->domainSize.x, m_settings->domainSize.y, m_settings->domainSize.z));
 
 		glm::vec3 bottomLeft;
 		glm::vec3 topRight;
-		float minLeftFace = m_settings->domainPosition.x - (m_settings->domainWidth / 2);
-		float minBottomFace = m_settings->domainPosition.y - (m_settings->domainDepth / 2);
-		float minBackFace = m_settings->domainPosition.z - (m_settings->domainHeight / 2);
+		float minLeftFace = m_settings->domainPosition.x - (m_settings->domainSize.x / 2);
+		float minBottomFace = m_settings->domainPosition.y - (m_settings->domainSize.y / 2);
+		float minBackFace = m_settings->domainPosition.z - (m_settings->domainSize.z / 2);
 		if (minLeftFace < 0.0f)
 			m_domainOffset.x = minLeftFace * -1;
 		if (minBottomFace < 0.0f)
@@ -80,7 +79,7 @@ namespace SnowGL
 					// position w = state
 					// -1 = active
 					// >= 0 index of last triangle collision
-					buffer[j].currentPosition = glm::vec4(Utils::randFloat(-spread, spread), m_settings->domainDepth + m_settings->domainPosition.y, Utils::randFloat(-spread, spread), -1);
+					buffer[j].currentPosition = glm::vec4(Utils::randFloat(m_settings->domainSize.x, -m_settings->domainSize.x) / 2, m_settings->domainSize.y / 2, Utils::randFloat(m_settings->domainSize.z, -m_settings->domainSize.z) / 2, -1) + glm::vec4(m_settings->domainPosition, 0.0f);
 					buffer[j].startPosition = buffer[j].currentPosition;
 					buffer[j].velocity = m_settings->initialVelocity;
 					buffer[j].delay = (j / (float)m_numParticles) * m_settings->lifetimeMax;
@@ -112,6 +111,15 @@ namespace SnowGL
 		layout.push<glm::vec4>(1);
 		m_accumulationBufferVAO->addBuffer(*m_accumulationBufferVBO, colLayout);
 
+
+		m_SSBO_AccumulationData.dimensions = glm::vec4(m_settings->domainSize.x, m_settings->domainSize.y, m_settings->domainSize.z, 1.0f);
+
+		m_accumulationSSBO = std::make_shared<VertexBuffer>(BUFFER_SHADER_STORAGE);
+		// link the uniform buffer to the binding point
+		m_accumulationSSBO->bindBase(BUFFER_SHADER_STORAGE, SHADER_BINDPOINT_ACCUMULATION_PARTITION);
+		// load the data to the uniform buffer
+		m_accumulationSSBO->loadData(&m_SSBO_AccumulationData, 0, sizeof(SSBO_accumulationPartition));
+
 		CONSOLE_MESSAGE("Created buffers for collision data");
 
 		return true;
@@ -130,12 +138,13 @@ namespace SnowGL
 		// domain position / size
 		m_tfShader->setUniform3f("u_domainPosition", m_settings->domainPosition);
 		m_tfShader->setUniform3f("u_domainOffset", m_domainOffset);
-		m_tfShader->setUniform1f("u_domainWidth", m_settings->domainWidth);
-		m_tfShader->setUniform1f("u_domainHeight", m_settings->domainHeight);
-		m_tfShader->setUniform1f("u_domainDepth", m_settings->domainDepth);
+		m_tfShader->setUniform1f("u_domainWidth", m_settings->domainSize.x);
+		m_tfShader->setUniform1f("u_domainHeight", m_settings->domainSize.y);
+		m_tfShader->setUniform1f("u_domainDepth", m_settings->domainSize.z);
 		CONSOLE_MESSAGE("Particle settings applied to shader");
 
-		m_domainTransform.setPosition(m_settings->domainPosition + m_domainOffset * 2);
+		//m_domainTransform.setPosition(m_settings->domainPosition + m_domainOffset * 2);
+		m_domainTransform.setPosition(m_settings->domainPosition);
 	}
 
 	void ParticleSystem::updateParticles(float _deltaTime, int _triangleCount)

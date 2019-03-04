@@ -13,6 +13,7 @@
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 #include "Utils.h"
+#include "SSBO_AccumulationPartition.h"
 
 #define MAX_PARTICLES 10000
 
@@ -103,6 +104,9 @@ namespace SnowGL
 		
 		std::shared_ptr<VertexArray>		m_accumulationBufferVAO;	/**< The Vertex Arrays for particle accumulation data */
 		std::shared_ptr<VertexBuffer>		m_accumulationBufferVBO;	/**< The Vertex Buffers for particle accumulation data */
+
+		std::shared_ptr<VertexBuffer>		m_accumulationSSBO;			/**< SSBO version of the accumulation data */
+		SSBO_accumulationPartition			m_SSBO_AccumulationData;	/**< SSBO version of the accumulation data */
 
 		std::shared_ptr<ShaderProgram>		m_tfShader;					/**< The transform Feedback shader */
 		GLuint								m_wsGeomArrayBuffer;

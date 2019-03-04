@@ -82,16 +82,18 @@ int main()
 	settings.lifetimeMin = 10.0f;
 	settings.lifetimeMax = 10.0f;
 	settings.particlesPerSecond = 20000;
+	// colour
 	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 0.1f);
 	settings.colourEnd = glm::vec4(1.0f, 1.0f, 1.0f, 0.1f);
-	settings.collisionDebugColour = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	settings.collisionDebugColour = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+	// physics
 	settings.globalWind = glm::vec3(0.0f);
-	settings.collisionMultiplier = 2.0f;
 	settings.initialVelocity = glm::vec3(0, -1.0f, 0);
-	settings.domainWidth = 4;
-	settings.domainHeight = 7;
-	settings.domainDepth = 3;
+	// debug
+	settings.collisionMultiplier = 2.0f;
+	// domain
 	settings.domainPosition = glm::vec3(0, 2, 0);
+	settings.domainSize = glm::vec3(8, 6, 8);
 	settings.drawDomain = true;
 
 	ParticleSystem snow(settings);
@@ -278,18 +280,20 @@ int main()
 			groundPlane_COLLISION.m_shader->bind();
 
 			glBeginTransformFeedback(GL_TRIANGLES);
-			glEnable(GL_RASTERIZER_DISCARD);
+			// begin collision mesh transform feedback
+				glEnable(GL_RASTERIZER_DISCARD);
 
-			// bind accumulation buffer
-			glBindImageTexture(5, snow.getAccumulationTextureBufferGLID(), 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32I);
+				// bind accumulation buffer
+				glBindImageTexture(5, snow.getAccumulationTextureBufferGLID(), 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32I);
 
-			sceneObject_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject_COLLISION.transform.getModelMatrix());
-			renderer.render(sceneObject_COLLISION);
+				sceneObject_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject_COLLISION.transform.getModelMatrix());
+				renderer.render(sceneObject_COLLISION);
 			
-			groundPlane_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", groundPlane_COLLISION.transform.getModelMatrix());
-			renderer.render(groundPlane_COLLISION);
+				groundPlane_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", groundPlane_COLLISION.transform.getModelMatrix());
+				renderer.render(groundPlane_COLLISION);
 
-			glDisable(GL_RASTERIZER_DISCARD);
+				glDisable(GL_RASTERIZER_DISCARD);
+			// end collision mesh transform feedback
 			glEndTransformFeedback();
 
 			// update and render snow

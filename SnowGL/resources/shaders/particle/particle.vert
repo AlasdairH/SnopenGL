@@ -6,6 +6,14 @@ layout (std140) uniform u_camera_data
 	mat4 projectionMatrix;
 };
 
+layout (std430, binding = 1) buffer buffer_accumulation
+{
+	vec4 dimensions;			// the size of the spatial partition			
+	vec4 resolution;			// the number of partitions in the width, height and depth
+	vec4 position;				// the position of the spatial partition
+	float bin[];				// the array of bins
+};
+
 /*
 layout (std430, binding = 3) buffer buffer_accumulationBins
 { 
@@ -153,6 +161,7 @@ void main()
 			particleColour = u_collisionColour;
 		}
 		// out of bounds check
+		/*
 		else if(out_position.x > u_domainWidth + u_domainPosition.x || out_position.x < -u_domainWidth + u_domainPosition.x
 		|| out_position.y > u_domainDepth + u_domainPosition.y || out_position.y < -u_domainDepth + u_domainPosition.y
 		|| out_position.z > u_domainWidth + u_domainPosition.z || out_position.z < -u_domainWidth + u_domainPosition.z
@@ -161,7 +170,7 @@ void main()
 			particleColour = vec4(0.0, 1.0, 0.0, 0.0);
 			out_position = vec4(0.0, 0.0, 0.0, 0.0);
 		}
-		
+		*/
 		else
 		{
 			// if we got here the particle is alive and well so update it
