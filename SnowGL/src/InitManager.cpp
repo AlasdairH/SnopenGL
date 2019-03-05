@@ -48,6 +48,11 @@ namespace SnowGL
 		CONSOLE_MESSAGE("OpenGL Version: " << glGetString(GL_VERSION));
 		CONSOLE_MESSAGE("OpenGL Shading Language Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION));
 
+		int maxTexBufferSize;
+		glGetIntegerv(GL_MAX_TEXTURE_BUFFER_SIZE, &maxTexBufferSize);
+		CONSOLE_MESSAGE("Max Texture Buffer Size: " << maxTexBufferSize);
+		CONSOLE_MESSAGE(1024 * 1024 * sizeof(glm::vec4));
+
 		CONSOLE_MESSAGE("OpenGL Initialised");
 	}
 }

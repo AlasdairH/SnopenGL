@@ -21,6 +21,7 @@ namespace SnowGL
 	class Renderable
 	{
 	friend class Renderer;
+	friend class ParticleSystem;
 
 	public:
 		/** @brief Renderable Ctor
@@ -44,7 +45,7 @@ namespace SnowGL
 		*
 		*	Sets the object's mesh
 		*/
-		inline void setMesh(std::shared_ptr<GPU_Mesh> _mesh) { m_mesh = _mesh; }
+		inline void setMesh(std::shared_ptr<GPU_Mesh> _mesh) { m_mesh = _mesh; }		
 		/** @brief Mesh setter
 		*	@param _shader The shader to set
 		*
@@ -77,11 +78,10 @@ namespace SnowGL
 		*
 		*	Returns the number of vertices on the object
 		*/
-		inline int getVertexCount() { return m_mesh->getVertexCount(); }
+		inline int getVertexCount() { return m_mesh->getVertexCount(); }		
 
-	protected:
-		std::shared_ptr<GPU_Mesh>			m_mesh;		/**< The mesh */
 	public: 
+		std::shared_ptr<GPU_Mesh>			m_mesh;		/**< The mesh */
 		std::shared_ptr<ShaderProgram>		m_shader;	/**< The shader */
 		std::shared_ptr<Texture>			m_texture;	/**< The texture */
 

@@ -6,8 +6,25 @@ layout (std140) uniform u_camera_data
 	mat4 projectionMatrix;
 };
 
+layout (std430, binding = 1) buffer buffer_accumulation
+{
+	vec4 dimensions;			// the size of the spatial partition			
+	vec4 resolution;			// the number of partitions in the width, height and depth
+	vec4 position;				// the position of the spatial partition
+	float bin[];				// the array of bins
+};
+
+/*
+layout (std430, binding = 3) buffer buffer_accumulationBins
+{ 
+	vec4 bin;
+};
+*/
+
 uniform int u_triangleCount;
-uniform samplerBuffer geometry_tbo;
+layout(		 binding = 0) uniform samplerBuffer geometry_tbo;
+layout(r32i, binding = 1) uniform iimageBuffer u_accumulation_tbo;
+//layout(r32i, binding = 1) uniform iimageBuffer u_accumulation_tbo;
 
 // transform feedback inputs
 in vec4 in_position;
@@ -24,18 +41,28 @@ out float out_startTime;
 out float out_lifetime;
 
 // rendering
-layout (location = 12) uniform mat4 u_modelMatrix;
+uniform mat4 u_modelMatrix;
 
 // particle system
+// colour
 uniform vec4 u_startColour = vec4(1.0f, 0.07f, 0.58f, 1.0f);
 uniform vec4 u_endColour = vec4(1.0f, 0.07f, 0.58f, 1.0f);
 uniform vec4 u_collisionColour = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+// environment
 uniform vec3 u_globalWind = vec3(0.0f, 0.0f, 0.0f);
+// movement
 uniform vec3 u_initialVelocity = vec3(0, -0.5f, 0);
 uniform float u_collisionMultiplier = 1.0f;
+// domain
+uniform float u_domainWidth = 1;
+uniform float u_domainHeight = 1;
+uniform float u_domainDepth = 1;
+uniform vec3 u_domainPosition = vec3(0, 0, 0);
+uniform vec3 u_domainOffset = vec3(0, 0, 0);
+uniform int u_accumulationSampleResolution = 10; // res x res x res
 
 // timing
-uniform float u_deltaTime = 1.0f;
+uniform float u_deltaTime = 0.016f;
 uniform float u_simTime = 0.0f;
 
 // fragment shader inputs
@@ -95,32 +122,32 @@ vec3 reflect_vector(vec3 v, vec3 n)
 	return v - 2.0 * dot(v, n) * n;
 }
 
-vec4 when_eq(vec4 x, vec4 y) 
+int toIndex(ivec3 _pos)
 {
-	return 1.0 - abs(sign(x - y));
+	return int((_pos.z * u_domainWidth * u_domainHeight) + (_pos.y * u_domainWidth) + _pos.x);
 }
 
-vec4 when_gt(vec4 x, vec4 y) 
+vec3 indexTo3D(int _index)
 {
-	return max(sign(x - y), 0.0);
+	int z = int(_index / (u_domainWidth * u_domainHeight));
+	_index -= (z * u_domainWidth * u_domainHeight);
+	int y = int(_index / ceil(u_domainWidth));
+	int x = int(_index % int(ceil(u_domainWidth)));
+	return vec3(x, y, z);
 }
 
 void main()
 {
-	particleColour = vec4(u_startColour.xyz, 0.0f);
-
+	// buffer 0
 	out_position = in_position;
 	out_startPosition = in_startPosition;
 	out_velocity = in_velocity;
 	out_startTime = in_startTime;
     out_lifetime = in_lifetime;
 
-	vec4 newPosition = out_position;
-
 	if(u_simTime >= in_startTime)
 	{
 		float age = u_simTime - in_startTime;
-		// TODO: remove if through lessthan
 		if(age > in_lifetime)
 		{
 			// particle is past it's lifetime
@@ -128,15 +155,27 @@ void main()
 			out_velocity = u_initialVelocity;
 			out_startTime = u_simTime;
 		}
-		else if(out_position.w == 0)
+		// if the collision index of the particle isn't -1 (if it's stuck to something)
+		else if(out_position.w >= 0.0f)
 		{
 			particleColour = u_collisionColour;
 		}
+		// out of bounds check
+		/*
+		else if(out_position.x > u_domainWidth + u_domainPosition.x || out_position.x < -u_domainWidth + u_domainPosition.x
+		|| out_position.y > u_domainDepth + u_domainPosition.y || out_position.y < -u_domainDepth + u_domainPosition.y
+		|| out_position.z > u_domainWidth + u_domainPosition.z || out_position.z < -u_domainWidth + u_domainPosition.z
+		)
+		{
+			particleColour = vec4(0.0, 1.0, 0.0, 0.0);
+			out_position = vec4(0.0, 0.0, 0.0, 0.0);
+		}
+		*/
 		else
 		{
-			// particle is alive and well so update it
+			// if we got here the particle is alive and well so update it
 			out_velocity += (u_globalWind * u_deltaTime);
-			out_position = vec4(in_position.xyz + (out_velocity * u_deltaTime), 1.0f);
+			out_position = vec4(in_position.xyz + (out_velocity * u_deltaTime), out_position.w);
 
 			float agePerc = age / in_lifetime;
 			particleColour = mix(u_startColour, u_endColour, agePerc);
@@ -150,25 +189,25 @@ void main()
 				v0 = texelFetch(geometry_tbo, i * 3).xyz;
 				v1 = texelFetch(geometry_tbo, i * 3 + 1).xyz;
 				v2 = texelFetch(geometry_tbo, i * 3 + 2).xyz;
-
 				
 				if (intersect(in_position.xyz, (in_position.xyz - out_position.xyz) * u_collisionMultiplier, v0, v1, v2, point))
 				{
 					//vec3 n = normalize(cross(v1 - v0, v2 - v0));
-					out_position = vec4(point.xyz, 0.0f);
-					//out_position = in_position;
+					out_position = vec4(point.xyz, i);
 					out_velocity = vec3(0, 0, 0);
+					ivec3 pos = ivec3(floor(out_position.xyz + (u_domainOffset * 2)));
+					int index = toIndex(pos);
+					imageAtomicAdd(u_accumulation_tbo, index, 1);
 				}
-				
 			}
 		}
 	}
 
-	if(out_velocity == vec3(0, 0, 0))
-	{
-		particleColour = u_collisionColour;
-	}
+	imageStore(u_accumulation_tbo, 0, ivec4(1));
+	imageStore(u_accumulation_tbo, 1, ivec4(1));
+	imageStore(u_accumulation_tbo, 2, ivec4(1));
+	imageStore(u_accumulation_tbo, 3, ivec4(1));
 
 	mat4 MVP = projectionMatrix * viewMatrix * u_modelMatrix;
-    gl_Position = MVP * vec4(out_position.x, out_position.y, out_position.z, 1.0);
+    gl_Position = MVP * vec4(out_position.xyz, 1.0);
 }

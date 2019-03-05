@@ -16,7 +16,7 @@ namespace SnowGL
 	enum VertexBufferType {
 		BUFFER_ARRAY = GL_ARRAY_BUFFER, BUFFER_ELEMENT_ARRAY = GL_ELEMENT_ARRAY_BUFFER,
 		BUFFER_UNIFORM = GL_UNIFORM_BUFFER, BUFFER_TRANSFORM_FEEDBACK = GL_TRANSFORM_FEEDBACK_BUFFER,
-		BUFFER_ARRAY_TEXTURE = GL_TEXTURE_BUFFER
+		BUFFER_ARRAY_TEXTURE = GL_TEXTURE_BUFFER, BUFFER_SHADER_STORAGE = GL_SHADER_STORAGE_BUFFER
 	};
 
 	/*! @class VertexBuffer
@@ -97,7 +97,7 @@ namespace SnowGL
 		inline GLuint getTextureGLID() { return m_vertexBufferTextureID; }
 
 		// TODO: Doxygen
-		void addTextureBuffer();
+		void addTextureBuffer(GLenum _format, unsigned int _size);
 
 		/** @brief Binds the VBO.
 		*

@@ -13,6 +13,7 @@
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 #include "Utils.h"
+#include "SSBO_AccumulationPartition.h"
 
 #define MAX_PARTICLES 10000
 
@@ -85,28 +86,47 @@ namespace SnowGL
 
 		inline void setWsGeometryBuffer(GLuint _tex, GLuint _ary) { m_wsGeomTextureBuffer = _tex; m_wsGeomArrayBuffer = _ary; }
 
+		inline GLuint getAccumulationBufferGLID() { return m_accumulationBufferVBO->getGLID(); }
+		inline GLuint getAccumulationTextureBufferGLID() { return m_accumulationBufferVBO->getTextureGLID(); }
+
+		inline glm::vec3 getDomainOffset() { return m_domainOffset; }
+
 	protected:
 		// TODO: doxygen
 
 		std::shared_ptr<ParticleSettings>	m_settings;
 
-		bool								m_isFirstRender;		/**< Flag for if this is the first render */			
-		unsigned int						m_currVAO;				/**< The current Transform Feedback Buffer */
-		unsigned int						m_currVBO;				/**< The current Vertex Buffer */
-		std::shared_ptr<VertexArray>		m_tfVAO[2];				/**< The Vertex Arrays for particle data */
-		std::shared_ptr<VertexBuffer>		m_tfVBO[2];				/**< The Vertex Buffers for particle data */
+		bool								m_isFirstRender;			/**< Flag for if this is the first render */			
+		unsigned int						m_currVAO;					/**< The current Transform Feedback Buffer */
+		unsigned int						m_currVBO;					/**< The current Vertex Buffer */
+		std::shared_ptr<VertexArray>		m_tfVAO[2];					/**< The Vertex Arrays for particle data */
+		std::shared_ptr<VertexBuffer>		m_tfVBO[2];					/**< The Vertex Buffers for particle data */
+		
+		std::shared_ptr<VertexArray>		m_accumulationBufferVAO;	/**< The Vertex Arrays for particle accumulation data */
+		std::shared_ptr<VertexBuffer>		m_accumulationBufferVBO;	/**< The Vertex Buffers for particle accumulation data */
 
-		std::shared_ptr<ShaderProgram>		m_tfShader;				/**< The transform Feedback shader */
+		std::shared_ptr<VertexBuffer>		m_accumulationSSBO;			/**< SSBO version of the accumulation data */
+		SSBO_accumulationPartition			m_SSBO_AccumulationData;	/**< SSBO version of the accumulation data */
+
+		std::shared_ptr<ShaderProgram>		m_tfShader;					/**< The transform Feedback shader */
 		GLuint								m_wsGeomArrayBuffer;
 		GLuint								m_wsGeomTextureBuffer;
 
-		int									m_numParticles;			/**< THe number of particles */
+		int									m_numParticles;				/**< The number of particles */
 
 		int									m_frameCount = 0;
 		float								m_simTime = 0;
 
+		float								m_pointSize = 1.0f;
+
 		Transform							m_transform;
 
-		float								m_pointSize = 1.0f;
+		std::shared_ptr<Renderable>			m_drawableDomain;
+		Transform							m_domainTransform;
+		glm::vec3							m_domainOffset;
+
+		std::shared_ptr<Renderable>			m_partitionPlane;
+
+		
 	};
 }

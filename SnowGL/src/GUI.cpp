@@ -134,11 +134,11 @@ namespace SnowGL
 				
 				ImGui::Text("Global Wind");
 				ImGui::PushItemWidth(80);
-				ImGui::SliderFloat("x", &m_selectedParticleSystem->getSettingsPtr()->globalWind.x, -1.0f, 1.0f, "%.2f");
+				ImGui::SliderFloat("x", &m_selectedParticleSystem->getSettingsPtr()->globalWind.x, -0.5f, 0.5f, "%.2f");
 				ImGui::SameLine();
-				ImGui::SliderFloat("y", &m_selectedParticleSystem->getSettingsPtr()->globalWind.y, -1.0f, 1.0f, "%.2f");
+				ImGui::SliderFloat("y", &m_selectedParticleSystem->getSettingsPtr()->globalWind.y, -0.5f, 0.5f, "%.2f");
 				ImGui::SameLine();
-				ImGui::SliderFloat("z", &m_selectedParticleSystem->getSettingsPtr()->globalWind.z, -1.0f, 1.0f, "%.2f");
+				ImGui::SliderFloat("z", &m_selectedParticleSystem->getSettingsPtr()->globalWind.z, -0.5f, 0.5f, "%.2f");
 
 				if (ImGui::Button("Reset"))
 				{
@@ -181,7 +181,13 @@ namespace SnowGL
 				{
 					m_selectedParticleSystem->applySettingsToShader();
 				}
-				ImGui::SameLine();
+
+				ImGui::Separator();
+
+				if (ImGui::Button("Show/Hide Partition"))
+				{
+					m_selectedParticleSystem->getSettingsPtr()->drawPartition = !m_selectedParticleSystem->getSettingsPtr()->drawPartition;
+				}
 
 				ImGui::End();
 			}

@@ -14,7 +14,8 @@
 namespace SnowGL
 {
 	enum TextureType { TEXTURE_RGB = GL_RGB, TEXTURE_RGBA = GL_RGBA, TEXTURE_DEPTH = GL_DEPTH_COMPONENT };
-	enum TexturePixelDataType { TEXTURE_PIXEL_FLOAT = GL_FLOAT, TEXTURE_PIXEL_UBYTE = GL_UNSIGNED_BYTE };
+	enum TextureFormat { TEXTURE_2D = GL_TEXTURE_2D, TEXTURE_3D = GL_TEXTURE_3D };
+	enum TexturePixelDataType { TEXTURE_PIXEL_FLOAT = GL_FLOAT, TEXTURE_PIXEL_UBYTE = GL_UNSIGNED_BYTE, TEXTURE_PIXEL_INT = GL_INT };
 
 	/*! @class Texture
 	*	@brief An abstraction of an OpenGL Texture

@@ -56,6 +56,12 @@ namespace SnowGL
 		*	sets the position in 3D space of the transform
 		*/
 		inline void setPosition(glm::vec3 _position) { m_vec_position = _position; m_mat_position = glm::translate(glm::mat4(1.0f), _position); }
+		/** @brief Sets the scale of the transform
+		*	@param _scale The scale in 3D space
+		*
+		*	sets the scale in 3D space of the transform
+		*/
+		inline void setScale(glm::vec3 _scale) { m_vec_scale = _scale; m_mat_scale = glm::scale(glm::mat4(1.0f), _scale); }
 		
 		// ------------------------------------------------
 		// get
@@ -65,7 +71,13 @@ namespace SnowGL
 		*
 		*	Returns the position in 3D space of the transform
 		*/
-		inline glm::vec3 getPosition() { return m_vec_position; }
+		inline glm::vec3 getPosition() { return m_vec_position; }		
+		/** @brief Gets the scale of the transform
+		*	@return The scale in 3D space
+		*
+		*	Returns the scale in 3D space of the transform
+		*/
+		inline glm::vec3 getScale() { return m_vec_scale; }
 
 	protected:
 		glm::mat4 m_mat_position		= glm::mat4(1.0f);	/**< The position as a 4x4 Matrix */

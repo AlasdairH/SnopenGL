@@ -53,23 +53,25 @@ int main()
 
 	Renderable groundPlane;
 	IOUtilities::loadRenderable(groundPlane, "resources/objects/Plane.rnd");
-	groundPlane.transform.translate(glm::vec3(0, 0, 0));
+	Renderable groundPlane_COLLISION;
+	IOUtilities::loadRenderable(groundPlane_COLLISION, "resources/objects/Plane_Collision.rnd");
 
-	Renderable cube;
-	IOUtilities::loadRenderable(cube, "resources/objects/Barrel.rnd");
-	cube.transform.translate(glm::vec3(0, 1, 0));
+	Renderable sceneObject;
+	IOUtilities::loadRenderable(sceneObject, "resources/objects/Table.rnd");
+	sceneObject.transform.translate(glm::vec3(0, 0, 0));
+	Renderable sceneObject_COLLISION;
+	IOUtilities::loadRenderable(sceneObject_COLLISION, "resources/objects/Table_Collision.rnd");
 
 	VertexBuffer vboGeometry(BUFFER_ARRAY);
-	vboGeometry.addTextureBuffer();
-
+	vboGeometry.addTextureBuffer(GL_RGBA32F, 1024 * 1024 * sizeof(glm::vec4));
 	VertexArray vaoGeometry;
 	VertexBufferLayout layout;
 	layout.push<glm::vec4>(1);
 	vaoGeometry.addBuffer(vboGeometry, layout);
 
 	int vertexCount = 0;
-	vertexCount += groundPlane.getVertexCount();
-	vertexCount += cube.getVertexCount();
+	vertexCount += groundPlane_COLLISION.getVertexCount();
+	vertexCount += sceneObject_COLLISION.getVertexCount();
 	int triangleCount = vertexCount / 3;
 
 	Renderer renderer;
@@ -77,16 +79,23 @@ int main()
 	GUI gui(window.getWindowPtr());
 
 	ParticleSettings settings;
-	settings.lifetimeMin = 7.0f;
-	settings.lifetimeMax = 7.0f;
-	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	settings.colourEnd = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	settings.collisionDebugColour = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-	settings.particlesPerSecond = 1000;
+	settings.lifetimeMin = 10.0f;
+	settings.lifetimeMax = 10.0f;
+	settings.particlesPerSecond = 200;
+	// colour
+	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 0.1f);
+	settings.colourEnd = glm::vec4(1.0f, 1.0f, 1.0f, 0.1f);
+	settings.collisionDebugColour = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+	// physics
 	settings.globalWind = glm::vec3(0.0f);
-	settings.collisionMultiplier = 2.0f;
 	settings.initialVelocity = glm::vec3(0, -1.0f, 0);
-	
+	// debug
+	settings.collisionMultiplier = 2.0f;
+	// domain
+	settings.domainPosition = glm::vec3(0, 2, 0);
+	settings.domainSize = glm::vec3(10, 6, 10);
+	settings.drawDomain = true;
+	settings.drawPartition = true;
 
 	ParticleSystem snow(settings);
 	snow.initialise();
@@ -111,6 +120,9 @@ int main()
 
 	CONSOLE_MESSAGE("Scene vertex count: " << vertexCount);
 	CONSOLE_MESSAGE("Scene triangle count: " << triangleCount);
+
+	std::vector<int> collisionBufferData;
+	collisionBufferData.resize(7 * 7 * 3);
 
 	while (state.isRunning)
 	{
@@ -168,7 +180,6 @@ int main()
 		else
 		{
 			cameraMoveSpeed = 5;
-
 		}
 		if (keyboardState[SDL_SCANCODE_W]) 
 		{
@@ -205,7 +216,7 @@ int main()
 			}
 			if (incomingEvent.type == SDL_KEYDOWN)
 			{
-				std::vector<glm::vec4> bufferData;
+				
 				//Select surfaces based on key press
 				switch (incomingEvent.key.keysym.sym)
 				{
@@ -214,17 +225,18 @@ int main()
 					break; 
 				case SDLK_SPACE:
 					state.isUIHidden = !state.isUIHidden;
+					snow.getSettingsPtr()->drawDomain = !snow.getSettingsPtr()->drawDomain;
+					snow.getSettingsPtr()->drawPartition = !snow.getSettingsPtr()->drawPartition;
 					break;
 				case SDLK_b:
-					/*
-					glBindBuffer(GL_ARRAY_BUFFER, geometry_vbo);
-					bufferData.resize(vertexCount);
-					glGetBufferSubData(GL_ARRAY_BUFFER, 0, vertexCount * sizeof(glm::vec4), &bufferData[0]);
-					for (int i = 0; i < bufferData.size(); ++i)
+					glBindBuffer(GL_ARRAY_BUFFER, snow.getAccumulationBufferGLID());
+					glGetBufferSubData(GL_ARRAY_BUFFER, 0, 7 * 7 * 3 * sizeof(int), &collisionBufferData[0]);
+					for (int i = 0; i < collisionBufferData.size(); ++i)
 					{
-						CONSOLE_MESSAGE(i << ": " << bufferData[i].x << ", " << bufferData[i].y << ", " << bufferData[i].z);
+						if(collisionBufferData[i] != 0)
+							CONSOLE_MESSAGE(i << " - " << collisionBufferData[i]);
 					}
-					*/
+					
 					break;
 				default:
 					break;
@@ -263,57 +275,44 @@ int main()
 			GLuint tf_vao = vaoGeometry.getGLID();
 			GLuint tf_vbo = vboGeometry.getGLID();
 
-		
+			
 			glBindVertexArray(tf_vao);
 			glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, tf_vbo);
 			
-			cube.m_shader->bind();
+			groundPlane_COLLISION.m_shader->bind();
 
 			glBeginTransformFeedback(GL_TRIANGLES);
+			// begin collision mesh transform feedback
+				glEnable(GL_RASTERIZER_DISCARD);
 
-			cube.m_shader->setUniformMat4f("u_modelMatrix", cube.transform.getModelMatrix());
-			cube.m_shader->setUniform1i("u_diffuseTexture", 0);
-			cube.m_texture->bind(0);
-			renderer.render(cube);
+				// bind accumulation buffer
+				glBindImageTexture(5, snow.getAccumulationTextureBufferGLID(), 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32I);
 
-			groundPlane.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
-			groundPlane.m_shader->setUniform1i("u_diffuseTexture", 0);
-			groundPlane.m_texture->bind(0);
-			renderer.render(groundPlane);
+				sceneObject_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject_COLLISION.transform.getModelMatrix());
+				renderer.render(sceneObject_COLLISION);
+			
+				groundPlane_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", groundPlane_COLLISION.transform.getModelMatrix());
+				renderer.render(groundPlane_COLLISION);
 
+				glDisable(GL_RASTERIZER_DISCARD);
+			// end collision mesh transform feedback
 			glEndTransformFeedback();
 
 			// update and render snow
 			snow.updateParticles(state.deltaTime, triangleCount);
 
+			// render visuals for objects
+			sceneObject.m_shader->setUniformMat4f("u_modelMatrix", sceneObject.transform.getModelMatrix());
+			sceneObject.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
+			sceneObject.m_texture->bind(0);
+			renderer.render(sceneObject);
 
+			groundPlane.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
+			groundPlane.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
+			groundPlane.m_texture->bind(0);
+			renderer.render(groundPlane);
 		}
 		renderer.unBindFrameBuffer();
-
-		/*
-		// if the scene is in edit mode
-		if (state.getSceneMode() == MODE_EDIT)
-		{
-			// render a plane in wire frame mode at the origin
-			outlineShader.setUniform4f("diffuseColour", 0.5f, 0.5f, 0.5f, 1.0f);
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			renderer.render(*editPlane.getGPUMesh(), outlineShader, zeroTransform);
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-			// second pass (scaled) for outline
-			renderer.setStencilBufferActive(false);
-			renderer.setDepthTest(false);
-
-			Transform transformUpscale = editPlane.transform;
-			transformUpscale.scale(glm::vec3(1.05f));
-
-			outlineShader.setUniform4f("diffuseColour", 0.0f, 0.8f, 0.0f, 1.0f);
-			renderer.render(*editPlane.getGPUMesh(), outlineShader, transformUpscale);
-
-			renderer.setStencilBufferActive(true);
-			renderer.setDepthTest(true);
-		}
-		*/
 
 		if (state.getSceneMode() == MODE_VIEW)
 		{

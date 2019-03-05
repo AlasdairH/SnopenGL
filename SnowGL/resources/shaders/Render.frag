@@ -1,7 +1,7 @@
 #version 430 core
 
 // textures
-uniform sampler2D u_diffuseTexture;
+layout (binding = 0) uniform sampler2D u_diffuseTexture;
 uniform sampler2D u_depthMap;
 uniform sampler2D u_snowTexture;
 
@@ -9,9 +9,13 @@ layout (location = 4) in vec2 frag_texCoord;
 layout (location = 5) in vec3 frag_normal;
 layout (location = 6) in vec3 frag_pos;
 layout (location = 7) in vec4 frag_posDepthSpace;
+layout (location = 8) in vec4 frag_colour;
 
 uniform vec3 u_lightPos = vec3(0, 5, 0);
 uniform vec3 u_lightColour = vec3(0.5f);
+
+uniform bool u_useTexture = true;
+uniform vec4 u_fragColour = vec4(1.0, 0.0, 0.0, 1.0);
 
 out vec4 outputColour;
 
@@ -63,6 +67,12 @@ void main()
 		
 	vec3 lighting = (ambient + (1.0f - shadow) * diffuse) * colour;
 
-
-	outputColour = vec4(lighting, 1.0f);
+	if(u_useTexture)
+	{
+		outputColour = vec4(lighting, 1.0f);
+	}
+	else
+	{
+		outputColour = u_fragColour;
+	}
 } 
