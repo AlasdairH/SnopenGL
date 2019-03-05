@@ -6,6 +6,14 @@ layout (std140) uniform u_camera_data
 	mat4 projectionMatrix;
 };
 
+layout (std430, binding = 1) buffer buffer_accumulation
+{
+	vec4 dimensions;			// the size of the spatial partition			
+	vec4 resolution;			// the number of partitions in the width, height and depth
+	vec4 partition_position;	// the position of the spatial partition
+	float bin[];				// the array of bins
+};
+
 // model inputs
 layout (location = 0) in vec3 position;
 layout (location = 1) in vec2 texCoord;
@@ -27,6 +35,7 @@ uniform vec3 u_domainOffset = vec3(0);
 // max snow depth
 uniform int u_maxSnowDepth = 1000;
 uniform float u_snowAccumulationSpeed = 0.1f;
+uniform bool u_useSnow = true;
 
 // model matrix
 uniform mat4 u_modelMatrix;
@@ -63,10 +72,10 @@ void main()
 	int snowDepth = int(snowDepthRGBA.x);
 	float percentageDepth = float(snowDepth) / float(u_maxSnowDepth);
 
-	pos += vec4(0, 1, 0, 0) * percentageDepth * u_snowAccumulationSpeed;
-
-	//vec4 texel = imageLoad(u_accumulationBuffer, 0);
-	//frag_colour = vec4(texel.xyz, 1.0f);
+	if(u_useSnow)
+	{
+		pos += vec4(0, 1, 0, 0) * percentageDepth * u_snowAccumulationSpeed;
+	}
 
 	mat4 VP = projectionMatrix * viewMatrix;
 

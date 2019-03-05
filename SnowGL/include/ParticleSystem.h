@@ -125,6 +125,8 @@ namespace SnowGL
 		Transform							m_domainTransform;
 		glm::vec3							m_domainOffset;
 
+		std::shared_ptr<Renderable>			m_partitionPlane;
+
 		
 	};
 }

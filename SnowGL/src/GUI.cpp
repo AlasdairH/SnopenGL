@@ -181,7 +181,13 @@ namespace SnowGL
 				{
 					m_selectedParticleSystem->applySettingsToShader();
 				}
-				ImGui::SameLine();
+
+				ImGui::Separator();
+
+				if (ImGui::Button("Show/Hide Partition"))
+				{
+					m_selectedParticleSystem->getSettingsPtr()->drawPartition = !m_selectedParticleSystem->getSettingsPtr()->drawPartition;
+				}
 
 				ImGui::End();
 			}

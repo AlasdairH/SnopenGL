@@ -24,6 +24,8 @@ namespace SnowGL
 		// setup drawable domain
 		m_drawableDomain = std::make_shared<Renderable>();
 		IOUtilities::loadRenderable(*m_drawableDomain, "resources/objects/Cube.rnd");
+		m_partitionPlane = std::make_shared<Renderable>();
+		IOUtilities::loadRenderable(*m_partitionPlane, "resources/objects/PartitionPlane.rnd");
 		m_domainTransform.scale(glm::vec3(m_settings->domainSize.x, m_settings->domainSize.y, m_settings->domainSize.z));
 
 		glm::vec3 bottomLeft;
@@ -113,12 +115,14 @@ namespace SnowGL
 
 
 		m_SSBO_AccumulationData.dimensions = glm::vec4(m_settings->domainSize.x, m_settings->domainSize.y, m_settings->domainSize.z, 1.0f);
+		m_SSBO_AccumulationData.position = glm::vec4(m_settings->domainPosition, 0.0f);
+		m_SSBO_AccumulationData.resolution = glm::vec4(3, 3, 3, 0.0f);
 
 		m_accumulationSSBO = std::make_shared<VertexBuffer>(BUFFER_SHADER_STORAGE);
-		// link the uniform buffer to the binding point
-		m_accumulationSSBO->bindBase(BUFFER_SHADER_STORAGE, SHADER_BINDPOINT_ACCUMULATION_PARTITION);
 		// load the data to the uniform buffer
 		m_accumulationSSBO->loadData(&m_SSBO_AccumulationData, 0, sizeof(SSBO_accumulationPartition));
+		// link the uniform buffer to the binding point
+		m_accumulationSSBO->bindBase(BUFFER_SHADER_STORAGE, SHADER_BINDPOINT_ACCUMULATION_PARTITION);
 
 		CONSOLE_MESSAGE("Created buffers for collision data");
 
@@ -177,6 +181,7 @@ namespace SnowGL
 
 		if (m_settings->drawDomain)
 		{
+			/*
 			m_drawableDomain->m_shader->setUniformMat4f("u_modelMatrix", m_domainTransform.getModelMatrix());
 			m_drawableDomain->m_shader->setUniform1i("u_diffuseTexture", 0);
 			m_drawableDomain->m_texture->bind(0);
@@ -186,6 +191,39 @@ namespace SnowGL
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			glDrawElements(GL_TRIANGLES, m_drawableDomain->m_mesh->m_IBO->getCount(), GL_UNSIGNED_INT, 0);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			*/
+		}
+		if (m_settings->drawPartition)
+		{
+			Transform transform;
+			m_partitionPlane->m_shader->setUniform1i("u_useTexture", false);
+			m_partitionPlane->m_shader->setUniform1i("u_useSnow", false);
+
+			glDisable(GL_CULL_FACE);
+
+			m_partitionPlane->m_mesh->m_IBO->bind();
+			m_partitionPlane->m_mesh->m_VAO->bind();
+
+			m_partitionPlane->m_shader->setUniform4f("u_fragColour", glm::vec4(1.0f, 0.0f, 0.0f, 0.2f));
+			glm::vec3 scale = m_domainTransform.getScale();
+			transform.scale(glm::vec3(scale.x, 1.0f, scale.z) * 0.9f);
+
+			for (int x = m_SSBO_AccumulationData.position.x - (m_SSBO_AccumulationData.dimensions.x / 2); x < m_SSBO_AccumulationData.dimensions.x; x += m_SSBO_AccumulationData.dimensions.x / m_SSBO_AccumulationData.resolution.x)
+			{
+
+			}
+			for (int y = m_SSBO_AccumulationData.position.y - (m_SSBO_AccumulationData.dimensions.y / 2); y < m_SSBO_AccumulationData.dimensions.y; y += m_SSBO_AccumulationData.dimensions.y / m_SSBO_AccumulationData.resolution.y)
+			{
+
+			}
+			for (int y = m_SSBO_AccumulationData.position.y - (m_SSBO_AccumulationData.dimensions.y / 2); y < m_SSBO_AccumulationData.dimensions.y; y += m_SSBO_AccumulationData.dimensions.y / m_SSBO_AccumulationData.resolution.y)
+			{
+				transform.setPosition(glm::vec3(x, y, z);
+				m_partitionPlane->m_shader->setUniformMat4f("u_modelMatrix", transform.getModelMatrix());
+				glDrawElements(GL_TRIANGLES, m_partitionPlane->m_mesh->m_IBO->getCount(), GL_UNSIGNED_INT, 0);
+			}
+
+			glEnable(GL_CULL_FACE);
 		}
 		
 	}

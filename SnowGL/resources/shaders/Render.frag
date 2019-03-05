@@ -14,6 +14,9 @@ layout (location = 8) in vec4 frag_colour;
 uniform vec3 u_lightPos = vec3(0, 5, 0);
 uniform vec3 u_lightColour = vec3(0.5f);
 
+uniform bool u_useTexture = true;
+uniform vec4 u_fragColour = vec4(1.0, 0.0, 0.0, 1.0);
+
 out vec4 outputColour;
 
 float calculateOcclusion(vec4 fragPosDepthSpace)
@@ -64,6 +67,12 @@ void main()
 		
 	vec3 lighting = (ambient + (1.0f - shadow) * diffuse) * colour;
 
-	outputColour = vec4(lighting, 1.0f);
-	//outputColour = frag_colour;
+	if(u_useTexture)
+	{
+		outputColour = vec4(lighting, 1.0f);
+	}
+	else
+	{
+		outputColour = u_fragColour;
+	}
 } 

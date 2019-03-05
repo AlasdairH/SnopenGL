@@ -81,7 +81,7 @@ int main()
 	ParticleSettings settings;
 	settings.lifetimeMin = 10.0f;
 	settings.lifetimeMax = 10.0f;
-	settings.particlesPerSecond = 20000;
+	settings.particlesPerSecond = 200;
 	// colour
 	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 0.1f);
 	settings.colourEnd = glm::vec4(1.0f, 1.0f, 1.0f, 0.1f);
@@ -93,8 +93,9 @@ int main()
 	settings.collisionMultiplier = 2.0f;
 	// domain
 	settings.domainPosition = glm::vec3(0, 2, 0);
-	settings.domainSize = glm::vec3(8, 6, 8);
+	settings.domainSize = glm::vec3(10, 6, 10);
 	settings.drawDomain = true;
+	settings.drawPartition = true;
 
 	ParticleSystem snow(settings);
 	snow.initialise();
@@ -225,6 +226,7 @@ int main()
 				case SDLK_SPACE:
 					state.isUIHidden = !state.isUIHidden;
 					snow.getSettingsPtr()->drawDomain = !snow.getSettingsPtr()->drawDomain;
+					snow.getSettingsPtr()->drawPartition = !snow.getSettingsPtr()->drawPartition;
 					break;
 				case SDLK_b:
 					glBindBuffer(GL_ARRAY_BUFFER, snow.getAccumulationBufferGLID());

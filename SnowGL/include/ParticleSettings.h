@@ -28,6 +28,7 @@ namespace SnowGL
 		glm::vec3	domainSize = glm::vec3(5.0f);
 
 		bool		drawDomain;
+		bool		drawPartition;
 
 		/** @brief Required particle count getter
 		*	@return The maxiumum number of particles that would be required for the system
