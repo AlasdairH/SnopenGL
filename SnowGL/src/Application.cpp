@@ -60,7 +60,7 @@ int main()
 	IOUtilities::loadRenderable(sceneObject, "resources/objects/Table.rnd");
 	sceneObject.transform.translate(glm::vec3(0, 0, 0));
 	Renderable sceneObject_COLLISION;
-	IOUtilities::loadRenderable(sceneObject_COLLISION, "resources/objects/Table_Collision.rnd");
+	IOUtilities::loadRenderable(sceneObject_COLLISION, "resources/objects/Table.rnd");
 
 	VertexBuffer vboGeometry(BUFFER_ARRAY);
 	vboGeometry.addTextureBuffer(GL_RGBA32F, 1024 * 1024 * sizeof(glm::vec4));
@@ -81,7 +81,7 @@ int main()
 	ParticleSettings settings;
 	settings.lifetimeMin = 10.0f;
 	settings.lifetimeMax = 10.0f;
-	settings.particlesPerSecond = 200;
+	settings.particlesPerSecond = 2000;
 	// colour
 	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 0.1f);
 	settings.colourEnd = glm::vec4(1.0f, 1.0f, 1.0f, 0.1f);
