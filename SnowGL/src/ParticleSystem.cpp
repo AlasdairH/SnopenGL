@@ -195,6 +195,7 @@ namespace SnowGL
 		}
 		if (m_settings->drawPartition)
 		{
+			/*
 			Transform transform;
 			m_partitionPlane->m_shader->setUniform1i("u_useTexture", false);
 			m_partitionPlane->m_shader->setUniform1i("u_useSnow", false);
@@ -204,7 +205,7 @@ namespace SnowGL
 			m_partitionPlane->m_mesh->m_IBO->bind();
 			m_partitionPlane->m_mesh->m_VAO->bind();
 
-			m_partitionPlane->m_shader->setUniform4f("u_fragColour", glm::vec4(1.0f, 0.0f, 0.0f, 0.2f));
+			//m_partitionPlane->m_shader->setUniform4f("u_fragColour", glm::vec4(1.0f, 0.0f, 0.0f, 0.2f));
 			glm::vec3 scale = m_domainTransform.getScale();
 			transform.scale(glm::vec3(scale.x, 1.0f, scale.z) * 0.9f);
 
@@ -224,6 +225,7 @@ namespace SnowGL
 			}
 
 			glEnable(GL_CULL_FACE);
+			*/
 		}
 		
 	}
