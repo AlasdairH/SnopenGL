@@ -195,6 +195,7 @@ namespace SnowGL
 		}
 		if (m_settings->drawPartition)
 		{
+			/*
 			Transform transform;
 			m_partitionPlane->m_shader->setUniform1i("u_useTexture", false);
 			m_partitionPlane->m_shader->setUniform1i("u_useSnow", false);
@@ -224,6 +225,7 @@ namespace SnowGL
 			}
 
 			glEnable(GL_CULL_FACE);
+			*/
 		}
 		
 	}
