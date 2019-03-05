@@ -86,6 +86,7 @@ int main()
 	settings.globalWind = glm::vec3(0.0f);
 	settings.collisionMultiplier = 2.0f;
 	settings.initialVelocity = glm::vec3(0, -1.0f, 0);
+	
 
 	ParticleSystem snow(settings);
 	snow.initialise();
