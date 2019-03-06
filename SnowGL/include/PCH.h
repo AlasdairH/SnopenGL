@@ -28,6 +28,7 @@
 // program
 #include "IOUtilities.h"
 #include "CompileSettings.h"
+#include "Debug.h"
 
 #ifdef COMPILE_DEBUG
 #define CONSOLE_MESSAGE(_text) std::cout << "MESSAGE: " << _text << std::endl;

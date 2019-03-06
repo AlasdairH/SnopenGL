@@ -24,8 +24,6 @@ namespace SnowGL
 		// setup drawable domain
 		m_drawableDomain = std::make_shared<Renderable>();
 		IOUtilities::loadRenderable(*m_drawableDomain, "resources/objects/Cube.rnd");
-		m_partitionPlane = std::make_shared<Renderable>();
-		IOUtilities::loadRenderable(*m_partitionPlane, "resources/objects/PartitionPlane.rnd");
 		m_domainTransform.scale(glm::vec3(m_settings->domainSize.x, m_settings->domainSize.y, m_settings->domainSize.z));
 
 		glm::vec3 bottomLeft;
@@ -113,10 +111,15 @@ namespace SnowGL
 		layout.push<glm::vec4>(1);
 		m_accumulationBufferVAO->addBuffer(*m_accumulationBufferVBO, colLayout);
 
+		// setup accumulation SSBO
+		m_SSBO_AccumulationData.dimensions = glm::vec4(m_settings->domainSize, 0);
+		m_SSBO_AccumulationData.position = glm::vec4(m_settings->domainPosition, 0);
+		m_SSBO_AccumulationData.resolution = glm::vec4(2, 2, 2, 0);
+		// pre compute
+		m_SSBO_AccumulationData.positionBL = m_SSBO_AccumulationData.position - (m_SSBO_AccumulationData.dimensions / 2.0f);
+		m_SSBO_AccumulationData.binSize = m_SSBO_AccumulationData.dimensions / m_SSBO_AccumulationData.resolution;
 
-		m_SSBO_AccumulationData.dimensions = glm::vec4(m_settings->domainSize.x, m_settings->domainSize.y, m_settings->domainSize.z, 1.0f);
-		m_SSBO_AccumulationData.position = glm::vec4(m_settings->domainPosition, 0.0f);
-		m_SSBO_AccumulationData.resolution = glm::vec4(3, 3, 3, 0.0f);
+		//m_SSBO_AccumulationData.position -= m_SSBO_AccumulationData.positionBL;
 
 		m_accumulationSSBO = std::make_shared<VertexBuffer>(BUFFER_SHADER_STORAGE);
 		// load the data to the uniform buffer
@@ -149,6 +152,8 @@ namespace SnowGL
 
 		//m_domainTransform.setPosition(m_settings->domainPosition + m_domainOffset * 2);
 		m_domainTransform.setPosition(m_settings->domainPosition);
+
+		//m_accumulationSSBO->loadData(&m_SSBO_AccumulationData, 0, sizeof(SSBO_accumulationPartition));
 	}
 
 	void ParticleSystem::updateParticles(float _deltaTime, int _triangleCount)
@@ -176,7 +181,7 @@ namespace SnowGL
 		// ping pong
 		m_currVAO = m_currVBO;
 		m_currVBO = (m_currVBO + 1) & 0x1;
-			
+
 		++m_frameCount;
 
 		if (m_settings->drawDomain)
@@ -185,7 +190,7 @@ namespace SnowGL
 			m_drawableDomain->m_shader->setUniformMat4f("u_modelMatrix", m_domainTransform.getModelMatrix());
 			m_drawableDomain->m_shader->setUniform1i("u_diffuseTexture", 0);
 			m_drawableDomain->m_texture->bind(0);
-			
+
 			m_drawableDomain->m_mesh->m_IBO->bind();
 			m_drawableDomain->m_mesh->m_VAO->bind();
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -195,38 +200,37 @@ namespace SnowGL
 		}
 		if (m_settings->drawPartition)
 		{
-			/*
+			Debug &debug = Debug::getInstance();
 			Transform transform;
-			m_partitionPlane->m_shader->setUniform1i("u_useTexture", false);
-			m_partitionPlane->m_shader->setUniform1i("u_useSnow", false);
 
-			glDisable(GL_CULL_FACE);
+			glm::vec3 binSize;
+			binSize = m_SSBO_AccumulationData.dimensions / m_SSBO_AccumulationData.resolution;
 
-			m_partitionPlane->m_mesh->m_IBO->bind();
-			m_partitionPlane->m_mesh->m_VAO->bind();
+			transform.setScale(glm::vec3(binSize.x, binSize.y, binSize.z));
 
-			//m_partitionPlane->m_shader->setUniform4f("u_fragColour", glm::vec4(1.0f, 0.0f, 0.0f, 0.2f));
-			glm::vec3 scale = m_domainTransform.getScale();
-			transform.scale(glm::vec3(scale.x, 1.0f, scale.z) * 0.9f);
-
-			for (int x = m_SSBO_AccumulationData.position.x - (m_SSBO_AccumulationData.dimensions.x / 2); x < m_SSBO_AccumulationData.dimensions.x; x += m_SSBO_AccumulationData.dimensions.x / m_SSBO_AccumulationData.resolution.x)
+			for (float x = (m_SSBO_AccumulationData.position.x - (m_SSBO_AccumulationData.dimensions.x / 2.0f)) + binSize.x / 2; 
+				x <= (m_SSBO_AccumulationData.position.x + (m_SSBO_AccumulationData.dimensions.x / 2.0f)) - binSize.x / 2; 
+				x += binSize.x)
 			{
-
+				for (float y = (m_SSBO_AccumulationData.position.y - (m_SSBO_AccumulationData.dimensions.y / 2.0f)) + binSize.y / 2; 
+					y <= (m_SSBO_AccumulationData.position.y + (m_SSBO_AccumulationData.dimensions.y / 2.0f)) - binSize.y / 2; 
+					y += binSize.y)
+				{
+					for (float z = (m_SSBO_AccumulationData.position.z - (m_SSBO_AccumulationData.dimensions.z / 2.0f)) + binSize.z / 2;
+						z <= (m_SSBO_AccumulationData.position.z + (m_SSBO_AccumulationData.dimensions.z / 2.0f)) - binSize.z / 2;
+						z += binSize.z)
+					{
+						transform.setPosition(glm::vec3(x, y, z));
+						debug.drawCube(transform, glm::vec4(1.0f, 0.0f, 0.0f, 0.2f));
+					}
+				}
 			}
-			for (int y = m_SSBO_AccumulationData.position.y - (m_SSBO_AccumulationData.dimensions.y / 2); y < m_SSBO_AccumulationData.dimensions.y; y += m_SSBO_AccumulationData.dimensions.y / m_SSBO_AccumulationData.resolution.y)
-			{
-
-			}
-			for (int y = m_SSBO_AccumulationData.position.y - (m_SSBO_AccumulationData.dimensions.y / 2); y < m_SSBO_AccumulationData.dimensions.y; y += m_SSBO_AccumulationData.dimensions.y / m_SSBO_AccumulationData.resolution.y)
-			{
-				transform.setPosition(glm::vec3(x, y, z);
-				m_partitionPlane->m_shader->setUniformMat4f("u_modelMatrix", transform.getModelMatrix());
-				glDrawElements(GL_TRIANGLES, m_partitionPlane->m_mesh->m_IBO->getCount(), GL_UNSIGNED_INT, 0);
-			}
-
-			glEnable(GL_CULL_FACE);
-			*/
 		}
+	}
+
+	glm::vec3 ParticleSystem::worldSpaceToPartitionSpace(glm::vec3 _wsPos)
+	{
 		
+		return glm::vec3();
 	}
 }

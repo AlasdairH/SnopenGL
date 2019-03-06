@@ -25,6 +25,7 @@ namespace SnowGL
 	{
 		friend class Renderer;
 		friend class ParticleSystem;
+		friend class Debug;
 
 	public:
 		/** @brief GPU_Mesh Ctor

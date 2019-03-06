@@ -91,6 +91,8 @@ namespace SnowGL
 
 		inline glm::vec3 getDomainOffset() { return m_domainOffset; }
 
+		glm::vec3 worldSpaceToPartitionSpace(glm::vec3 _wsPos);
+
 	protected:
 		// TODO: doxygen
 
@@ -124,9 +126,5 @@ namespace SnowGL
 		std::shared_ptr<Renderable>			m_drawableDomain;
 		Transform							m_domainTransform;
 		glm::vec3							m_domainOffset;
-
-		std::shared_ptr<Renderable>			m_partitionPlane;
-
-		
 	};
 }

@@ -11,6 +11,10 @@ layout (std430, binding = 1) buffer buffer_accumulation
 	vec4 dimensions;			// the size of the spatial partition			
 	vec4 resolution;			// the number of partitions in the width, height and depth
 	vec4 position;				// the position of the spatial partition
+	// pre compute
+	vec4 positionBL;				// the position of the spatial partition
+	vec4 binSize;				// the position of the spatial partition
+	// data
 	float bin[];				// the array of bins
 };
 
@@ -203,11 +207,9 @@ void main()
 		}
 	}
 
-	imageStore(u_accumulation_tbo, 0, ivec4(1));
-	imageStore(u_accumulation_tbo, 1, ivec4(1));
-	imageStore(u_accumulation_tbo, 2, ivec4(1));
-	imageStore(u_accumulation_tbo, 3, ivec4(1));
+	vec4 finalPosition = vec4(out_position.xyz, 1.0);
+	//finalPosition -= positionBL;
 
 	mat4 MVP = projectionMatrix * viewMatrix * u_modelMatrix;
-    gl_Position = MVP * vec4(out_position.xyz, 1.0);
+    gl_Position = MVP * finalPosition;
 }

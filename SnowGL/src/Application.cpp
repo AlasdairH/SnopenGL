@@ -60,7 +60,7 @@ int main()
 	IOUtilities::loadRenderable(sceneObject, "resources/objects/Table.rnd");
 	sceneObject.transform.translate(glm::vec3(0, 0, 0));
 	Renderable sceneObject_COLLISION;
-	IOUtilities::loadRenderable(sceneObject_COLLISION, "resources/objects/Table.rnd");
+	IOUtilities::loadRenderable(sceneObject_COLLISION, "resources/objects/Table_Collision.rnd");
 
 	VertexBuffer vboGeometry(BUFFER_ARRAY);
 	vboGeometry.addTextureBuffer(GL_RGBA32F, 1024 * 1024 * sizeof(glm::vec4));
@@ -93,7 +93,7 @@ int main()
 	settings.collisionMultiplier = 2.0f;
 	// domain
 	settings.domainPosition = glm::vec3(0, 2, 0);
-	settings.domainSize = glm::vec3(10, 6, 10);
+	settings.domainSize = glm::vec3(10, 10, 10);
 	settings.drawDomain = true;
 	settings.drawPartition = true;
 
