@@ -114,7 +114,7 @@ namespace SnowGL
 		// setup accumulation SSBO
 		m_SSBO_AccumulationData.dimensions = glm::vec4(m_settings->domainSize, 0);
 		m_SSBO_AccumulationData.position = glm::vec4(m_settings->domainPosition, 0);
-		m_SSBO_AccumulationData.resolution = glm::vec4(2, 2, 2, 0);
+		m_SSBO_AccumulationData.resolution = glm::vec4(10, 2, 10, 0);
 		// pre compute
 		m_SSBO_AccumulationData.positionBL = m_SSBO_AccumulationData.position - (m_SSBO_AccumulationData.dimensions / 2.0f);
 		m_SSBO_AccumulationData.binSize = m_SSBO_AccumulationData.dimensions / m_SSBO_AccumulationData.resolution;
@@ -150,7 +150,6 @@ namespace SnowGL
 		m_tfShader->setUniform1f("u_domainDepth", m_settings->domainSize.z);
 		CONSOLE_MESSAGE("Particle settings applied to shader");
 
-		//m_domainTransform.setPosition(m_settings->domainPosition + m_domainOffset * 2);
 		m_domainTransform.setPosition(m_settings->domainPosition);
 
 		//m_accumulationSSBO->loadData(&m_SSBO_AccumulationData, 0, sizeof(SSBO_accumulationPartition));
@@ -226,11 +225,27 @@ namespace SnowGL
 				}
 			}
 		}
+
+		// TODO: REMOVE
+		//Debug &debug = Debug::getInstance();
+		//Transform cube;
+		//cube.setPosition(glm::vec3(-2, 1.4, 2));
+		//debug.drawCube(cube, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 	}
 
-	glm::vec3 ParticleSystem::worldSpaceToPartitionSpace(glm::vec3 _wsPos)
+	// _ws pos is guarenteed to be inside the domain
+	int ParticleSystem::worldSpaceToIndex(glm::vec3 _wsPos)
 	{
-		
-		return glm::vec3();
+		int index = -1;
+		// get the position in partition space
+		glm::vec3 psPos = _wsPos - glm::vec3(m_SSBO_AccumulationData.positionBL);
+		glm::vec3 bin3d = floor(psPos / glm::vec3(m_SSBO_AccumulationData.binSize));
+
+		index = (bin3d.z * m_SSBO_AccumulationData.resolution.x * m_SSBO_AccumulationData.resolution.y) + (bin3d.y * m_SSBO_AccumulationData.resolution.x) + bin3d.x;
+
+		//CONSOLE_MESSAGE(bin3d.x << ", " << bin3d.y << ", " << bin3d.z);
+		//CONSOLE_MESSAGE(index);
+
+		return index;
 	}
 }

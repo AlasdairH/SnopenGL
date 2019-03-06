@@ -6,29 +6,22 @@ layout (std140) uniform u_camera_data
 	mat4 projectionMatrix;
 };
 
+// vec4 is used here for padding
 layout (std430, binding = 1) buffer buffer_accumulation
 {
 	vec4 dimensions;			// the size of the spatial partition			
 	vec4 resolution;			// the number of partitions in the width, height and depth
 	vec4 position;				// the position of the spatial partition
 	// pre compute
-	vec4 positionBL;				// the position of the spatial partition
+	vec4 positionBL;			// the bottom left position of the spatial partition (used to offset for always positive values
 	vec4 binSize;				// the position of the spatial partition
 	// data
 	float bin[];				// the array of bins
 };
 
-/*
-layout (std430, binding = 3) buffer buffer_accumulationBins
-{ 
-	vec4 bin;
-};
-*/
-
 uniform int u_triangleCount;
 layout(		 binding = 0) uniform samplerBuffer geometry_tbo;
 layout(r32i, binding = 1) uniform iimageBuffer u_accumulation_tbo;
-//layout(r32i, binding = 1) uniform iimageBuffer u_accumulation_tbo;
 
 // transform feedback inputs
 in vec4 in_position;
@@ -126,18 +119,16 @@ vec3 reflect_vector(vec3 v, vec3 n)
 	return v - 2.0 * dot(v, n) * n;
 }
 
-int toIndex(ivec3 _pos)
+int toIndex(vec3 _pos)
 {
-	return int((_pos.z * u_domainWidth * u_domainHeight) + (_pos.y * u_domainWidth) + _pos.x);
-}
+	int index = -1;
+	// get the position in partition space
+	vec3 psPos = _pos - vec3(positionBL);
+	ivec3 bin3d = ivec3(floor(psPos / vec3(binSize)));
 
-vec3 indexTo3D(int _index)
-{
-	int z = int(_index / (u_domainWidth * u_domainHeight));
-	_index -= (z * u_domainWidth * u_domainHeight);
-	int y = int(_index / ceil(u_domainWidth));
-	int x = int(_index % int(ceil(u_domainWidth)));
-	return vec3(x, y, z);
+	index = (bin3d.z * int(resolution.x) * int(resolution.y)) + (bin3d.y * int(resolution.x)) + bin3d.x;
+
+	return index;
 }
 
 void main()
@@ -199,8 +190,7 @@ void main()
 					//vec3 n = normalize(cross(v1 - v0, v2 - v0));
 					out_position = vec4(point.xyz, i);
 					out_velocity = vec3(0, 0, 0);
-					ivec3 pos = ivec3(floor(out_position.xyz + (u_domainOffset * 2)));
-					int index = toIndex(pos);
+					int index = toIndex(out_position.xyz);
 					imageAtomicAdd(u_accumulation_tbo, index, 1);
 				}
 			}

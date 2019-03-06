@@ -12,8 +12,6 @@
 #include "VertexBuffer.h"
 #include "ShaderProgram.h"
 
-// TODO: Seperate the FrameBuffer and the object it draws to
-
 namespace SnowGL
 {
 	enum FrameBufferTextureType { FBO_TEXTURE_COLOUR = GL_COLOR_ATTACHMENT0, FBO_TEXTURE_DEPTH = GL_DEPTH_ATTACHMENT };

@@ -91,7 +91,8 @@ namespace SnowGL
 
 		inline glm::vec3 getDomainOffset() { return m_domainOffset; }
 
-		glm::vec3 worldSpaceToPartitionSpace(glm::vec3 _wsPos);
+		// TODO: REMOVE
+		int worldSpaceToIndex(glm::vec3 _wsPos);
 
 	protected:
 		// TODO: doxygen
