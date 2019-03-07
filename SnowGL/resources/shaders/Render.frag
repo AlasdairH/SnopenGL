@@ -10,6 +10,7 @@ layout (location = 5) in vec3 frag_normal;
 layout (location = 6) in vec3 frag_pos;
 layout (location = 7) in vec4 frag_posDepthSpace;
 layout (location = 8) in vec4 frag_colour;
+layout (location = 9) in float frag_snowPerc;
 
 uniform vec3 u_lightPos = vec3(0, 5, 0);
 uniform vec3 u_lightColour = vec3(0.5f);
@@ -53,10 +54,10 @@ void main()
 	}
 	else
 	{
-		
 		//colour = texture(u_snowTexture, frag_texCoord).xyz;
 		colour = texture(u_diffuseTexture, frag_texCoord).xyz;
 	}
+	colour = mix(colour, vec3(1, 1, 1), frag_snowPerc);
 
 	vec3 ambient = 0.40f * colour;
 

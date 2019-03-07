@@ -11,12 +11,12 @@ layout (std430, binding = 1) buffer buffer_accumulation
 {
 	vec4 dimensions;			// the size of the spatial partition			
 	vec4 resolution;			// the number of partitions in the width, height and depth
-	vec4 buffer_position;				// the position of the spatial partition
+	vec4 buffer_position;		// the position of the spatial partition
 	// pre compute
 	vec4 positionBL;			// the bottom left position of the spatial partition (used to offset for always positive values
 	vec4 binSize;				// the position of the spatial partition
 	// data
-	float bin[];				// the array of bins
+	int bin[];					// the array of bins
 };
 
 // model inputs
@@ -30,6 +30,7 @@ layout (location = 5) out vec3 frag_normal;
 layout (location = 6) out vec3 frag_pos;
 layout (location = 7) out vec4 frag_posDepthSpace;
 layout (location = 8) out vec4 frag_colour;
+layout (location = 9) out float frag_snowPerc;
 
 // domain
 uniform float u_domainWidth = 7;
@@ -38,8 +39,8 @@ uniform float u_domainDepth = 3;
 uniform vec3 u_domainOffset = vec3(0);
 
 // max snow depth
-uniform int u_maxSnowDepth = 1000;
-uniform float u_snowAccumulationSpeed = 1.0f;
+uniform int u_maxSnowDepth = 400;
+uniform float u_snowAccumulationSpeed = 1.5f;
 uniform bool u_useSnow = true;
 
 // model matrix
@@ -67,16 +68,21 @@ void main()
 	frag_normal = transpose(inverse(mat3(u_modelMatrix))) * normal;
 	frag_pos = vec3(u_modelMatrix * vec4(position, 1.0));
 	frag_posDepthSpace = u_depthSpaceMatrix * vec4(frag_pos.xyz, 1.0);
+	frag_snowPerc = 0.0f;
 
 	vec4 pos = (u_modelMatrix * (vec4(position, 1.0f)));
 
-	int accumulationBinIndex = toIndex(pos.xyz);
-	vec4 snowDepthRGBA = imageLoad(u_accumulationBuffer, accumulationBinIndex);
-	int snowDepth = int(snowDepthRGBA.x);
-	float percentageDepth = float(snowDepth) / float(u_maxSnowDepth);
-
-	if(u_useSnow)
+	if(u_useSnow && normal.y > 0.0f)
 	{
+		int accumulationBinIndex = toIndex(pos.xyz);
+		vec4 snowDepthRGBA = imageLoad(u_accumulationBuffer, accumulationBinIndex);
+		int snowDepthInt = bin[accumulationBinIndex];
+		int snowDepth = int(snowDepthRGBA.x);
+		//snowDepth = snowDepthInt;
+		//float percentageDepth = float(snowDepth) / float(u_maxSnowDepth);
+		float percentageDepth = clamp(float(snowDepth) / float(u_maxSnowDepth), 0.0f, 1.0f);
+		frag_snowPerc = percentageDepth;
+
 		pos += vec4(0, 1, 0, 0) * percentageDepth * u_snowAccumulationSpeed;
 	}
 

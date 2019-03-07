@@ -16,7 +16,7 @@ layout (std430, binding = 1) buffer buffer_accumulation
 	vec4 positionBL;			// the bottom left position of the spatial partition (used to offset for always positive values
 	vec4 binSize;				// the position of the spatial partition
 	// data
-	float bin[];				// the array of bins
+	int bin[];				// the array of bins
 };
 
 uniform int u_triangleCount;
@@ -154,6 +154,7 @@ void main()
 		else if(out_position.w >= 0.0f)
 		{
 			particleColour = u_collisionColour;
+			out_position = vec4(0, -1000, 0, out_position.w);
 		}
 		// out of bounds check
 		/*
@@ -192,6 +193,7 @@ void main()
 					out_velocity = vec3(0, 0, 0);
 					int index = toIndex(out_position.xyz);
 					imageAtomicAdd(u_accumulation_tbo, index, 1);
+					atomicAdd(bin[index], 1);
 				}
 			}
 		}

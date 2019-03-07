@@ -59,6 +59,7 @@ int main()
 	Renderable sceneObject;
 	IOUtilities::loadRenderable(sceneObject, "resources/objects/Table.rnd");
 	sceneObject.transform.translate(glm::vec3(0, 0, 0));
+	sceneObject.m_shader->setUniform1i("u_useSnow", 0);
 	Renderable sceneObject_COLLISION;
 	IOUtilities::loadRenderable(sceneObject_COLLISION, "resources/objects/Table_Collision.rnd");
 
@@ -83,24 +84,24 @@ int main()
 	settings.lifetimeMax = 10.0f;
 	settings.particlesPerSecond = 2000;
 	// colour
-	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 0.1f);
-	settings.colourEnd = glm::vec4(1.0f, 1.0f, 1.0f, 0.1f);
+	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	settings.colourEnd = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	settings.collisionDebugColour = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 	// physics
-	settings.globalWind = glm::vec3(0.0f);
+	settings.globalWind = glm::vec3(0.0f, 0.0f, 0.0f);
 	settings.initialVelocity = glm::vec3(0, -1.0f, 0);
 	// debug
 	settings.collisionMultiplier = 2.0f;
 	// domain
 	settings.domainPosition = glm::vec3(0, 2, 0);
-	settings.domainSize = glm::vec3(10, 10, 10);
+	settings.domainSize = glm::vec3(10, 6, 6);
 	settings.drawDomain = true;
 	settings.drawPartition = true;
 
 	ParticleSystem snow(settings);
 	snow.initialise();
 	snow.setWsGeometryBuffer(vboGeometry.getTextureGLID(), vboGeometry.getGLID());
-	snow.setPointSize(10);
+	snow.setPointSize(2);
 	gui.setSelectedParticleSystem(std::make_shared<ParticleSystem>(snow));
 
 	bool quit = false;
@@ -120,6 +121,11 @@ int main()
 
 	CONSOLE_MESSAGE("Scene vertex count: " << vertexCount);
 	CONSOLE_MESSAGE("Scene triangle count: " << triangleCount);
+
+	glm::vec3 up = { 0, 1, 0 };
+	glm::vec3 vec = { 0, -0.5f, 1.0f };
+	float dot = glm::dot(up, vec);
+	//CONSOLE_ERROR(sizeof(SSBO_accumulationPartitiona));
 
 	std::vector<int> collisionBufferData;
 	collisionBufferData.resize(7 * 7 * 3);
@@ -306,11 +312,14 @@ int main()
 			sceneObject.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
 			sceneObject.m_texture->bind(0);
 			renderer.render(sceneObject);
+			
 
 			groundPlane.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
 			groundPlane.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
 			groundPlane.m_texture->bind(0);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			renderer.render(groundPlane);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 		renderer.unBindFrameBuffer();
 

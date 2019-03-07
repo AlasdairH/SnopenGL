@@ -19,6 +19,7 @@ namespace SnowGL
 
 	void Debug::drawCube(Transform &_transform, glm::vec4 _colour)
 	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glDisable(GL_CULL_FACE);
 
 		// bind vao / ibo
@@ -35,9 +36,11 @@ namespace SnowGL
 		glDrawElements(GL_TRIANGLES, m_debugCube->m_mesh->m_IBO->getCount(), GL_UNSIGNED_INT, 0);
 
 		glEnable(GL_CULL_FACE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 	void Debug::drawPlane(Transform &_transform, glm::vec4 _colour)
 	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glDisable(GL_CULL_FACE);
 
 		// bind vao / ibo
@@ -54,5 +57,6 @@ namespace SnowGL
 		glDrawElements(GL_TRIANGLES, m_debugPlane->m_mesh->m_IBO->getCount(), GL_UNSIGNED_INT, 0);
 
 		glEnable(GL_CULL_FACE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 }
