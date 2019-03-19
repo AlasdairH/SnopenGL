@@ -26,6 +26,6 @@ namespace SnowGL
 		glm::vec4 positionBL;			// the position of the bottom left corner
 		glm::vec4 binSize;				// individual bin size
 
-		int bin[100000];				// the array of bins
+		int bin[230000];				// the array of bins
 	};
 }

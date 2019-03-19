@@ -59,7 +59,7 @@ int main()
 	Renderable sceneObject;
 	IOUtilities::loadRenderable(sceneObject, "resources/objects/Table.rnd");
 	sceneObject.transform.translate(glm::vec3(0, 0, 0));
-	sceneObject.m_shader->setUniform1i("u_useSnow", 0);
+	sceneObject.m_shader->setUniform1i("u_useSnow", 1);
 	Renderable sceneObject_COLLISION;
 	IOUtilities::loadRenderable(sceneObject_COLLISION, "resources/objects/Table_Collision.rnd");
 
@@ -82,7 +82,7 @@ int main()
 	ParticleSettings settings;
 	settings.lifetimeMin = 10.0f;
 	settings.lifetimeMax = 10.0f;
-	settings.particlesPerSecond = 2000;
+	settings.particlesPerSecond = 20000;
 	// colour
 	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	settings.colourEnd = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -122,8 +122,7 @@ int main()
 	CONSOLE_MESSAGE("Scene vertex count: " << vertexCount);
 	CONSOLE_MESSAGE("Scene triangle count: " << triangleCount);
 
-	std::vector<int> collisionBufferData;
-	collisionBufferData.resize(7 * 7 * 3);
+	CONSOLE_MESSAGE_RELEASE(sizeof(GPU_SSBO_accumulationPartition));
 
 	while (state.isRunning)
 	{

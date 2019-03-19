@@ -106,23 +106,10 @@ namespace SnowGL
 		// setup accumulation SSBO
 		m_SSBO_AccumulationData.dimensions = glm::vec4(m_settings->domainSize, 0);
 		m_SSBO_AccumulationData.position = glm::vec4(m_settings->domainPosition, 0);
-		m_SSBO_AccumulationData.resolution = glm::vec4(30, 5, 30, 0);
+		m_SSBO_AccumulationData.resolution = glm::vec4(80, 30, 80, 0);
 		// pre compute
 		m_SSBO_AccumulationData.positionBL = m_SSBO_AccumulationData.position - (m_SSBO_AccumulationData.dimensions / 2.0f);
 		m_SSBO_AccumulationData.binSize = m_SSBO_AccumulationData.dimensions / m_SSBO_AccumulationData.resolution;
-
-		/*
-		glm::vec3 testPos = { 0, 0, 6 };
-		CONSOLE_MESSAGE_RELEASE(m_SSBO_AccumulationData.resolution.x * m_SSBO_AccumulationData.resolution.y * m_SSBO_AccumulationData.resolution.z);
-		CONSOLE_MESSAGE_RELEASE(sizeof(SSBO_accumulationPartition));
-		CONSOLE_MESSAGE_RELEASE(worldSpaceToIndex(glm::vec3(0, 100, 6)));
-		CONSOLE_MESSAGE_RELEASE(m_SSBO_AccumulationData.binSize.x << ", " << m_SSBO_AccumulationData.binSize.y << ", " << m_SSBO_AccumulationData.binSize.z);
-		glm::vec3 psPos = testPos - glm::vec3(m_SSBO_AccumulationData.positionBL);
-		CONSOLE_MESSAGE_RELEASE(" ");
-		CONSOLE_MESSAGE_RELEASE(psPos.x << ", " << psPos.y << ", " << psPos.z);
-		glm::vec3 bin3d = floor(psPos / glm::vec3(m_SSBO_AccumulationData.binSize));
-		CONSOLE_MESSAGE_RELEASE(bin3d.x << ", " << bin3d.y << ", " << bin3d.z);
-		*/
 
 		//m_SSBO_AccumulationData.position -= m_SSBO_AccumulationData.positionBL;
 
@@ -156,8 +143,6 @@ namespace SnowGL
 		CONSOLE_MESSAGE("Particle settings applied to shader");
 
 		m_domainTransform.setPosition(m_settings->domainPosition);
-
-		//m_accumulationSSBO->loadData(&m_SSBO_AccumulationData, 0, sizeof(SSBO_accumulationPartition));
 	}
 
 	void ParticleSystem::updateParticles(float _deltaTime, int _triangleCount)
@@ -223,7 +208,7 @@ namespace SnowGL
 						z += binSize.z)
 					{
 						transform.setPosition(glm::vec3(x, y, z));
-						debug.drawCube(transform, glm::vec4(1.0f, 0.0f, 0.0f, 0.2f));
+						//debug.drawCube(transform, glm::vec4(1.0f, 0.0f, 0.0f, 0.2f));
 					}
 				}
 			}

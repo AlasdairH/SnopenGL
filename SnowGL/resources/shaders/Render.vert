@@ -53,6 +53,20 @@ int toIndex(vec3 _pos)
 	int index = -1;
 	// get the position in partition space
 	vec3 psPos = _pos - vec3(positionBL);
+
+	if(psPos.x < 0 || psPos.x > dimensions.x)
+	{
+		if(psPos.y < 0 || psPos.y > dimensions.y)
+		{
+			if(psPos.z < 0 || psPos.z > dimensions.z)
+			{
+				return 99999;
+			}
+			return 99999;
+		}
+		return 99999;
+	}
+
 	ivec3 bin3d = ivec3(floor(psPos / vec3(binSize)));
 
 	index = (bin3d.z * int(resolution.x) * int(resolution.y)) + (bin3d.y * int(resolution.x)) + bin3d.x;
@@ -83,7 +97,7 @@ void main()
 		// get the value to offset the position by through mixing the default position with the max by the percentage fill in the current bin
 		float depth = pos.y + mix(pos.y, pos.y + u_maxSnowDepth, percentageDepth);
 
-		pos += vec4(0, 1, 0, 0) * depth;
+		//pos += vec4(0, 1, 0, 0) * depth;
 	}
 
 	mat4 VP = projectionMatrix * viewMatrix;
