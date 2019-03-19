@@ -40,8 +40,8 @@ uniform vec3 u_domainOffset = vec3(0);
 
 // max snow depth
 uniform float u_maxSnowDepth = 0.2f;			// the max offset of a position for snow (the offset when u_maxSnowBinValue is reached)
-uniform int u_maxSnowBinValue = 100;			// the max value a bin of snow can hold (the value will go higher but will be clamped on use)
-uniform float u_snowAccumulationSpeed = 1.5f;
+uniform int u_maxSnowBinValue = 300;			// the max value a bin of snow can hold (the value will go higher but will be clamped on use)
+uniform float u_snowAccumulationSpeed = 1.0f;
 uniform bool u_useSnow = true;
 
 // model matrix
@@ -80,6 +80,7 @@ void main()
 	frag_normal = transpose(inverse(mat3(u_modelMatrix))) * normal;
 	frag_pos = vec3(u_modelMatrix * vec4(position, 1.0));
 	frag_posDepthSpace = u_depthSpaceMatrix * vec4(frag_pos.xyz, 1.0);
+	frag_colour = vec4(0, 0, 0, 1);
 	frag_snowPerc = 0.0f;
 
 	vec4 pos = (u_modelMatrix * (vec4(position, 1.0f)));
@@ -94,15 +95,11 @@ void main()
 		float percentageDepth = clamp(float(snowDepth) / float(u_maxSnowBinValue), 0.0f, 1.0f);
 		// send the depth at the current bin over to the fragment shader
 		frag_snowPerc = percentageDepth;
-		// get the value to offset the position by through mixing the default position with the max by the percentage fill in the current bin
-		float depth = pos.y + mix(pos.y, pos.y + u_maxSnowDepth, percentageDepth);
-
-		//pos += vec4(0, 1, 0, 0) * depth;
+		// offset the position by the percentage depth
+		pos += vec4(0, u_maxSnowDepth, 0, 0) * percentageDepth * u_snowAccumulationSpeed;
 	}
 
 	mat4 VP = projectionMatrix * viewMatrix;
 
-    //gl_Position = out_worldSpacePosition;
-	//gl_Position = MVP * vec4(position, 1.0f);
 	gl_Position = VP * pos;
 }

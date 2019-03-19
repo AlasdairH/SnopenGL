@@ -71,6 +71,7 @@ void main()
 	if(u_useTexture)
 	{
 		outputColour = vec4(lighting, 1.0f);
+		//outputColour = frag_colour;
 	}
 	else
 	{
