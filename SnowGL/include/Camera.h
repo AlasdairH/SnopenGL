@@ -7,7 +7,7 @@
 
 // program
 #include "PCH.h"
-#include "Uniform_CameraData.h"
+#include "GPU_UB_CameraData.h"
 #include "VertexBuffer.h"
 #include "Transform.h"
 
@@ -82,7 +82,7 @@ namespace SnowGL
 		*
 		*	Returns a unifom block struct with the cameras data
 		*/
-		inline u_CameraData getCameraUniformData() { return m_uniformData; }
+		inline GPU_UB_CameraData getCameraUniformData() { return m_uniformData; }
 
 		/** @brief Returns the width of the viewport
 		*	@return The width of the viewport
@@ -144,6 +144,6 @@ namespace SnowGL
 		glm::mat4									m_perspectiveProjectionMatrix;				/**< The Perspective Matrix */
 		glm::mat4									m_orthographicProjectionMatrix;				/**< The Orthographic Matrix */
 
-		u_CameraData								m_uniformData;					/**< The struct containing the matrices for the uniform buffer to use */
+		GPU_UB_CameraData								m_uniformData;					/**< The struct containing the matrices for the uniform buffer to use */
 	};
 }

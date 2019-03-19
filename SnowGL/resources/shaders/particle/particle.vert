@@ -20,8 +20,7 @@ layout (std430, binding = 1) buffer buffer_accumulation
 };
 
 uniform int u_triangleCount;
-layout(		 binding = 0) uniform samplerBuffer geometry_tbo;
-layout(r32i, binding = 1) uniform iimageBuffer u_accumulation_tbo;
+layout(binding = 0) uniform samplerBuffer geometry_tbo;
 
 // transform feedback inputs
 in vec4 in_position;
@@ -192,7 +191,6 @@ void main()
 					out_position = vec4(point.xyz, i);
 					out_velocity = vec3(0, 0, 0);
 					int index = toIndex(out_position.xyz);
-					imageAtomicAdd(u_accumulation_tbo, index, 1);
 					atomicAdd(bin[index], 1);
 				}
 			}

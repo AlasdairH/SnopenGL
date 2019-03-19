@@ -103,14 +103,6 @@ namespace SnowGL
 
 		CONSOLE_MESSAGE("Created " << m_numParticles << " particles on the GPU");
 
-		// create a texture buffer for the collision data to be written to
-		m_accumulationBufferVBO = std::make_shared<VertexBuffer>(BUFFER_ARRAY);
-		m_accumulationBufferVBO->addTextureBuffer(GL_R32I, 1024 * sizeof(int) * 4);
-		m_accumulationBufferVAO = std::make_shared<VertexArray>();
-		VertexBufferLayout colLayout;
-		layout.push<glm::vec4>(1);
-		m_accumulationBufferVAO->addBuffer(*m_accumulationBufferVBO, colLayout);
-
 		// setup accumulation SSBO
 		m_SSBO_AccumulationData.dimensions = glm::vec4(m_settings->domainSize, 0);
 		m_SSBO_AccumulationData.position = glm::vec4(m_settings->domainPosition, 0);
@@ -136,7 +128,7 @@ namespace SnowGL
 
 		m_accumulationSSBO = std::make_shared<VertexBuffer>(BUFFER_SHADER_STORAGE);
 		// load the data to the uniform buffer
-		m_accumulationSSBO->loadData(&m_SSBO_AccumulationData, 0, sizeof(SSBO_accumulationPartition));
+		m_accumulationSSBO->loadData(&m_SSBO_AccumulationData, 0, sizeof(GPU_SSBO_accumulationPartition));
 		// link the uniform buffer to the binding point
 		m_accumulationSSBO->bindBase(BUFFER_SHADER_STORAGE, SHADER_BINDPOINT_ACCUMULATION_PARTITION);
 
@@ -178,8 +170,6 @@ namespace SnowGL
 
 		glActiveTexture(GL_TEXTURE0 + 0);
 		glBindTexture(GL_TEXTURE_BUFFER, m_wsGeomTextureBuffer);
-
-		glBindImageTexture(1, m_accumulationBufferVBO->getTextureGLID(), 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32I);
 
 		m_tfShader->setUniformMat4f("u_modelMatrix", m_transform.getModelMatrix());
 

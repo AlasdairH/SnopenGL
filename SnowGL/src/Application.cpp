@@ -44,7 +44,7 @@ int main()
 	// link the uniform buffer to the binding point
 	cameraDataUniformBuffer->bindBase(GL_UNIFORM_BUFFER, SHADER_BINDPOINT_CAMERA_VP);
 	// load the data to the uniform buffer
-	cameraDataUniformBuffer->loadData(&camera.getCameraUniformData(), 0, sizeof(u_CameraData));
+	cameraDataUniformBuffer->loadData(&camera.getCameraUniformData(), 0, sizeof(GPU_UB_CameraData));
 
 	// create shader
 	//ShaderProgram outlineShader("resources/shaders/Basic.vert", "resources/shaders/BlockColour.frag");
@@ -230,6 +230,7 @@ int main()
 					snow.getSettingsPtr()->drawPartition = !snow.getSettingsPtr()->drawPartition;
 					break;
 				case SDLK_b:
+					/*
 					glBindBuffer(GL_ARRAY_BUFFER, snow.getAccumulationBufferGLID());
 					glGetBufferSubData(GL_ARRAY_BUFFER, 0, 7 * 7 * 3 * sizeof(int), &collisionBufferData[0]);
 					for (int i = 0; i < collisionBufferData.size(); ++i)
@@ -237,7 +238,7 @@ int main()
 						if(collisionBufferData[i] != 0)
 							CONSOLE_MESSAGE(i << " - " << collisionBufferData[i]);
 					}
-					
+					*/
 					break;
 				default:
 					break;
@@ -254,7 +255,7 @@ int main()
 			glClear(GL_DEPTH_BUFFER_BIT);
 
 			depthCamera.updateCameraUniform();
-			cameraDataUniformBuffer->loadData(&depthCamera.getCameraUniformData(), 0, sizeof(u_CameraData));
+			cameraDataUniformBuffer->loadData(&depthCamera.getCameraUniformData(), 0, sizeof(GPU_UB_CameraData));
 			renderer.setDepthSpaceMatrix(depthCamera.getCameraUniformData().projectionMatrix * depthCamera.getCameraUniformData().viewMatrix);
 
 			// render all objects
@@ -265,7 +266,7 @@ int main()
 
 		// switch camera back to main
 		Camera::activeCamera->updateCameraUniform();
-		cameraDataUniformBuffer->loadData(&Camera::activeCamera->getCameraUniformData(), 0, sizeof(u_CameraData));
+		cameraDataUniformBuffer->loadData(&Camera::activeCamera->getCameraUniformData(), 0, sizeof(GPU_UB_CameraData));
 
 		// 2nd pass: rendering to frame buffer
 		renderer.bindFrameBuffer();
@@ -285,9 +286,6 @@ int main()
 			glBeginTransformFeedback(GL_TRIANGLES);
 			// begin collision mesh transform feedback
 				glEnable(GL_RASTERIZER_DISCARD);
-
-				// bind accumulation buffer
-				glBindImageTexture(5, snow.getAccumulationTextureBufferGLID(), 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32I);
 
 				sceneObject_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject_COLLISION.transform.getModelMatrix());
 				renderer.render(sceneObject_COLLISION);

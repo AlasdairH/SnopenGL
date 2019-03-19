@@ -200,13 +200,13 @@
     <ClInclude Include="include\FrameBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Uniform_CameraData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\SSBO_AccumulationPartition.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GPU_SSBO_AccumulationPartition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GPU_UB_CameraData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

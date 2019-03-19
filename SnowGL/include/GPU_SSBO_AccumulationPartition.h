@@ -10,12 +10,13 @@
 
 namespace SnowGL
 {
-	/*! @class SSBO_accumulationPartition
+	/*! @class GPU_SSBO_accumulationPartition
 	*	@brief The CPU side data for the acumulation buffer
 	*
 	*	This data corresponds to the shader side "buffer_accumulation" for the acumulation spatial partition
+	*	All vec3s are vec4s for padding.
 	*/
-	struct SSBO_accumulationPartition
+	struct GPU_SSBO_accumulationPartition
 	{
 		glm::vec4 dimensions;			// the size of the spatial partition			
 		glm::vec4 resolution;			// the number of partitions in the width, height and depth

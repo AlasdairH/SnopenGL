@@ -48,9 +48,6 @@ uniform bool u_useSnow = true;
 uniform mat4 u_modelMatrix;
 uniform mat4 u_depthSpaceMatrix;
 
-// textures
-layout(r32i, binding = 5) uniform iimageBuffer u_accumulationBuffer;
-
 int toIndex(vec3 _pos)
 {
 	int index = -1;
@@ -75,13 +72,15 @@ void main()
 
 	if(u_useSnow && normal.y > 0.0f)
 	{
+		// get the bin the position lies in
 		int accumulationBinIndex = toIndex(pos.xyz);
-		vec4 snowDepthRGBA = imageLoad(u_accumulationBuffer, accumulationBinIndex);
-		int snowDepthInt = bin[accumulationBinIndex];
-		int snowDepth = int(snowDepthRGBA.x);
-		//snowDepth = snowDepthInt;
+		// get the current amount of snow in the bin
+		int snowDepth = bin[accumulationBinIndex];
+		// get the percentage of how full the bin is
 		float percentageDepth = clamp(float(snowDepth) / float(u_maxSnowBinValue), 0.0f, 1.0f);
+		// send the depth at the current bin over to the fragment shader
 		frag_snowPerc = percentageDepth;
+		// get the value to offset the position by through mixing the default position with the max by the percentage fill in the current bin
 		float depth = pos.y + mix(pos.y, pos.y + u_maxSnowDepth, percentageDepth);
 
 		pos += vec4(0, 1, 0, 0) * depth;
