@@ -39,7 +39,8 @@ uniform float u_domainDepth = 3;
 uniform vec3 u_domainOffset = vec3(0);
 
 // max snow depth
-uniform int u_maxSnowDepth = 400;
+uniform float u_maxSnowDepth = 0.2f;			// the max offset of a position for snow (the offset when u_maxSnowBinValue is reached)
+uniform int u_maxSnowBinValue = 100;			// the max value a bin of snow can hold (the value will go higher but will be clamped on use)
 uniform float u_snowAccumulationSpeed = 1.5f;
 uniform bool u_useSnow = true;
 
@@ -79,11 +80,11 @@ void main()
 		int snowDepthInt = bin[accumulationBinIndex];
 		int snowDepth = int(snowDepthRGBA.x);
 		//snowDepth = snowDepthInt;
-		//float percentageDepth = float(snowDepth) / float(u_maxSnowDepth);
-		float percentageDepth = clamp(float(snowDepth) / float(u_maxSnowDepth), 0.0f, 1.0f);
+		float percentageDepth = clamp(float(snowDepth) / float(u_maxSnowBinValue), 0.0f, 1.0f);
 		frag_snowPerc = percentageDepth;
+		float depth = pos.y + mix(pos.y, pos.y + u_maxSnowDepth, percentageDepth);
 
-		pos += vec4(0, 1, 0, 0) * percentageDepth * u_snowAccumulationSpeed;
+		pos += vec4(0, 1, 0, 0) * depth;
 	}
 
 	mat4 VP = projectionMatrix * viewMatrix;

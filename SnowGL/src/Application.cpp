@@ -122,11 +122,6 @@ int main()
 	CONSOLE_MESSAGE("Scene vertex count: " << vertexCount);
 	CONSOLE_MESSAGE("Scene triangle count: " << triangleCount);
 
-	glm::vec3 up = { 0, 1, 0 };
-	glm::vec3 vec = { 0, -0.5f, 1.0f };
-	float dot = glm::dot(up, vec);
-	//CONSOLE_ERROR(sizeof(SSBO_accumulationPartitiona));
-
 	std::vector<int> collisionBufferData;
 	collisionBufferData.resize(7 * 7 * 3);
 
@@ -317,9 +312,9 @@ int main()
 			groundPlane.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
 			groundPlane.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
 			groundPlane.m_texture->bind(0);
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			renderer.render(groundPlane);
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 		renderer.unBindFrameBuffer();
 
