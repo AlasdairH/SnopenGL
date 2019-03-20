@@ -82,7 +82,7 @@ void main()
 
 	vec4 pos = (u_modelMatrix * (vec4(position, 1.0f)));
 
-	if(normal.y > 0.0f)
+	//if(normal.y > 0.0f)
 	{
 		// get the bin the position lies in
 		int accumulationBinIndex = toIndex(pos.xyz);

@@ -26,6 +26,7 @@ namespace SnowGL
 		IOUtilities::loadRenderable(*m_drawableDomain, "resources/objects/Cube.rnd");
 		m_domainTransform.scale(glm::vec3(m_settings->domainSize.x, m_settings->domainSize.y, m_settings->domainSize.z));
 
+		// set the extents of the domain based on the centre
 		glm::vec3 bottomLeft;
 		glm::vec3 topRight;
 		float minLeftFace = m_settings->domainPosition.x - (m_settings->domainSize.x / 2);
@@ -38,6 +39,7 @@ namespace SnowGL
 		if (minBackFace < 0.0f)
 			m_domainOffset.z = minBackFace * -1;
 
+		// create the transform feedback shaders for the particle system
 		Shader tfVert(SHADER_VERTEX);
 		tfVert.load("resources/shaders/particle/particle.vert");
 		m_tfShader->attachShader(tfVert);
@@ -48,8 +50,10 @@ namespace SnowGL
 		m_tfShader->setTransformFeedbackVarying(tfVaryings);
 		m_tfShader->link();
 
+		// get the number of particles required
 		m_numParticles = m_settings->getMaxParticles();
 
+		// set the particle buffer layout
 		VertexBufferLayout layout;
 		layout.push<glm::vec4>(1);	// position (w = is active)
 		layout.push<glm::vec4>(1);	// start position
@@ -57,7 +61,7 @@ namespace SnowGL
 		layout.push<float>(1);		// delay
 		layout.push<float>(1);		// lifetime
 
-
+		// create 2 buffers for pingpong
 		for (int i = 0; i < 2; ++i)
 		{
 			// create 2 VAOs and VBOs for ping ponging
@@ -104,9 +108,10 @@ namespace SnowGL
 		CONSOLE_MESSAGE("Created " << m_numParticles << " particles on the GPU");
 
 		// setup accumulation SSBO
-		m_SSBO_AccumulationData.dimensions = glm::vec4(m_settings->domainSize, 0);
-		m_SSBO_AccumulationData.position = glm::vec4(m_settings->domainPosition, 0);
-		m_SSBO_AccumulationData.resolution = glm::vec4(80, 30, 80, 0);
+		m_SSBO_AccumulationData.dimensions = glm::vec4(m_settings->domainSize.x, 1.75f, m_settings->domainSize.z, 0);
+		m_SSBO_AccumulationData.position = glm::vec4(0, 0.75f, 0, 0);
+		m_SSBO_AccumulationData.resolution = glm::vec4(60, 60, 60, 0);
+		//m_SSBO_AccumulationData.resolution = glm::vec4(1, 1, 1, 0);
 		// pre compute
 		m_SSBO_AccumulationData.positionBL = m_SSBO_AccumulationData.position - (m_SSBO_AccumulationData.dimensions / 2.0f);
 		m_SSBO_AccumulationData.binSize = m_SSBO_AccumulationData.dimensions / m_SSBO_AccumulationData.resolution;
@@ -208,7 +213,7 @@ namespace SnowGL
 						z += binSize.z)
 					{
 						transform.setPosition(glm::vec3(x, y, z));
-						//debug.drawCube(transform, glm::vec4(1.0f, 0.0f, 0.0f, 0.2f));
+						debug.drawCube(transform, glm::vec4(1.0f, 0.0f, 0.0f, 0.2f));
 					}
 				}
 			}

@@ -27,8 +27,8 @@ namespace SnowGL
 		glm::vec3	domainPosition = glm::vec3(0.0f);			// domain position
 		glm::vec3	domainSize = glm::vec3(5.0f);
 
-		bool		drawDomain;
-		bool		drawPartition;
+		bool		drawDomain = false;
+		bool		drawPartition = false;
 
 		/** @brief Required particle count getter
 		*	@return The maxiumum number of particles that would be required for the system
