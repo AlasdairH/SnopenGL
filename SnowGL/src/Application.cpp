@@ -64,7 +64,15 @@ int main()
 	sceneObject.transform.rotate(45, glm::vec3(0, 1, 0));
 	sceneObject.m_shader->setUniform1i("u_useSnow", 1);
 	Renderable sceneObject_COLLISION;
-	IOUtilities::loadRenderable(sceneObject_COLLISION, "resources/objects/Table_Collision.rnd");
+	IOUtilities::loadRenderable(sceneObject_COLLISION, "resources/objects/Table_Collision.rnd");	
+	// create a scene object
+	Renderable sceneObject2;
+	IOUtilities::loadRenderable(sceneObject2, "resources/objects/Bin.rnd");
+	sceneObject2.transform.translate(glm::vec3(-1, 0, 0));
+	//sceneObject2.transform.rotate(45, glm::vec3(0, 1, 0));
+	sceneObject2.m_shader->setUniform1i("u_useSnow", 1);
+	Renderable sceneObject2_COLLISION;
+	IOUtilities::loadRenderable(sceneObject2_COLLISION, "resources/objects/Bin_Collision.rnd");
 
 	// create a texture buffer to contain collidable world space geometry
 	VertexBuffer vboGeometry(BUFFER_ARRAY);
@@ -77,6 +85,7 @@ int main()
 	int vertexCount = 0;
 	vertexCount += groundPlane_COLLISION.getVertexCount();
 	vertexCount += sceneObject_COLLISION.getVertexCount();
+	vertexCount += sceneObject2_COLLISION.getVertexCount();
 	int triangleCount = vertexCount / 3;
 
 	Renderer renderer;
@@ -264,6 +273,7 @@ int main()
 			// render all objects
 			renderer.renderToDepthBuffer(groundPlane);
 			renderer.renderToDepthBuffer(sceneObject);
+			renderer.renderToDepthBuffer(sceneObject2);
 		}
 		renderer.unBindDepthFrameBuffer();
 
@@ -285,9 +295,14 @@ int main()
 		// begin collision mesh transform feedback
 			glEnable(GL_RASTERIZER_DISCARD);
 
+			// table
 			sceneObject_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject.transform.getModelMatrix());
 			renderer.render(sceneObject_COLLISION);
+			// bin
+			sceneObject2_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject2.transform.getModelMatrix());
+			renderer.render(sceneObject2_COLLISION);
 			
+			// grass
 			groundPlane_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
 			renderer.render(groundPlane_COLLISION);
 
@@ -304,16 +319,20 @@ int main()
 			snow.updateParticles(state.deltaTime, triangleCount);
 
 			// render visuals for objects
+			// table
 			sceneObject.m_shader->setUniformMat4f("u_modelMatrix", sceneObject.transform.getModelMatrix());
 			sceneObject.m_shader->setUniformMat4f("u_depthSpaceMatrix", depthCamera.getCameraUniformData().viewProjectionMatrix);
-			//sceneObject.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
 			sceneObject.m_texture->bind(0);
 			renderer.render(sceneObject);
+			// bin
+			sceneObject2.m_shader->setUniformMat4f("u_modelMatrix", sceneObject2.transform.getModelMatrix());
+			sceneObject2.m_shader->setUniformMat4f("u_depthSpaceMatrix", depthCamera.getCameraUniformData().viewProjectionMatrix);
+			sceneObject2.m_texture->bind(0);
+			renderer.render(sceneObject2);
 			
 
 			groundPlane.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
 			groundPlane.m_shader->setUniformMat4f("u_depthSpaceMatrix", depthCamera.getCameraUniformData().viewProjectionMatrix);
-			//groundPlane.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
 			groundPlane.m_texture->bind(0);
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			renderer.render(groundPlane);
