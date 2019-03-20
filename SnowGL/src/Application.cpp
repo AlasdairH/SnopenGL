@@ -62,7 +62,8 @@ int main()
 	IOUtilities::loadRenderable(sceneObject, "resources/objects/Table.rnd");
 	sceneObject.transform.translate(glm::vec3(1, 0, 0));
 	sceneObject.transform.rotate(45, glm::vec3(0, 1, 0));
-	sceneObject.m_shader->setUniform1i("u_useSnow", 1);
+	sceneObject.m_shader->setUniform1i("u_useSnowTexture", 1);
+	sceneObject.m_shader->setUniform1i("u_useSnowOffset", 0);
 	Renderable sceneObject_COLLISION;
 	IOUtilities::loadRenderable(sceneObject_COLLISION, "resources/objects/Table_Collision.rnd");	
 	// create a scene object
@@ -71,6 +72,7 @@ int main()
 	sceneObject2.transform.translate(glm::vec3(-1, 0, 0));
 	//sceneObject2.transform.rotate(45, glm::vec3(0, 1, 0));
 	sceneObject2.m_shader->setUniform1i("u_useSnow", 1);
+	sceneObject2.m_shader->setUniform1i("u_useSnowOffset", 0);
 	Renderable sceneObject2_COLLISION;
 	IOUtilities::loadRenderable(sceneObject2_COLLISION, "resources/objects/Bin_Collision.rnd");
 

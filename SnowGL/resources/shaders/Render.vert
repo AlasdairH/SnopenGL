@@ -38,7 +38,8 @@ uniform float u_maxSnowDepth = 0.2f;			// the max offset of a position for snow 
 uniform int u_maxSnowBinValue = 300;			// the max value a bin of snow can hold (the value will go higher but will be clamped on use)
 uniform float u_snowAccumulationSpeed = 1.0f;
 uniform float u_snowColourChangeSpeed = 3.0f;
-uniform bool u_useSnow = true;
+uniform bool u_useSnowTexture = true;
+uniform bool u_useSnowOffset = true;
 
 // model matrix
 uniform mat4 u_modelMatrix;
@@ -81,7 +82,7 @@ void main()
 
 	vec4 pos = (u_modelMatrix * (vec4(position, 1.0f)));
 
-	if(u_useSnow && normal.y > 0.0f)
+	if(normal.y > 0.0f)
 	{
 		// get the bin the position lies in
 		int accumulationBinIndex = toIndex(pos.xyz);
@@ -90,9 +91,9 @@ void main()
 		// get the percentage of how full the bin is
 		float percentageDepth = clamp(float(snowDepth) / float(u_maxSnowBinValue), 0.0f, 1.0f);
 		// send the depth at the current bin over to the fragment shader
-		frag_snowPerc = percentageDepth;
+		frag_snowPerc = percentageDepth * int(u_useSnowTexture);
 		// offset the position by the percentage depth
-		pos += vec4(0, u_maxSnowDepth, 0, 0) * percentageDepth * u_snowAccumulationSpeed;
+		pos += (vec4(0, u_maxSnowDepth, 0, 0) * percentageDepth * u_snowAccumulationSpeed) * int(u_useSnowOffset);
 	}
 
 	mat4 VP = projectionMatrix * viewMatrix;
