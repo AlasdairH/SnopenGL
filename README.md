@@ -1,6 +1,6 @@
 # SnowGL
 A snow simulation in OpenGL
 
-Current state as of 08/02/2019 (98 days to deadline)
+Current state as of 20/03/2019
 
-![State1](https://i.imgur.com/weIJKEV.png)
+![State1](blob:https://imgur.com/72a0ac3a-d773-4d2e-bc9c-fd9409202d37)
