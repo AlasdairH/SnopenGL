@@ -54,6 +54,13 @@ namespace SnowGL
 		*/
 		void init();
 
+		/** @brief Allocates a chunk of data on the GPU for this buffer
+		*	@param _size The size of the chunk to allocate in bytes
+		*
+		*	Allocates a chunk of data on the GPU
+		*/
+		void allocate(GLuint _size);
+
 		/** @brief Loads data to the VBO.
 		*	@param _data he data to send to the VBO
 		*	@param _count The number of items of data
@@ -75,6 +82,16 @@ namespace SnowGL
 		*	Loads data to the VBO.
 		*/
 		void loadData(const void *_data);
+
+		/** @brief Loads data to the VBO.
+		*	@param _data he data to send to the VBO
+		*	@param _count The number of items of data
+		*	@param _size The size of the data in bytes
+		*	@param _offset The offset of where to start writing form
+		*
+		*	Loads data to the VBO at a set point and for a set size
+		*/
+		void loadSubData(const void * _data, GLuint _count, GLuint _size, int _offset);
 
 		/** @brief Returns the count of the number of items contained within the buffer.
 		*	@return The count

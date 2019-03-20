@@ -51,7 +51,9 @@ namespace SnowGL
 		int maxTexBufferSize;
 		glGetIntegerv(GL_MAX_TEXTURE_BUFFER_SIZE, &maxTexBufferSize);
 		CONSOLE_MESSAGE("Max Texture Buffer Size: " << maxTexBufferSize);
-		CONSOLE_MESSAGE(1024 * 1024 * sizeof(glm::vec4));
+		int maxSSBOSize;
+		glGetIntegerv(GL_MAX_SHADER_STORAGE_BLOCK_SIZE, &maxSSBOSize);
+		CONSOLE_MESSAGE("Max SSBO Size: " << maxSSBOSize);
 
 		CONSOLE_MESSAGE("OpenGL Initialised");
 	}

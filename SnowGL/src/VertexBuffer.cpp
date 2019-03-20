@@ -54,6 +54,12 @@ namespace SnowGL
 		CONSOLE_MESSAGE("Vertex Buffer Object with ID: " << m_vertexBufferID << " Created");
 	}
 
+	void VertexBuffer::allocate(GLuint _size)
+	{
+		bind();
+		glBufferData(m_vertexBufferType, _size, NULL, m_usage);
+	}
+
 	void VertexBuffer::loadData(const void *_data, GLuint _count, GLuint _size)
 	{
 		m_count = _count;
@@ -71,6 +77,11 @@ namespace SnowGL
 		m_count = -1;
 		bind();
 		glBufferData(m_vertexBufferType, sizeof(_data), _data, m_usage);
+	}
+
+	void VertexBuffer::loadSubData(const void * _data, GLuint _count, GLuint _size, int _offset)
+	{
+		glBufferSubData(m_vertexBufferType, _offset, _size, _data);
 	}
 
 	void VertexBuffer::addTextureBuffer(GLenum _format, unsigned int _size)

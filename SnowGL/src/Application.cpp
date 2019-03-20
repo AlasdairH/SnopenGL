@@ -30,6 +30,7 @@ int main()
 
 	Window window("SnopenGL");
 
+
 	InitManager::initOpenGL();
 
 	Camera camera(state.windowSize.x, state.windowSize.y, PROJECTION_PERSPECTIVE);
@@ -240,8 +241,6 @@ int main()
 					break; 
 				case SDLK_SPACE:
 					state.isUIHidden = !state.isUIHidden;
-					//snow.getSettingsPtr()->drawDomain = !snow.getSettingsPtr()->drawDomain;
-					//snow.getSettingsPtr()->drawPartition = !snow.getSettingsPtr()->drawPartition;
 					break;
 				case SDLK_b:
 					/*

@@ -110,17 +110,17 @@ namespace SnowGL
 		// setup accumulation SSBO
 		m_SSBO_AccumulationData.dimensions = glm::vec4(m_settings->domainSize.x, 1.75f, m_settings->domainSize.z, 0);
 		m_SSBO_AccumulationData.position = glm::vec4(0, 0.75f, 0, 0);
-		m_SSBO_AccumulationData.resolution = glm::vec4(60, 60, 60, 0);
-		//m_SSBO_AccumulationData.resolution = glm::vec4(1, 1, 1, 0);
+		int rootPartition = std::floor(std::cbrt(SSBO_MAX_INT_ARRAY));
+		m_SSBO_AccumulationData.resolution = glm::vec4(rootPartition);
 		// pre compute
 		m_SSBO_AccumulationData.positionBL = m_SSBO_AccumulationData.position - (m_SSBO_AccumulationData.dimensions / 2.0f);
 		m_SSBO_AccumulationData.binSize = m_SSBO_AccumulationData.dimensions / m_SSBO_AccumulationData.resolution;
 
-		//m_SSBO_AccumulationData.position -= m_SSBO_AccumulationData.positionBL;
-
 		m_accumulationSSBO = std::make_shared<VertexBuffer>(BUFFER_SHADER_STORAGE);
-		// load the data to the uniform buffer
-		m_accumulationSSBO->loadData(&m_SSBO_AccumulationData, 0, sizeof(GPU_SSBO_accumulationPartition));
+		// allocate the memory on the GPU for the partition (data preceding bins + bins)
+		m_accumulationSSBO->allocate(sizeof(GPU_SSBO_accumulationPartition) + (sizeof(int) * SSBO_MAX_INT_ARRAY));
+		// load the data that precedes the bin array
+		m_accumulationSSBO->loadSubData(&m_SSBO_AccumulationData, 0, sizeof(GPU_SSBO_accumulationPartition), 0);
 		// link the uniform buffer to the binding point
 		m_accumulationSSBO->bindBase(BUFFER_SHADER_STORAGE, SHADER_BINDPOINT_ACCUMULATION_PARTITION);
 
