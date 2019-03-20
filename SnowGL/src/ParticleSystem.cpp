@@ -135,11 +135,11 @@ namespace SnowGL
 		m_tfShader->setUniform1f("u_collisionMultiplier", m_settings->collisionMultiplier);
 		m_tfShader->setUniform3f("u_initialVelocity", m_settings->initialVelocity);
 		// domain position / size
-		m_tfShader->setUniform3f("u_domainPosition", m_settings->domainPosition);
-		m_tfShader->setUniform3f("u_domainOffset", m_domainOffset);
-		m_tfShader->setUniform1f("u_domainWidth", m_settings->domainSize.x);
-		m_tfShader->setUniform1f("u_domainHeight", m_settings->domainSize.y);
-		m_tfShader->setUniform1f("u_domainDepth", m_settings->domainSize.z);
+		//m_tfShader->setUniform3f("u_domainPosition", m_settings->domainPosition);
+		//m_tfShader->setUniform3f("u_domainOffset", m_domainOffset);
+		//m_tfShader->setUniform1f("u_domainWidth", m_settings->domainSize.x);
+		//m_tfShader->setUniform1f("u_domainHeight", m_settings->domainSize.y);
+		//m_tfShader->setUniform1f("u_domainDepth", m_settings->domainSize.z);
 		CONSOLE_MESSAGE("Particle settings applied to shader");
 
 		m_domainTransform.setPosition(m_settings->domainPosition);

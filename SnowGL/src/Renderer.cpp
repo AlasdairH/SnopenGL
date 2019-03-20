@@ -76,6 +76,7 @@ namespace SnowGL
 
 	void Renderer::render(const Renderable &_renderable)
 	{
+		m_snowTexture->bind(10);
 
 		// set stencil buffer
 		glStencilFunc(m_sencilFunc, 1, 0xFF);
@@ -99,8 +100,8 @@ namespace SnowGL
 
 		m_shaderDepthTest->bind();
 		m_shaderDepthTest->setUniformMat4f("u_modelMatrix", _renderable.transform.getModelMatrix());
-		_renderable.m_texture->bind();
-		// access member through friend
+		_renderable.m_texture->bind(0);
+
 		_renderable.m_mesh->m_VAO->bind();
 		_renderable.m_mesh->m_IBO->bind();
 

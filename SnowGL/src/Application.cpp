@@ -262,8 +262,8 @@ int main()
 			renderer.setDepthSpaceMatrix(depthCamera.getCameraUniformData().projectionMatrix * depthCamera.getCameraUniformData().viewMatrix);
 
 			// render all objects
-			//renderer.renderToDepthBuffer(groundPlane);
-			//renderer.renderToDepthBuffer(cube);
+			renderer.renderToDepthBuffer(groundPlane);
+			renderer.renderToDepthBuffer(sceneObject);
 		}
 		renderer.unBindDepthFrameBuffer();
 
@@ -272,31 +272,28 @@ int main()
 		cameraDataUniformBuffer->loadData(&Camera::activeCamera->getCameraUniformData(), 0, sizeof(GPU_UB_CameraData));
 
 
+		// render with transform feedback going to world space geometry texture buffer
+		GLuint tf_vao = vaoGeometry.getGLID();
+		GLuint tf_vbo = vboGeometry.getGLID();
+
+		glBindVertexArray(tf_vao);
+		glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, tf_vbo);
 			
+		groundPlane_COLLISION.m_shader->bind();
 
-			// render with transform feedback going to meshFeedbackBuffer
-			GLuint tf_vao = vaoGeometry.getGLID();
-			GLuint tf_vbo = vboGeometry.getGLID();
+		glBeginTransformFeedback(GL_TRIANGLES);
+		// begin collision mesh transform feedback
+			glEnable(GL_RASTERIZER_DISCARD);
 
+			sceneObject_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject.transform.getModelMatrix());
+			renderer.render(sceneObject_COLLISION);
 			
-			glBindVertexArray(tf_vao);
-			glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, tf_vbo);
-			
-			groundPlane_COLLISION.m_shader->bind();
+			groundPlane_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
+			renderer.render(groundPlane_COLLISION);
 
-			glBeginTransformFeedback(GL_TRIANGLES);
-			// begin collision mesh transform feedback
-				glEnable(GL_RASTERIZER_DISCARD);
-
-				sceneObject_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject.transform.getModelMatrix());
-				renderer.render(sceneObject_COLLISION);
-			
-				groundPlane_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
-				renderer.render(groundPlane_COLLISION);
-
-				glDisable(GL_RASTERIZER_DISCARD);
-			// end collision mesh transform feedback
-			glEndTransformFeedback();
+			glDisable(GL_RASTERIZER_DISCARD);
+		// end collision mesh transform feedback
+		glEndTransformFeedback();
 			
 		// 2nd pass: rendering to frame buffer
 		renderer.bindFrameBuffer();
@@ -308,13 +305,13 @@ int main()
 
 			// render visuals for objects
 			sceneObject.m_shader->setUniformMat4f("u_modelMatrix", sceneObject.transform.getModelMatrix());
-			sceneObject.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
+			//sceneObject.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
 			sceneObject.m_texture->bind(0);
 			renderer.render(sceneObject);
 			
 
 			groundPlane.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
-			groundPlane.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
+			//groundPlane.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
 			groundPlane.m_texture->bind(0);
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			renderer.render(groundPlane);

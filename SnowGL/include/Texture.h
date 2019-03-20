@@ -104,9 +104,9 @@ namespace SnowGL
 		inline GLuint getGLID() { return m_textureID; }
 
 	protected:
-		GLuint			 m_textureID = 0;			/**< The OpenGL Texture ID */
-		std::string		 m_filepath;			/**< The filepath to the texture */
-		unsigned char	*m_localBuffer;			/**< The local buffer for the loaded image */
+		GLuint					m_textureID = 0;			/**< The OpenGL Texture ID */
+		std::string				m_filepath;			/**< The filepath to the texture */
+		unsigned char			*m_localBuffer;			/**< The local buffer for the loaded image */
 
 		int						m_width;				/**< The width */
 		int						m_height;				/**< The height */

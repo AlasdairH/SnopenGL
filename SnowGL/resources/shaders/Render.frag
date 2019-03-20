@@ -1,9 +1,16 @@
 #version 430 core
 
+// texture bind ranges
+// 0 - 9: base textures
+// 10 - 19: extra base textures
+// 20: depth map
+
 // textures
 layout (binding = 0) uniform sampler2D u_diffuseTexture;
-uniform sampler2D u_depthMap;
-uniform sampler2D u_snowTexture;
+layout (binding = 1) uniform sampler2D u_specularTexture;
+
+layout (binding = 10) uniform sampler2D u_snowTexture;
+layout (binding = 20) uniform sampler2D u_depthMap;
 
 layout (location = 4) in vec2 frag_texCoord;
 layout (location = 5) in vec3 frag_normal;
@@ -17,6 +24,8 @@ uniform vec3 u_lightColour = vec3(0.5f);
 
 uniform bool u_useTexture = true;
 uniform vec4 u_fragColour = vec4(1.0, 0.0, 0.0, 1.0);
+
+uniform float u_snowColourChangeSpeed = 3.0f;
 
 out vec4 outputColour;
 
@@ -50,14 +59,14 @@ void main()
 	vec3 colour;
 	if(shadow == 1.0f)
 	{
-		colour = texture(u_diffuseTexture, frag_texCoord).xyz;
+		//colour = texture(u_diffuseTexture, frag_texCoord).xyz;
+		colour = vec3(0.0, 0.0, 0.0);
 	}
 	else
 	{
-		//colour = texture(u_snowTexture, frag_texCoord).xyz;
 		colour = texture(u_diffuseTexture, frag_texCoord).xyz;
 	}
-	colour = mix(colour, vec3(1, 1, 1), frag_snowPerc);
+	colour = mix(colour, texture(u_snowTexture, frag_texCoord).xyz, clamp(frag_snowPerc * u_snowColourChangeSpeed, 0.0f, 1.0f));
 
 	vec3 ambient = 0.40f * colour;
 
