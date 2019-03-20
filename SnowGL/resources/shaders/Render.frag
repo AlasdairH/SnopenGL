@@ -57,15 +57,8 @@ void main()
 	// 0 = in shadow
 
 	vec3 colour;
-	if(shadow == 1.0f)
-	{
-		//colour = texture(u_diffuseTexture, frag_texCoord).xyz;
-		colour = vec3(0.0, 0.0, 0.0);
-	}
-	else
-	{
-		colour = texture(u_diffuseTexture, frag_texCoord).xyz;
-	}
+	colour = texture(u_diffuseTexture, frag_texCoord).xyz;
+
 	colour = mix(colour, texture(u_snowTexture, frag_texCoord).xyz, clamp(frag_snowPerc * u_snowColourChangeSpeed, 0.0f, 1.0f));
 
 	vec3 ambient = 0.40f * colour;

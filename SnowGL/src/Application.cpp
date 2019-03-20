@@ -259,7 +259,7 @@ int main()
 
 			depthCamera.updateCameraUniform();
 			cameraDataUniformBuffer->loadData(&depthCamera.getCameraUniformData(), 0, sizeof(GPU_UB_CameraData));
-			renderer.setDepthSpaceMatrix(depthCamera.getCameraUniformData().projectionMatrix * depthCamera.getCameraUniformData().viewMatrix);
+			renderer.setDepthSpaceMatrix(depthCamera.getCameraUniformData().viewProjectionMatrix);
 
 			// render all objects
 			renderer.renderToDepthBuffer(groundPlane);
@@ -305,12 +305,14 @@ int main()
 
 			// render visuals for objects
 			sceneObject.m_shader->setUniformMat4f("u_modelMatrix", sceneObject.transform.getModelMatrix());
+			sceneObject.m_shader->setUniformMat4f("u_depthSpaceMatrix", depthCamera.getCameraUniformData().viewProjectionMatrix);
 			//sceneObject.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
 			sceneObject.m_texture->bind(0);
 			renderer.render(sceneObject);
 			
 
 			groundPlane.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
+			groundPlane.m_shader->setUniformMat4f("u_depthSpaceMatrix", depthCamera.getCameraUniformData().viewProjectionMatrix);
 			//groundPlane.m_shader->setUniform3f("u_domainOffset", snow.getDomainOffset());
 			groundPlane.m_texture->bind(0);
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

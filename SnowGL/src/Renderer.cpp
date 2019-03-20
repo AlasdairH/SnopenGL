@@ -77,6 +77,7 @@ namespace SnowGL
 	void Renderer::render(const Renderable &_renderable)
 	{
 		m_snowTexture->bind(10);
+		m_depthFrameBuffer->getTexture()->bind(20);
 
 		// set stencil buffer
 		glStencilFunc(m_sencilFunc, 1, 0xFF);

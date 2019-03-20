@@ -18,9 +18,10 @@ namespace SnowGL
 	*	To use the "u_camera_data" uniform block, simply include
 	*
 	*	layout (std140) uniform u_camera_data
-	*	{
+	*	{ 
 	*		mat4 viewMatrix;
 	*		mat4 projectionMatrix;
+	*		mat4 viewProjectionMatrix;
 	*	};
 	*
 	*	in the vertex shader. It will be detected and linked on shader verification.
