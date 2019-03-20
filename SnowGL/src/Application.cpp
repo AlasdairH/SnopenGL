@@ -51,18 +51,22 @@ int main()
 
 	Transform zeroTransform;
 
+	// create a ground plane (grass)
 	Renderable groundPlane;
 	IOUtilities::loadRenderable(groundPlane, "resources/objects/Plane.rnd");
 	Renderable groundPlane_COLLISION;
 	IOUtilities::loadRenderable(groundPlane_COLLISION, "resources/objects/Plane_Collision.rnd");
 
+	// create a scene object
 	Renderable sceneObject;
 	IOUtilities::loadRenderable(sceneObject, "resources/objects/Table.rnd");
-	sceneObject.transform.translate(glm::vec3(0, 0, 0));
+	sceneObject.transform.translate(glm::vec3(1, 0, 0));
+	sceneObject.transform.rotate(45, glm::vec3(0, 1, 0));
 	sceneObject.m_shader->setUniform1i("u_useSnow", 1);
 	Renderable sceneObject_COLLISION;
 	IOUtilities::loadRenderable(sceneObject_COLLISION, "resources/objects/Table_Collision.rnd");
 
+	// create a texture buffer to contain collidable world space geometry
 	VertexBuffer vboGeometry(BUFFER_ARRAY);
 	vboGeometry.addTextureBuffer(GL_RGBA32F, 1024 * 1024 * sizeof(glm::vec4));
 	VertexArray vaoGeometry;
@@ -267,10 +271,8 @@ int main()
 		Camera::activeCamera->updateCameraUniform();
 		cameraDataUniformBuffer->loadData(&Camera::activeCamera->getCameraUniformData(), 0, sizeof(GPU_UB_CameraData));
 
-		// 2nd pass: rendering to frame buffer
-		renderer.bindFrameBuffer();
-		{
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+			
 
 			// render with transform feedback going to meshFeedbackBuffer
 			GLuint tf_vao = vaoGeometry.getGLID();
@@ -286,15 +288,20 @@ int main()
 			// begin collision mesh transform feedback
 				glEnable(GL_RASTERIZER_DISCARD);
 
-				sceneObject_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject_COLLISION.transform.getModelMatrix());
+				sceneObject_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject.transform.getModelMatrix());
 				renderer.render(sceneObject_COLLISION);
 			
-				groundPlane_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", groundPlane_COLLISION.transform.getModelMatrix());
+				groundPlane_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
 				renderer.render(groundPlane_COLLISION);
 
 				glDisable(GL_RASTERIZER_DISCARD);
 			// end collision mesh transform feedback
 			glEndTransformFeedback();
+			
+		// 2nd pass: rendering to frame buffer
+		renderer.bindFrameBuffer();
+		{
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 			// update and render snow
 			snow.updateParticles(state.deltaTime, triangleCount);
