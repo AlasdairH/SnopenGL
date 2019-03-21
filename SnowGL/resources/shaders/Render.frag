@@ -25,7 +25,7 @@ uniform vec3 u_lightColour = vec3(0.5f);
 uniform bool u_useTexture = true;
 uniform vec4 u_fragColour = vec4(1.0, 0.0, 0.0, 1.0);
 
-uniform float u_snowColourChangeSpeed = 3.0f;
+uniform float u_snowColourChangeSpeed = 5.0f;
 
 out vec4 outputColour;
 
