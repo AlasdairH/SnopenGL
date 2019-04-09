@@ -54,24 +54,16 @@ namespace SnowGL
 			// get a substring from i, for end of line - i chars
 			std::string line = objFile.substr(i, eol - i);
 
-
-
 			// vertex line
 			if (line.find("v ") != std::string::npos)
 			{
-				// TODO: Split
-				size_t firstSpaceIndex = line.find(" ", 0);
-				size_t secondSpaceIndex = line.find(" ", firstSpaceIndex + 1);
-				size_t thirdSpaceIndex = line.find(" ", secondSpaceIndex + 1);
-				size_t eolIndex = line.find("\n", i);
-
-				std::string xVal = line.substr(firstSpaceIndex + 1, secondSpaceIndex - firstSpaceIndex - 1);
-				std::string yVal = line.substr(secondSpaceIndex + 1, thirdSpaceIndex - secondSpaceIndex - 1);
-				std::string zVal = line.substr(thirdSpaceIndex + 1, eolIndex - thirdSpaceIndex - 1);
-
-				float x = std::stof(xVal);
-				float y = std::stof(yVal);
-				float z = std::stof(zVal);
+				// split the face line
+				std::vector<std::string> splitLine = split(line, ' ');
+				// remove the "v"
+				splitLine.erase(splitLine.begin());
+				float x = std::stof(splitLine[0]);
+				float y = std::stof(splitLine[1]);
+				float z = std::stof(splitLine[2]);
 
 				// check bounding box values
 				if (x < _mesh.minBound.x)
@@ -95,32 +87,31 @@ namespace SnowGL
 			// texture coord line
 			if (line.find("vt ") != std::string::npos)
 			{
-				// TODO: Split
-				size_t firstSpaceIndex = line.find(" ", 0);
-				size_t secondSpaceIndex = line.find(" ", firstSpaceIndex + 1);
-				size_t eolIndex = line.find("\n", i);
+				// split the face line
+				std::vector<std::string> splitLine = split(line, ' ');
+				// remove the "vt"
+				splitLine.erase(splitLine.begin());
 
-				std::string xVal = line.substr(firstSpaceIndex + 1, secondSpaceIndex - firstSpaceIndex - 1);
-				std::string yVal = line.substr(secondSpaceIndex + 1, eolIndex - secondSpaceIndex - 1);
+				float xVal = std::stof(splitLine[0]);
+				float yVal = std::stof(splitLine[1]);
 
-				textureCoords[(int)textureCoords.size() + 1] = glm::vec2(std::stof(xVal), std::stof(yVal));
+				textureCoords[(int)textureCoords.size() + 1] = glm::vec2(xVal, yVal);
 				++parsedLines;
 			}
 
 			// normal line
 			if (line.find("vn ") != std::string::npos)
 			{
-				// TODO: Split
-				unsigned int firstSpaceIndex = line.find(" ", 0);
-				unsigned int secondSpaceIndex = line.find(" ", firstSpaceIndex + 1);
-				unsigned int thirdSpaceIndex = line.find(" ", secondSpaceIndex + 1);
-				unsigned int eolIndex = line.find("\n", i);
+				// split the face line
+				std::vector<std::string> splitLine = split(line, ' ');
+				// remove the "vn"
+				splitLine.erase(splitLine.begin());
 
-				std::string xVal = line.substr(firstSpaceIndex + 1, secondSpaceIndex - firstSpaceIndex - 1);
-				std::string yVal = line.substr(secondSpaceIndex + 1, thirdSpaceIndex - secondSpaceIndex - 1);
-				std::string zVal = line.substr(thirdSpaceIndex + 1, eolIndex - thirdSpaceIndex - 1);
+				float xVal = std::stof(splitLine[0]);
+				float yVal = std::stof(splitLine[1]);
+				float zVal = std::stof(splitLine[2]);
 
-				normals[(int)normals.size() + 1] = glm::vec3(std::stof(xVal), std::stof(yVal), std::stof(zVal));
+				normals[(int)normals.size() + 1] = glm::vec3(xVal, yVal, zVal);
 				++parsedLines;
 			}
 

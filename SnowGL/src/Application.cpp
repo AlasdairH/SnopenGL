@@ -242,17 +242,6 @@ int main()
 				case SDLK_SPACE:
 					state.isUIHidden = !state.isUIHidden;
 					break;
-				case SDLK_b:
-					/*
-					glBindBuffer(GL_ARRAY_BUFFER, snow.getAccumulationBufferGLID());
-					glGetBufferSubData(GL_ARRAY_BUFFER, 0, 7 * 7 * 3 * sizeof(int), &collisionBufferData[0]);
-					for (int i = 0; i < collisionBufferData.size(); ++i)
-					{
-						if(collisionBufferData[i] != 0)
-							CONSOLE_MESSAGE(i << " - " << collisionBufferData[i]);
-					}
-					*/
-					break;
 				default:
 					break;
 				}
@@ -302,7 +291,6 @@ int main()
 			// bin
 			sceneObject2_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject2.transform.getModelMatrix());
 			renderer.render(sceneObject2_COLLISION);
-			
 			// grass
 			groundPlane_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
 			renderer.render(groundPlane_COLLISION);
