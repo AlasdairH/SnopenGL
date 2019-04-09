@@ -211,8 +211,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\shaders\particle\particle.vert" />
-    <None Include="resources\shaders\particle\particle.frag" />
     <None Include="resources\shaders\BlockColour.frag" />
     <None Include="resources\shaders\post_processing\PostProcVert.vert" />
     <None Include="resources\shaders\post_processing\PostProcFrag.frag" />
@@ -224,5 +222,10 @@
     <None Include="resources\shaders\GeometryFeedback.vert" />
     <None Include="resources\shaders\Render.frag" />
     <None Include="resources\shaders\Render.vert" />
+    <None Include="resources\shaders\particle\transform_feedback\tf_particle.frag" />
+    <None Include="resources\shaders\particle\transform_feedback\tf_particle.vert" />
+    <None Include="resources\shaders\particle\render\rnd_particle.frag" />
+    <None Include="resources\shaders\particle\render\rnd_particle.vert" />
+    <None Include="resources\shaders\particle\render\rnd_particle.geom" />
   </ItemGroup>
 </Project>

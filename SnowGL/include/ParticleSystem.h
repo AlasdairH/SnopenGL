@@ -106,15 +106,18 @@ namespace SnowGL
 		std::shared_ptr<ParticleSettings>	m_settings;					/**< The settings used by the particle system */
 
 		bool								m_isFirstRender;			/**< Flag for if this is the first render */			
-		unsigned int						m_currVAO;					/**< The current Transform Feedback Buffer */
-		unsigned int						m_currVBO;					/**< The current Vertex Buffer */
+		unsigned int						m_currentTFBVAO = 0;		/**< The current Transform Feedback Buffer */
+		unsigned int						m_currentTFBVBO = 0;		/**< The current Transform Feedback Buffer */
+		unsigned int						m_currentRenderVAO = 1;		/**< The current rendering Buffer */
+		unsigned int						m_currentRenderVBO = 1;		/**< The current rendering Feedback Buffer */
 		std::shared_ptr<VertexArray>		m_tfVAO[2];					/**< The Vertex Arrays for particle data */
 		std::shared_ptr<VertexBuffer>		m_tfVBO[2];					/**< The Vertex Buffers for particle data */
 
 		std::shared_ptr<VertexBuffer>		m_accumulationSSBO;			/**< SSBO version of the accumulation data */
 		GPU_SSBO_accumulationPartition		m_SSBO_AccumulationData;	/**< SSBO version of the accumulation data */
 
-		std::shared_ptr<ShaderProgram>		m_tfShader;					/**< The transform Feedback shader */
+		std::shared_ptr<ShaderProgram>		m_tfShader;					/**< The particle transform feedback shader */
+		std::shared_ptr<ShaderProgram>		m_renderShader;				/**< The particle rendering shader */
 		GLuint								m_wsGeomArrayBuffer;
 		GLuint								m_wsGeomTextureBuffer;
 

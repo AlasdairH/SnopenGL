@@ -6,5 +6,5 @@ out vec4 out_Colour;
 
 void main(void)
 {
-    out_Colour = particleColour;
+	out_Colour = particleColour;
 }

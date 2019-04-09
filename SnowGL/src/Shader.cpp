@@ -23,6 +23,10 @@ namespace SnowGL
 		{
 			CONSOLE_MESSAGE("Created Vertex Shader with ID " << m_shaderID);
 		}
+		else if (m_shaderType == SHADER_GEOMETRY)
+		{
+			CONSOLE_MESSAGE("Created Geometry Shader with ID " << m_shaderID);
+		}
 		else if (m_shaderType == SHADER_FRAGMENT)
 		{
 			CONSOLE_MESSAGE("Created Fragment Shader with ID " << m_shaderID);

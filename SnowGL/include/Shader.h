@@ -9,7 +9,7 @@
 
 namespace SnowGL
 {
-	enum ShaderType { SHADER_VERTEX = GL_VERTEX_SHADER, SHADER_FRAGMENT = GL_FRAGMENT_SHADER };
+	enum ShaderType { SHADER_VERTEX = GL_VERTEX_SHADER, SHADER_FRAGMENT = GL_FRAGMENT_SHADER, SHADER_GEOMETRY = GL_GEOMETRY_SHADER };
 
 	/*! @class Shader
 	*	@brief Abstracted OpenGL Shader

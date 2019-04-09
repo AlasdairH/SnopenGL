@@ -20,6 +20,7 @@ namespace SnowGL
 		glPointSize(m_pointSize);
 
 		m_tfShader = std::make_shared<ShaderProgram>();
+		m_renderShader = std::make_shared<ShaderProgram>();
 
 		// setup drawable domain
 		m_drawableDomain = std::make_shared<Renderable>();
@@ -40,15 +41,36 @@ namespace SnowGL
 			//m_domainOffset.z = minBackFace * -1;
 
 		// create the transform feedback shaders for the particle system
+		// vertex
 		Shader tfVert(SHADER_VERTEX);
-		tfVert.load("resources/shaders/particle/particle.vert");
+		tfVert.load("resources/shaders/particle/transform_feedback/tf_particle.vert");
 		m_tfShader->attachShader(tfVert);
+		// fragment
 		Shader tfFrag(SHADER_FRAGMENT);
-		tfFrag.load("resources/shaders/particle/particle.frag");
+		tfFrag.load("resources/shaders/particle/transform_feedback/tf_particle.frag");
 		m_tfShader->attachShader(tfFrag);
+		// compile and link
 		std::vector<std::string> tfVaryings{ "out_position", "out_startPosition", "out_velocity", "out_startTime", "out_lifetime"};
 		m_tfShader->setTransformFeedbackVarying(tfVaryings);
 		m_tfShader->link();
+
+		
+		// create the rendering shaders for the particle system
+		// vertex
+		Shader renderVert(SHADER_VERTEX);
+		renderVert.load("resources/shaders/particle/render/rnd_particle.vert");
+		m_renderShader->attachShader(renderVert);
+		// geometry
+		Shader renderGeom(SHADER_GEOMETRY);
+		renderGeom.load("resources/shaders/particle/render/rnd_particle.geom");
+		m_renderShader->attachShader(renderGeom);
+		// fragment
+		Shader renderFrag(SHADER_FRAGMENT);
+		renderFrag.load("resources/shaders/particle/render/rnd_particle.frag");
+		m_renderShader->attachShader(renderFrag);
+		// compile and link
+		m_renderShader->link();
+		
 
 		// get the number of particles required
 		m_numParticles = m_settings->getMaxParticles();
@@ -102,8 +124,10 @@ namespace SnowGL
 		applySettingsToShader();
 
 		// set current vertex buffer and current transform feedback buffer to be alternate of eachother (0, 1);
-		m_currVAO = m_currVBO;
-		m_currVBO = (m_currVBO + 1) & 0x1;
+		m_currentTFBVAO = m_currentTFBVBO;
+		m_currentTFBVBO = (m_currentTFBVBO + 1) & 0x1;
+		m_currentRenderVAO = m_currentRenderVBO;
+		m_currentRenderVBO = (m_currentRenderVBO + 1) & 0x1;
 
 		CONSOLE_MESSAGE("Created " << m_numParticles << " particles on the GPU");
 
@@ -135,16 +159,10 @@ namespace SnowGL
 		m_tfShader->setUniform4f("u_startColour", m_settings->colourStart);
 		m_tfShader->setUniform4f("u_endColour", m_settings->colourEnd);
 		m_tfShader->setUniform4f("u_collisionColour", m_settings->collisionDebugColour);
-		//
+		// environment
 		m_tfShader->setUniform3f("u_globalWind", m_settings->globalWind);
 		m_tfShader->setUniform1f("u_collisionMultiplier", m_settings->collisionMultiplier);
 		m_tfShader->setUniform3f("u_initialVelocity", m_settings->initialVelocity);
-		// domain position / size
-		//m_tfShader->setUniform3f("u_domainPosition", m_settings->domainPosition);
-		//m_tfShader->setUniform3f("u_domainOffset", m_domainOffset);
-		//m_tfShader->setUniform1f("u_domainWidth", m_settings->domainSize.x);
-		//m_tfShader->setUniform1f("u_domainHeight", m_settings->domainSize.y);
-		//m_tfShader->setUniform1f("u_domainDepth", m_settings->domainSize.z);
 		CONSOLE_MESSAGE("Particle settings applied to shader");
 
 		m_domainTransform.setPosition(m_settings->domainPosition);
@@ -163,32 +181,35 @@ namespace SnowGL
 
 		m_tfShader->setUniformMat4f("u_modelMatrix", m_transform.getModelMatrix());
 
-		m_tfVAO[m_currVAO]->bind();
-		m_tfVBO[m_currVBO]->bindBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0);
+		// first pass, particle caculations
+		m_tfVAO[m_currentTFBVAO]->bind();
+		m_tfVBO[m_currentTFBVBO]->bindBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0);
 
+		glEnable(GL_RASTERIZER_DISCARD);
 		glBeginTransformFeedback(GL_POINTS);
 		glDrawArrays(GL_POINTS, 0, m_numParticles);
 		glEndTransformFeedback();
+		glDisable(GL_RASTERIZER_DISCARD);
 
-		// ping pong
-		m_currVAO = m_currVBO;
-		m_currVBO = (m_currVBO + 1) & 0x1;
+		// 2nd pass, visual render
+		m_tfVAO[m_currentRenderVAO]->bind();
+		m_renderShader->bind();
+		m_renderShader->setUniformMat4f("u_modelMatrix", m_transform.getModelMatrix());
+
+		glDrawArrays(GL_POINTS, 0, m_numParticles);
+
+		// ping pong - tfb
+		m_currentTFBVAO = m_currentTFBVBO;
+		m_currentTFBVBO = (m_currentTFBVBO + 1) & 0x1;
+		// ping pong - render
+		m_currentRenderVAO = m_currentRenderVBO;
+		m_currentRenderVBO = (m_currentRenderVBO + 1) & 0x1;
 
 		++m_frameCount;
 
 		if (m_settings->drawDomain)
 		{
-			/*
-			m_drawableDomain->m_shader->setUniformMat4f("u_modelMatrix", m_domainTransform.getModelMatrix());
-			m_drawableDomain->m_shader->setUniform1i("u_diffuseTexture", 0);
-			m_drawableDomain->m_texture->bind(0);
-
-			m_drawableDomain->m_mesh->m_IBO->bind();
-			m_drawableDomain->m_mesh->m_VAO->bind();
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			glDrawElements(GL_TRIANGLES, m_drawableDomain->m_mesh->m_IBO->getCount(), GL_UNSIGNED_INT, 0);
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-			*/
+			// debug object?
 		}
 		if (m_settings->drawPartition)
 		{
@@ -218,11 +239,5 @@ namespace SnowGL
 				}
 			}
 		}
-
-		// TODO: REMOVE
-		//Debug &debug = Debug::getInstance();
-		//Transform cube;
-		//cube.setPosition(glm::vec3(-2, 1.4, 2));
-		//debug.drawCube(cube, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 	}
 }
