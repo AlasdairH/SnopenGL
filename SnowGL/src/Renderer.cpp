@@ -14,9 +14,9 @@ namespace SnowGL
 		glEnable(GL_MULTISAMPLE);
 
 		// stencil buffer setup
-		glEnable(GL_STENCIL_TEST);
-		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+		//glEnable(GL_STENCIL_TEST);
+		//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+		//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
 		glStencilFunc(m_sencilFunc, 1, 0xFF);
 		glStencilMask(m_stencilBufferInt);

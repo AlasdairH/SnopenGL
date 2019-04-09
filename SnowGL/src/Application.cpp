@@ -61,7 +61,7 @@ int main()
 	// create a scene object
 	Renderable sceneObject;
 	IOUtilities::loadRenderable(sceneObject, "resources/objects/Table.rnd");
-	sceneObject.transform.translate(glm::vec3(1, 0, 0));
+	sceneObject.transform.translate(glm::vec3(3, 0, 0));
 	sceneObject.transform.rotate(-45, glm::vec3(0, 1, 0));
 	sceneObject.m_shader->setUniform1i("u_useSnowTexture", 1);
 	sceneObject.m_shader->setUniform1i("u_useSnowOffset", 1);
@@ -303,9 +303,6 @@ int main()
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-			// update and render snow
-			snow.updateParticles(state.deltaTime, triangleCount);
-
 			// render visuals for objects
 			// table
 			sceneObject.m_shader->setUniformMat4f("u_modelMatrix", sceneObject.transform.getModelMatrix());
@@ -324,6 +321,10 @@ int main()
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			renderer.render(groundPlane);
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+
+			// update and render snow
+			snow.updateParticles(state.deltaTime, triangleCount);
 		}
 		renderer.unBindFrameBuffer();
 

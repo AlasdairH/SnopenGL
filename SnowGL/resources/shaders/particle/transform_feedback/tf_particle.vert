@@ -24,7 +24,7 @@ uniform int u_triangleCount;
 layout(binding = 0) uniform samplerBuffer geometry_tbo;
 
 // transform feedback inputs
-in vec4 in_position;
+layout (location = 0) in vec4 in_position;
 in vec4 in_startPosition;
 in vec3 in_velocity;
 in float in_startTime;

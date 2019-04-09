@@ -70,6 +70,9 @@ namespace SnowGL
 		m_renderShader->attachShader(renderFrag);
 		// compile and link
 		m_renderShader->link();
+
+		m_snowflakeTexture = std::make_shared<Texture>();
+		m_snowflakeTexture->load("Snowflake", "resources/textures/snowflake.png");
 		
 
 		// get the number of particles required
@@ -94,26 +97,24 @@ namespace SnowGL
 			// load correctly sized but empty data to the VBO
 			m_tfVBO[i]->loadData(nullptr, sizeof(Particle) * m_numParticles);
 
-			// if the buffer is the first to be created, send it the actual particle data
-			if (i == 0)
+
+			// set a pointer to the buffer in GPU memory
+			Particle *buffer = (Particle *)glMapBuffer(BUFFER_ARRAY, GL_WRITE_ONLY);
+
+			for (int j = 0; j < m_numParticles; ++j)
 			{
-				// set a pointer to the buffer in GPU memory
-				Particle *buffer = (Particle *)glMapBuffer(BUFFER_ARRAY, GL_WRITE_ONLY);
-
-				for (int j = 0; j < m_numParticles; ++j)
-				{
-					// position w = state
-					// -1 = active
-					// >= 0 index of last triangle collision
-					buffer[j].currentPosition = glm::vec4(Utils::randFloat(m_settings->domainSize.x, -m_settings->domainSize.x) / 2, m_settings->domainSize.y / 2, Utils::randFloat(m_settings->domainSize.z, -m_settings->domainSize.z) / 2, -1) + glm::vec4(m_settings->domainPosition, 0.0f);
-					buffer[j].startPosition = buffer[j].currentPosition;
-					buffer[j].velocity = m_settings->initialVelocity;
-					buffer[j].delay = (j / (float)m_numParticles) * m_settings->lifetimeMax;
-					buffer[j].lifetime = Utils::randFloat(m_settings->lifetimeMin, m_settings->lifetimeMax);
-				}
-
-				glUnmapBuffer(BUFFER_ARRAY);
+				// position w = state
+				// -1 = active
+				// >= 0 index of last triangle collision
+				buffer[j].currentPosition = glm::vec4(Utils::randFloat(m_settings->domainSize.x, -m_settings->domainSize.x) / 2, m_settings->domainSize.y / 2, Utils::randFloat(m_settings->domainSize.z, -m_settings->domainSize.z) / 2, -1) + glm::vec4(m_settings->domainPosition, 0.0f);
+				buffer[j].startPosition = buffer[j].currentPosition;
+				buffer[j].velocity = m_settings->initialVelocity;
+				buffer[j].delay = (j / (float)m_numParticles) * m_settings->lifetimeMax;
+				buffer[j].lifetime = Utils::randFloat(m_settings->lifetimeMin, m_settings->lifetimeMax);
 			}
+
+			glUnmapBuffer(BUFFER_ARRAY);
+			
 
 			m_tfVAO[i]->bind();
 			m_tfVBO[i]->bind(BUFFER_ARRAY);
@@ -122,12 +123,6 @@ namespace SnowGL
 
 		// particle system setup
 		applySettingsToShader();
-
-		// set current vertex buffer and current transform feedback buffer to be alternate of eachother (0, 1);
-		m_currentTFBVAO = m_currentTFBVBO;
-		m_currentTFBVBO = (m_currentTFBVBO + 1) & 0x1;
-		m_currentRenderVAO = m_currentRenderVBO;
-		m_currentRenderVBO = (m_currentRenderVBO + 1) & 0x1;
 
 		CONSOLE_MESSAGE("Created " << m_numParticles << " particles on the GPU");
 
@@ -192,11 +187,14 @@ namespace SnowGL
 		glDisable(GL_RASTERIZER_DISCARD);
 
 		// 2nd pass, visual render
-		m_tfVAO[m_currentRenderVAO]->bind();
 		m_renderShader->bind();
-		m_renderShader->setUniformMat4f("u_modelMatrix", m_transform.getModelMatrix());
+		m_renderShader->setUniformMat4f("u_modelMatrix", Transform().getModelMatrix());
+		m_snowflakeTexture->bind();
+		m_tfVAO[m_currentRenderVAO]->bind();
 
+		glDisable(GL_CULL_FACE);
 		glDrawArrays(GL_POINTS, 0, m_numParticles);
+		glEnable(GL_CULL_FACE);
 
 		// ping pong - tfb
 		m_currentTFBVAO = m_currentTFBVBO;
