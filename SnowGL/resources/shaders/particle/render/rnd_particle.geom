@@ -11,7 +11,7 @@ layout (points) in;
 layout (triangle_strip, max_vertices = 4) out;
 
 uniform float particle_size = 0.02f;
-uniform float particle_size2 = 0.05f;
+uniform float particle_size2 = 0.03f;
 uniform mat4 u_modelMatrix;
 
 out vec2 txcoord;
