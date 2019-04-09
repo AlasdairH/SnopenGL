@@ -1,7 +1,5 @@
 #pragma once
 
-// TODO: Doxygen
-
 // cstdlib
 
 // external libs
@@ -41,7 +39,11 @@ namespace SnowGL
 		*/
 		void setMesh(const Mesh &_mesh);
 
-		// TODO: Doxygen
+		/** @brief Gets the vertex buffer
+		*	@return A pointer to the vertex buffer
+		*
+		*	Returns the vertex buffer 
+		*/
 		inline std::shared_ptr<VertexBuffer> getVBO() { return m_VBO; }
 
 		/** @brief Gets the vertex count of the object

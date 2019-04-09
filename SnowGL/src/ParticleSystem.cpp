@@ -32,12 +32,12 @@ namespace SnowGL
 		float minLeftFace = m_settings->domainPosition.x - (m_settings->domainSize.x / 2);
 		float minBottomFace = m_settings->domainPosition.y - (m_settings->domainSize.y / 2);
 		float minBackFace = m_settings->domainPosition.z - (m_settings->domainSize.z / 2);
-		if (minLeftFace < 0.0f)
-			m_domainOffset.x = minLeftFace * -1;
-		if (minBottomFace < 0.0f)
-			m_domainOffset.y = minBottomFace * -1;
-		if (minBackFace < 0.0f)
-			m_domainOffset.z = minBackFace * -1;
+		//if (minLeftFace < 0.0f)
+			//m_domainOffset.x = minLeftFace * -1;
+		//if (minBottomFace < 0.0f)
+			//m_domainOffset.y = minBottomFace * -1;
+		//if (minBackFace < 0.0f)
+			//m_domainOffset.z = minBackFace * -1;
 
 		// create the transform feedback shaders for the particle system
 		Shader tfVert(SHADER_VERTEX);
@@ -224,21 +224,5 @@ namespace SnowGL
 		//Transform cube;
 		//cube.setPosition(glm::vec3(-2, 1.4, 2));
 		//debug.drawCube(cube, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-	}
-
-	// _ws pos is guarenteed to be inside the domain
-	int ParticleSystem::worldSpaceToIndex(glm::vec3 _wsPos)
-	{
-		int index = -1;
-		// get the position in partition space
-		glm::vec3 psPos = _wsPos - glm::vec3(m_SSBO_AccumulationData.positionBL);
-		glm::vec3 bin3d = floor(psPos / glm::vec3(m_SSBO_AccumulationData.binSize));
-
-		index = (bin3d.z * m_SSBO_AccumulationData.resolution.x * m_SSBO_AccumulationData.resolution.y) + (bin3d.y * m_SSBO_AccumulationData.resolution.x) + bin3d.x;
-
-		//CONSOLE_MESSAGE(bin3d.x << ", " << bin3d.y << ", " << bin3d.z);
-		//CONSOLE_MESSAGE(index);
-
-		return index;
 	}
 }

@@ -7,8 +7,6 @@
 // program
 #include "PCH.h"
 
-// TODO: Doxygen
-
 namespace SnowGL
 {
 	enum SceneMode { MODE_VIEW, MODE_EDIT };
@@ -32,28 +30,42 @@ namespace SnowGL
 			return instance;
 		}
 
-		bool isRunning			= true;
-		bool isUIHidden = false;
+		bool isRunning			= true;		/**< The running state of the program */
+		bool isUIHidden			= false;	/**< Whether the UI is hidden or not */
 
 		// window
-		glm::vec2 windowSize;
+		glm::vec2 windowSize;	/**< The current window size */
+		/** @brief Gets the aspect ratio
+		*	@return The aspect ratio of the window
+		*
+		*	Gets the aspect ratio
+		*/
 		float getAspectRatio() { return windowSize.x / windowSize.y; }
 
 		// performance
-		float deltaTime;
-		float framesPerSecond;
+		float deltaTime;			/**< The delta time between frames */
+		float framesPerSecond;		/**< The frames per second */
 
 		// input
-		glm::vec2 mousePosition;
-		glm::vec2 lastMousePosition = glm::vec2(640, 360);
-		glm::vec2 mouseOffset;
+		glm::vec2 mousePosition;									/**< The current mouse position */
+		glm::vec2 lastMousePosition = glm::vec2(640, 360);			/**< The last mouse position ID */
+		glm::vec2 mouseOffset;										/**< The difference between the current and last mouse position */
 
 		// gl
-		std::string curBoundTexture = "None";
+		std::string curBoundTexture = "None";						/**< The currently bound texture (not used) */
 
-		inline SceneMode getSceneMode() { return m_sceneMode; }
+		/** @brief Gets the current scene mode
+		*	@return The current scene mode
+		*
+		*	Returns the scene mode
+		*/
+		inline SceneMode getSceneMode() { return m_sceneMode; }	
 		
-		void switchSceneMode();
+		/** @brief Toggle the scene mode
+		*
+		*	Toggles the scene mode between view and edit
+		*/
+		void switchSceneMode();									
 
 		// ------------------------------------------------
 		ApplicationState(ApplicationState const&) = delete;
@@ -61,7 +73,7 @@ namespace SnowGL
 
 	protected:
 
-		SceneMode m_sceneMode = MODE_VIEW;
+		SceneMode m_sceneMode = MODE_VIEW;			/**< The current scene mode */			
 
 
 		/** @brief ApplicationState Ctor

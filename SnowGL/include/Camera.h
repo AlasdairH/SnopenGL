@@ -104,14 +104,43 @@ namespace SnowGL
 		*/
 		inline glm::vec3 getFront() { return m_front; }
 
-		// TODO: Doxygen
+		/** @brief Sets the projection mode for the camera
+		*	@param _mode The mode to set the projection to
+		*
+		*	Sets the projection mode for the camera
+		*/
 		inline void setProjectionMode(const ProjectionMode _mode) { m_projectionMode = _mode; }
+		/** @brief Sets the projection mode for the camera
+		*	@return The current projection mode
+		*
+		*	Gets the projection mode from the camera
+		*/
 		inline ProjectionMode getProjectionMode() { return m_projectionMode; }
 
+		/** @brief Sets the camera pitch
+		*	@param _pitch The pitch to set
+		*
+		*	Sets the camera pitch
+		*/
 		inline void setPitch(const float &_pitch) { m_pitch = _pitch; }
+		/** @brief Sets the camera yaw
+		*	@param _pitch The yaw to set
+		*
+		*	Sets the camera yaw
+		*/
 		inline void setYaw(const float &_yaw) { m_yaw = _yaw; }
 
+		/** @brief Gets the camera pitch
+		*	@return The camera pitch
+		*
+		*	Gets the camera pitch
+		*/
 		inline float getPitch() { return m_pitch; }
+		/** @brief Gets the camera yaw
+		*	@return The camera yaw
+		*
+		*	Gets the camera yaw
+		*/
 		inline float getYaw() { return m_yaw; }
 
 		static Camera *activeCamera;	/**< The currently active camera */
@@ -128,22 +157,22 @@ namespace SnowGL
 		*/
 		void cleanViewMatrix();
 
-		ProjectionMode								m_projectionMode = PROJECTION_PERSPECTIVE;
+		ProjectionMode								m_projectionMode = PROJECTION_PERSPECTIVE;	/**< The current projection matrix */
 
-		float										m_fovRad;						/**< The current FoV in radians */
-		float										m_aspect;						/**< The current Aspect Ratio */
-		int											m_viewportWidth;				/**< Width of the viewport in pixels */
-		int											m_viewportHeight;				/**< Height of the viewport in pixels */
+		float										m_fovRad;									/**< The current FoV in radians */
+		float										m_aspect;									/**< The current Aspect Ratio */
+		int											m_viewportWidth;							/**< Width of the viewport in pixels */
+		int											m_viewportHeight;							/**< Height of the viewport in pixels */
 
-		float										m_pitch = 0.0f;
-		float										m_yaw = -90.0f;
+		float										m_pitch = 0.0f;								/**< The camera pitch */
+		float										m_yaw = -90.0f;								/**< The camera yaw */
 
-		glm::vec3									m_up = glm::vec3(0, 1, 0);
-		glm::vec3									m_front = glm::vec3(0, 0, -1);
+		glm::vec3									m_up = glm::vec3(0, 1, 0);					/**< The camera up vector */
+		glm::vec3									m_front = glm::vec3(0, 0, -1);				/**< The vector which points forward */
 
 		glm::mat4									m_perspectiveProjectionMatrix;				/**< The Perspective Matrix */
 		glm::mat4									m_orthographicProjectionMatrix;				/**< The Orthographic Matrix */
 
-		GPU_UB_CameraData								m_uniformData;					/**< The struct containing the matrices for the uniform buffer to use */
+		GPU_UB_CameraData							m_uniformData;								/**< The struct containing the matrices for the uniform buffer to use */
 	};
 }

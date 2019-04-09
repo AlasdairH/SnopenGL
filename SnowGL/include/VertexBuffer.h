@@ -113,7 +113,12 @@ namespace SnowGL
 		*/
 		inline GLuint getTextureGLID() { return m_vertexBufferTextureID; }
 
-		// TODO: Doxygen
+		/** @brief Adds a texture buffer object
+		*	@param _format The format to assign to the texture (eg. GL_RGBA32F)
+		*	@param _size The size in bytes to make the texture buffer
+		*
+		*	Creates a texture on the buffer to be used to store data.
+		*/
 		void addTextureBuffer(GLenum _format, unsigned int _size);
 
 		/** @brief Binds the VBO.
@@ -148,6 +153,6 @@ namespace SnowGL
 		GLuint				m_vertexBufferID;				/**< The Vertex Buffer ID */
 		GLuint				m_vertexBufferTextureID;		/**< The Vertex Buffer Texture ID (if one exists) */
 
-		GLuint				m_usage = GL_STATIC_DRAW;	/**< The usage pattern for the buffer */
+		GLuint				m_usage = GL_STATIC_DRAW;		/**< The usage pattern for the buffer */
 	};
 }

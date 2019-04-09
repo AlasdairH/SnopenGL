@@ -1,7 +1,5 @@
 #pragma once
 
-// TODO: Doxygen
-
 // cstdlib
 
 // external libs
@@ -62,16 +60,38 @@ namespace SnowGL
 		*/
 		void setStencilBufferActive(bool _active);
 
+		/** @brief Bind the renderer default framebuffer
+		*
+		*	Bind the renderer's default framebuffer for drawing to the screen with.
+		*/
 		inline void bindFrameBuffer() { m_frameBuffer->bind(); }
+		/** @brief unbind the renderer default framebuffer
+		*
+		*	unbind the renderer's default framebuffer for drawing to the screen with.
+		*/
 		inline void unBindFrameBuffer() { m_frameBuffer->unBind(); }
 
+		/** @brief Bind the renderer shadow mapping framebuffer
+		*
+		*	Bind the renderer's shadow mapping framebuffer for calculating shadows.
+		*/
 		inline void bindDepthFrameBuffer() { m_depthFrameBuffer->bind(); }
+		/** @brief Unbind the renderer shadow mapping framebuffer
+		*
+		*	Unbind the renderer's shadow mapping framebuffer for calculating shadows.
+		*/
 		inline void unBindDepthFrameBuffer() { m_depthFrameBuffer->unBind(); }
 
-		inline void setDepthSpaceMatrix(glm::mat4 _matrix) { m_depthSpaceMatrix = _matrix; }
-
+		/** @brief Draws the default framebuffer to the screen quad
+		*
+		*	Draws the default framebuffer to the screen quad.
+		*/
 		void drawFrameBuffer();
 
+		/** @brief Draws the shadow mapping framebuffer to the screen quad
+		*
+		*	Draws the shadow mapping framebuffer to the screen quad. This is primarily used for debugging the shadow map.
+		*/
 		void drawDepthFrameBuffer();
 
 		/** @brief Sets whether depth should be tested when rendering
@@ -82,15 +102,13 @@ namespace SnowGL
 		void setDepthTest(bool _active);
 
 	protected:
-		GLenum m_sencilFunc = GL_NOTEQUAL;
-		int m_stencilBufferInt = 0x00;
+		GLenum m_sencilFunc = GL_NOTEQUAL;						/**< The current stencil buffer function */
+		int m_stencilBufferInt = 0x00;							/**< The stencil buffer integar */
 
 		std::shared_ptr<FrameBuffer>	m_frameBuffer;			/**< The framebuffer that will be rendered to */
 		std::shared_ptr<FrameBuffer>	m_depthFrameBuffer;		/**< The framebuffer that will be rendered to */
 		std::shared_ptr<ShaderProgram>	m_shaderDepthTest;		/**< The framebuffer that will be rendered to */
 
-		glm::mat4						m_depthSpaceMatrix;		/**< The depth space matrix */
-
-		std::shared_ptr<Texture>		m_snowTexture;
+		std::shared_ptr<Texture>		m_snowTexture;			/**< The texture used to render the snow */
 	};
 }

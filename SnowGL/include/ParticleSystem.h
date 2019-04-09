@@ -81,20 +81,29 @@ namespace SnowGL
 		*/
 		inline std::shared_ptr<ParticleSettings> getSettingsPtr() { return m_settings; }
 
+		/** @brief Sets the point size to use to render the particles
+		*	@param _size The size to use
+		*
+		*	Sets the OpenGL point size
+		*/
 		inline void setPointSize(float _size) { m_pointSize = _size; glPointSize(m_pointSize); }	
+		/** @brief Gets the point size to be used to render the snow
+		*	@return Gets the point size
+		*
+		*	Gets the OpenGL point size
+		*/
 		inline float getPointSize() { return m_pointSize; }
 
+		/** @brief Sets the buffer to get the world space geometry from
+		*	@param _tex The texture buffer to get the data from
+		*	@param _ary The array buffer that contains the texture buffer
+		*
+		*	Sets the buffer to get the world space geometry from. This is used in the collision detection in the particle simulation.
+		*/
 		inline void setWsGeometryBuffer(GLuint _tex, GLuint _ary) { m_wsGeomTextureBuffer = _tex; m_wsGeomArrayBuffer = _ary; }
 
-		inline glm::vec3 getDomainOffset() { return m_domainOffset; }
-
-		// TODO: REMOVE
-		int worldSpaceToIndex(glm::vec3 _wsPos);
-
 	protected:
-		// TODO: doxygen
-
-		std::shared_ptr<ParticleSettings>	m_settings;
+		std::shared_ptr<ParticleSettings>	m_settings;					/**< The settings used by the particle system */
 
 		bool								m_isFirstRender;			/**< Flag for if this is the first render */			
 		unsigned int						m_currVAO;					/**< The current Transform Feedback Buffer */
@@ -111,15 +120,14 @@ namespace SnowGL
 
 		int									m_numParticles;				/**< The number of particles */
 
-		int									m_frameCount = 0;
-		float								m_simTime = 0;
+		int									m_frameCount = 0;			/**< The number of frames since the start of the simulation */
+		float								m_simTime = 0;				/**< How long the simulation has been running */
 
-		float								m_pointSize = 1.0f;
+		float								m_pointSize = 1.0f;			/**< The point size to use when rendering the particles */
 
-		Transform							m_transform;
+		Transform							m_transform;				/**< The transform used for the overall position of the simulation */
 
-		std::shared_ptr<Renderable>			m_drawableDomain;
-		Transform							m_domainTransform;
-		glm::vec3							m_domainOffset;
+		std::shared_ptr<Renderable>			m_drawableDomain;			/**< A drawable representation of the particle domain */
+		Transform							m_domainTransform;			/**< The transform for the drawable domain */
 	};
 }

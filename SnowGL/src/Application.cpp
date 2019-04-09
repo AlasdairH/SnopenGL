@@ -258,7 +258,6 @@ int main()
 
 			depthCamera.updateCameraUniform();
 			cameraDataUniformBuffer->loadData(&depthCamera.getCameraUniformData(), 0, sizeof(GPU_UB_CameraData));
-			renderer.setDepthSpaceMatrix(depthCamera.getCameraUniformData().viewProjectionMatrix);
 
 			// render all objects
 			renderer.renderToDepthBuffer(groundPlane);
@@ -318,8 +317,7 @@ int main()
 			sceneObject2.m_shader->setUniformMat4f("u_depthSpaceMatrix", depthCamera.getCameraUniformData().viewProjectionMatrix);
 			sceneObject2.m_texture->bind(0);
 			renderer.render(sceneObject2);
-			
-
+			// ground plane
 			groundPlane.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
 			groundPlane.m_shader->setUniformMat4f("u_depthSpaceMatrix", depthCamera.getCameraUniformData().viewProjectionMatrix);
 			groundPlane.m_texture->bind(0);
