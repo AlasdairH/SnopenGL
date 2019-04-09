@@ -24,7 +24,7 @@ public:
 	*
 	*	Stops the timer
 	*/
-	~Timer() { duration = std::chrono::high_resolution_clock::now() - start; std::cout << "INFO: Timer Took " << duration.count() * 1000.0f << "ms" << std::endl; }
+	~Timer() { }
 
 	/** @brief Gets the current duration of the timer
 	*

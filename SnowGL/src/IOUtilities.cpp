@@ -29,8 +29,7 @@ namespace SnowGL
 
 	void IOUtilities::loadMesh(Mesh &_mesh, const std::string & _filepath)
 	{
-		// TODO: Timer
-		//Utilities::Timer timer;
+		Timer timer;
 		_mesh.vertices.clear();
 		_mesh.indices.clear();
 		_mesh.layout.reset();
@@ -38,6 +37,11 @@ namespace SnowGL
 		int parsedLines = 0;
 
 		std::string objFile = loadText(_filepath);
+		if (objFile == "ERROR")
+		{
+			CONSOLE_ERROR("Unable to load .obj file");
+			return;
+		}
 
 		CONSOLE_MESSAGE("Parsing mesh file: " << _filepath);
 
@@ -178,7 +182,7 @@ namespace SnowGL
 		_mesh.layout = Vertex::getLayout();
 		// return the mesh
 
-		CONSOLE_MESSAGE("Loaded " << _mesh.vertices.size() << " vertices | " << parsedLines << " lines parsed");
+		CONSOLE_MESSAGE("Loaded " << _mesh.vertices.size() << " vertices | " << parsedLines << " lines parsed | Took " << timer.getDuration().count() << "s");
 	}
 
 	void IOUtilities::loadRenderable(Renderable &_renderable, const std::string &_filepath)
