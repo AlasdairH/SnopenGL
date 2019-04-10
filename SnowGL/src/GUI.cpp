@@ -44,6 +44,10 @@ namespace SnowGL
 				}
 				if (ImGui::BeginMenu("Scene"))
 				{			
+					if (ImGui::MenuItem("Toggle Pause"))
+					{
+						m_state->isPaused = !m_state->isPaused;
+					}
 					if (ImGui::MenuItem("Switch Camera"))
 					{
 						// switch mode between view and edit
@@ -63,10 +67,6 @@ namespace SnowGL
 					{
 						Camera::activeCamera->setProjectionMode(PROJECTION_PERSPECTIVE);
 						CONSOLE_MESSAGE("Set camera to PROJECTION_PERSPECTIVE")
-					}
-					if (ImGui::MenuItem("Options")) 
-					{
-						/* Do stuff */ 
 					}
 					ImGui::EndMenu();
 				}

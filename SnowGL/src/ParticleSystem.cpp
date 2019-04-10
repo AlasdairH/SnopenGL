@@ -171,20 +171,24 @@ namespace SnowGL
 		m_tfShader->setUniform1f("u_simTime", m_simTime);
 		m_tfShader->setUniform1i("u_triangleCount", _triangleCount);
 
-		glActiveTexture(GL_TEXTURE0 + 0);
-		glBindTexture(GL_TEXTURE_BUFFER, m_wsGeomTextureBuffer);
+		ApplicationState &state = ApplicationState::getInstance();
+		if (!state.isPaused)
+		{
+			glActiveTexture(GL_TEXTURE0 + 0);
+			glBindTexture(GL_TEXTURE_BUFFER, m_wsGeomTextureBuffer);
 
-		m_tfShader->setUniformMat4f("u_modelMatrix", m_transform.getModelMatrix());
+			m_tfShader->setUniformMat4f("u_modelMatrix", m_transform.getModelMatrix());
 
-		// first pass, particle caculations
-		m_tfVAO[m_currentTFBVAO]->bind();
-		m_tfVBO[m_currentTFBVBO]->bindBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0);
+			// first pass, particle caculations
+			m_tfVAO[m_currentTFBVAO]->bind();
+			m_tfVBO[m_currentTFBVBO]->bindBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0);
 
-		glEnable(GL_RASTERIZER_DISCARD);
-		glBeginTransformFeedback(GL_POINTS);
-		glDrawArrays(GL_POINTS, 0, m_numParticles);
-		glEndTransformFeedback();
-		glDisable(GL_RASTERIZER_DISCARD);
+			glEnable(GL_RASTERIZER_DISCARD);
+			glBeginTransformFeedback(GL_POINTS);
+			glDrawArrays(GL_POINTS, 0, m_numParticles);
+			glEndTransformFeedback();
+			glDisable(GL_RASTERIZER_DISCARD);
+		}
 
 		// 2nd pass, visual render
 		m_renderShader->bind();

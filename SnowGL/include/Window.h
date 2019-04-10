@@ -29,7 +29,7 @@ namespace SnowGL
 		*	by overwriting these provided values.
 		*	The constructor creates an SDL Window, SDL Renderer and an accompanying GL Context.
 		*/
-		Window(const std::string _title = "Default", const int _width = 1280, const int _height = 720);
+		Window(const std::string _title = "Default", const int _width = 1920, const int _height = 1080);
 
 		/** @brief The Window Destructor
 		*

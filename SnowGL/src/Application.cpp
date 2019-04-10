@@ -61,7 +61,7 @@ int main()
 	// create a scene object
 	Renderable sceneObject;
 	IOUtilities::loadRenderable(sceneObject, "resources/objects/Table.rnd");
-	sceneObject.transform.translate(glm::vec3(3, 0, 0));
+	sceneObject.transform.translate(glm::vec3(1.5f, 0, 0));
 	sceneObject.transform.rotate(-45, glm::vec3(0, 1, 0));
 	sceneObject.m_shader->setUniform1i("u_useSnowTexture", 1);
 	sceneObject.m_shader->setUniform1i("u_useSnowOffset", 1);

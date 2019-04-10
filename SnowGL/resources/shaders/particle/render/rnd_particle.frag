@@ -12,5 +12,5 @@ void main(void)
 	//uv.y *= -1.0;
 	vec4 t = texture(snowflakeTexture, uv);
 	//vec4 t = vec4(1.0f, 0.0f, 0.0f, 1.0f);
-	out_Colour = vec4(t);
+	out_Colour = t * vec4(1, 1, 1, 0.5f);
 }
