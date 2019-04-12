@@ -887,7 +887,7 @@ STBTT_DEF void stbtt_GetGlyphBitmapBox(const stbtt_fontinfo *font, int glyph, fl
 STBTT_DEF void stbtt_GetGlyphBitmapBoxSubpixel(const stbtt_fontinfo *font, int glyph, float scale_x, float scale_y,float shift_x, float shift_y, int *ix0, int *iy0, int *ix1, int *iy1);
 
 
-// @TODO: don't expose this structure
+
 typedef struct
 {
    int w,h,stride;
@@ -1410,9 +1410,6 @@ static int stbtt_InitFont_internal(stbtt_fontinfo *info, unsigned char *data, in
    else
       info->numGlyphs = 0xffff;
 
-   // find a cmap encoding table we understand *now* to avoid searching
-   // later. (todo: could make this installable)
-   // the same regardless of glyph.
    numTables = ttUSHORT(data + cmap + 2);
    info->index_map = 0;
    for (i=0; i < numTables; ++i) {
@@ -1530,7 +1527,6 @@ STBTT_DEF int stbtt_FindGlyphIndex(const stbtt_fontinfo *info, int unicode_codep
       }
       return 0; // not found
    }
-   // @TODO
    STBTT_assert(0);
    return 0;
 }
@@ -1783,7 +1779,6 @@ static int stbtt__GetGlyphShapeTT(const stbtt_fontinfo *info, int glyph_index, s
             }
          }
          else {
-            // @TODO handle matching point
             STBTT_assert(0);
          }
          if (flags & (1<<3)) { // WE_HAVE_A_SCALE
@@ -2456,7 +2451,6 @@ static stbtt_int32  stbtt__GetGlyphGPOSInfoAdvance(const stbtt_fontinfo *info, i
                             stbtt_uint8 *pairValueTable = table + pairPosOffset;
                             stbtt_uint16 pairValueCount = ttUSHORT(pairValueTable);
                             stbtt_uint8 *pairValueArray = pairValueTable + 2;
-                            // TODO: Support more formats.
                             STBTT_GPOS_TODO_assert(valueFormat1 == 4);
                             if (valueFormat1 != 4) return 0;
                             STBTT_GPOS_TODO_assert(valueFormat2 == 0);
@@ -2502,7 +2496,6 @@ static stbtt_int32  stbtt__GetGlyphGPOSInfoAdvance(const stbtt_fontinfo *info, i
                             STBTT_assert(glyph1class < class1Count);
                             STBTT_assert(glyph2class < class2Count);
 
-                            // TODO: Support more formats.
                             STBTT_GPOS_TODO_assert(valueFormat1 == 4);
                             if (valueFormat1 != 4) return 0;
                             STBTT_GPOS_TODO_assert(valueFormat2 == 0);

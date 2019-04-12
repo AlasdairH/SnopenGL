@@ -1046,10 +1046,6 @@ retry:
          state->has_preferred_x = 0;
          break;
       }
-
-// @TODO:
-//    STB_TEXTEDIT_K_PGUP      - move cursor up a page
-//    STB_TEXTEDIT_K_PGDOWN    - move cursor down a page
    }
 }
 
