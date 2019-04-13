@@ -102,7 +102,7 @@ namespace SnowGL
 			}
 			m_fpsValues[m_fpsValues.size() - 1] = m_state->framesPerSecond;
 
-			ImGui::PlotLines("", m_fpsValues.data(), m_fpsValues.size());
+			ImGui::PlotLines("", m_fpsValues.data(), (int)m_fpsValues.size());
 			ImGui::Separator();
 			ImGui::Text("Delta Time: %fms", m_state->deltaTime * 1000.0f);
 

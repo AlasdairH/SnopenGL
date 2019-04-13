@@ -15,8 +15,6 @@
 #include "Utils.h"
 #include "GPU_SSBO_AccumulationPartition.h"
 
-#define MAX_PARTICLES 10000
-
 namespace SnowGL
 {
 	/*! @class Particle

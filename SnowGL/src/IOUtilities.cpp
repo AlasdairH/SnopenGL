@@ -51,13 +51,10 @@ namespace SnowGL
 		std::unordered_map<int, glm::vec3> normals;
 		std::unordered_map<int, glm::vec2> textureCoords;
 
-		for (unsigned int i = 0; i < objFile.size(); ++i)
-		{
-			// find the index of the next end of line char, starting from i
-			unsigned int eol = objFile.find("\n", i);
-			// get a substring from i, for end of line - i chars
-			std::string line = objFile.substr(i, eol - i);
+		std::vector<std::string> lines = split(objFile, '\n');
 
+		for (std::string &line : lines)
+		{
 			// vertex line
 			if (line.find("v ") != std::string::npos)
 			{
@@ -174,9 +171,6 @@ namespace SnowGL
 				}
 				++parsedLines;
 			}
-
-			// move the next start point to the end of the last line
-			i = eol;
 		}
 		// push 3 floats for the position (x, y, z)
 		_mesh.layout = Vertex::getLayout();

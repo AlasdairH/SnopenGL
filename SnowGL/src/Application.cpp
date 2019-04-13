@@ -33,7 +33,7 @@ int main()
 
 	InitManager::initOpenGL();
 
-	Camera camera(state.windowSize.x, state.windowSize.y, PROJECTION_PERSPECTIVE);
+	Camera camera((int)state.windowSize.x, (int)state.windowSize.y, PROJECTION_PERSPECTIVE);
 	camera.transform.translate(glm::vec3(0, 3, 18));
 
 	Camera depthCamera(1024, 1024, PROJECTION_ORTHOGRAPHIC);
