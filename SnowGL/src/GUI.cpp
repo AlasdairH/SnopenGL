@@ -107,7 +107,10 @@ namespace SnowGL
 			//ImGui::Text("Delta Time: %fms", m_state->deltaTime * 1000.0f);
 			ImGui::Text("Delta Time: %fms", m_state->deltaTime);
 
-
+			if (ImGui::Button("Toggle Pause"))
+			{
+				m_state->isPaused = !m_state->isPaused;
+			}
 
 			ImGui::End();
 
