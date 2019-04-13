@@ -129,8 +129,8 @@ namespace SnowGL
 		// setup accumulation SSBO
 		m_SSBO_AccumulationData.dimensions = glm::vec4(m_settings->domainSize.x, 1.75f, m_settings->domainSize.z, 0);
 		m_SSBO_AccumulationData.position = glm::vec4(0, 0.75f, 0, 0);
-		int rootPartition = std::floor(std::cbrt(SSBO_MAX_INT_ARRAY));
-		m_SSBO_AccumulationData.resolution = glm::vec4(rootPartition);
+		int rootPartition = (int)std::floor(std::cbrt(SSBO_MAX_INT_ARRAY));
+		m_SSBO_AccumulationData.resolution = glm::vec4((float)rootPartition);
 		// pre compute
 		m_SSBO_AccumulationData.positionBL = m_SSBO_AccumulationData.position - (m_SSBO_AccumulationData.dimensions / 2.0f);
 		m_SSBO_AccumulationData.binSize = m_SSBO_AccumulationData.dimensions / m_SSBO_AccumulationData.resolution;
@@ -165,7 +165,7 @@ namespace SnowGL
 
 	void ParticleSystem::updateParticles(float _deltaTime, int _triangleCount)
 	{
-		m_simTime += _deltaTime;
+		
 		m_tfShader->bind();
 		m_tfShader->setUniform1f("u_deltaTime", _deltaTime);
 		m_tfShader->setUniform1f("u_simTime", m_simTime);
@@ -174,6 +174,16 @@ namespace SnowGL
 		ApplicationState &state = ApplicationState::getInstance();
 		if (!state.isPaused)
 		{
+			// update the simulation time
+			m_simTime += _deltaTime;
+
+			// ping pong - tfb
+			m_currentTFBVAO = m_currentTFBVBO;
+			m_currentTFBVBO = (m_currentTFBVBO + 1) & 0x1;
+			// ping pong - render
+			m_currentRenderVAO = m_currentRenderVBO;
+			m_currentRenderVBO = (m_currentRenderVBO + 1) & 0x1;
+
 			glActiveTexture(GL_TEXTURE0 + 0);
 			glBindTexture(GL_TEXTURE_BUFFER, m_wsGeomTextureBuffer);
 
@@ -199,13 +209,6 @@ namespace SnowGL
 		glDisable(GL_CULL_FACE);
 		glDrawArrays(GL_POINTS, 0, m_numParticles);
 		glEnable(GL_CULL_FACE);
-
-		// ping pong - tfb
-		m_currentTFBVAO = m_currentTFBVBO;
-		m_currentTFBVBO = (m_currentTFBVBO + 1) & 0x1;
-		// ping pong - render
-		m_currentRenderVAO = m_currentRenderVBO;
-		m_currentRenderVBO = (m_currentRenderVBO + 1) & 0x1;
 
 		++m_frameCount;
 

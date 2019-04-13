@@ -22,6 +22,9 @@ using namespace SnowGL;
 
 int main()
 {
+	CONSOLE_MESSAGE(sizeof(unsigned int));
+	CONSOLE_MESSAGE(sizeof(const void*));
+
 	srand(1);
 
 	ApplicationState &state = ApplicationState::getInstance();
@@ -137,8 +140,6 @@ int main()
 
 	CONSOLE_MESSAGE("Scene vertex count: " << vertexCount);
 	CONSOLE_MESSAGE("Scene triangle count: " << triangleCount);
-
-	CONSOLE_MESSAGE_RELEASE(sizeof(GPU_SSBO_accumulationPartition));
 
 	while (state.isRunning)
 	{
@@ -324,7 +325,8 @@ int main()
 
 
 			// update and render snow
-			snow.updateParticles(state.deltaTime, triangleCount);
+			if (state.deltaTime < 0.02f)
+				snow.updateParticles(state.deltaTime, triangleCount);
 		}
 		renderer.unBindFrameBuffer();
 

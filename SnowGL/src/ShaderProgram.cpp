@@ -138,7 +138,7 @@ namespace SnowGL
 			}
 			char** arr = &ptr_list[0];
 
-			glTransformFeedbackVaryings(m_programID, _varying.size(), arr, GL_INTERLEAVED_ATTRIBS);
+			glTransformFeedbackVaryings(m_programID, (GLsizei)_varying.size(), arr, GL_INTERLEAVED_ATTRIBS);
 		}
 		else
 		{

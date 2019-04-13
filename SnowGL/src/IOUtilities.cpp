@@ -86,7 +86,7 @@ namespace SnowGL
 			}
 
 			// texture coord line
-			if (line.find("vt ") != std::string::npos)
+			else if (line.find("vt ") != std::string::npos)
 			{
 				// split the face line
 				std::vector<std::string> splitLine = split(line, ' ');
@@ -101,7 +101,7 @@ namespace SnowGL
 			}
 
 			// normal line
-			if (line.find("vn ") != std::string::npos)
+			else if (line.find("vn ") != std::string::npos)
 			{
 				// split the face line
 				std::vector<std::string> splitLine = split(line, ' ');
@@ -118,7 +118,7 @@ namespace SnowGL
 
 
 			// face line
-			if (line.find("f ") != std::string::npos)
+			else if (line.find("f ") != std::string::npos)
 			{
 				// split the face line
 				std::vector<std::string> splitLine = split(line, ' ');
@@ -166,7 +166,7 @@ namespace SnowGL
 						// push the vertex back onto the vector
 						_mesh.vertices.push_back(vert);
 						// push back the index for that vector to the indices
-						_mesh.indices.push_back(_mesh.vertices.size() - 1);
+						_mesh.indices.push_back((unsigned int)_mesh.vertices.size() - 1);
 					}
 				}
 				++parsedLines;
@@ -195,27 +195,10 @@ namespace SnowGL
 
 		std::vector<std::string>		varyings;
 
-		for (unsigned int i = 0; i < fileText.size(); ++i)
+		std::vector<std::string> lines = split(fileText, '\n');
+
+		for (std::string &line : lines)
 		{
-			// find the index of the next end of line char, starting from i
-			unsigned int eol = fileText.find("\n", i);
-			// get a substring from i, for end of line - i chars
-			std::string line = fileText.substr(i, eol - i);
-
-			if (i == 0)
-			{
-				// vertex line
-				if (line.find("FILETYPE RENDERABLE") != std::string::npos)
-				{
-					filetypeVerified = true;
-				}
-				else
-				{
-					CONSOLE_ERROR("Failed to load Renderable file, incorrect file type");
-					return;
-				}
-			}
-
 			// SHADER_VERT path
 			if (line.find("SHADER_VERT") != std::string::npos)
 			{
@@ -226,7 +209,7 @@ namespace SnowGL
 			}
 
 			// SHADER_FRAG path
-			if (line.find("SHADER_FRAG") != std::string::npos)
+			else if (line.find("SHADER_FRAG") != std::string::npos)
 			{
 				std::vector<std::string> splitBlock = split(line, ' ');
 				Shader fragShader(SHADER_FRAGMENT);
@@ -235,14 +218,14 @@ namespace SnowGL
 			}
 
 			// TEXTURE name path
-			if (line.find("TEXTURE") != std::string::npos)
+			else if (line.find("TEXTURE") != std::string::npos)
 			{
 				std::vector<std::string> splitBlock = split(line, ' ');
 				texture->load(splitBlock[1], splitBlock[2]);
 			}
 
 			// MESH path
-			if (line.find("MESH") != std::string::npos)
+			else if (line.find("MESH") != std::string::npos)
 			{
 				std::vector<std::string> splitBlock = split(line, ' ');
 				Mesh objMesh;
@@ -250,7 +233,7 @@ namespace SnowGL
 				mesh->setMesh(objMesh);
 			}			
 			// MESH path
-			if (line.find("MESH_COLLISION") != std::string::npos)
+			else if (line.find("MESH_COLLISION") != std::string::npos)
 			{
 				std::vector<std::string> splitBlock = split(line, ' ');
 				Mesh objMesh;
@@ -259,14 +242,14 @@ namespace SnowGL
 			}
 
 			// TFB_VARYING varying
-			if (line.find("TFB_VARYING") != std::string::npos)
+			else if (line.find("TFB_VARYING") != std::string::npos)
 			{
 				std::vector<std::string> splitBlock = split(line, ' ');
 				varyings.push_back(splitBlock[1]);
 			}
 
 			// TRANSFORM pos_x pos_y pos_z rot_x rot_y rot_z scale_x scale_y scale_z 
-			if (line.find("TRANSFORM") != std::string::npos)
+			else if (line.find("TRANSFORM") != std::string::npos)
 			{
 				std::vector<std::string> splitBlock = split(line, ' ');
 				_renderable.transform.setPosition(glm::vec3(std::stof(splitBlock[1]), std::stof(splitBlock[2]), std::stof(splitBlock[3])));
@@ -275,9 +258,6 @@ namespace SnowGL
 				_renderable.transform.rotate(std::stof(splitBlock[6]), glm::vec3(0, 0, 1));
 				_renderable.transform.scale(glm::vec3(std::stof(splitBlock[7]), std::stof(splitBlock[8]), std::stof(splitBlock[9])));
 			}
-
-			// move the next start point to the end of the last line
-			i = eol;
 		}
 
 		if (varyings.size() > 0)

@@ -27,7 +27,7 @@ namespace SnowGL
 
 		ApplicationState &state = ApplicationState::getInstance();
 
-		glViewport(0, 0, state.windowSize.x, state.windowSize.y);
+		glViewport(0, 0, (GLsizei)state.windowSize.x, (GLsizei)state.windowSize.y);
 
 		// colour frame buffer ----------------------------------------------------------------------------------------------------
 		// create a frame buffer 
