@@ -40,6 +40,7 @@ namespace SnowGL
 			glEnableVertexAttribArray(i);
 			// set up the layout (index, size, type, normalised, stride, offset ptr)
 			// it is here that the buffer is linked to the VAO (Whatever buffer is bound to GL_ARRAY_BUFFER is added)
+			// TODO: Fix void pointer
 			glVertexAttribPointer(i, elements[i].count, elements[i].type, elements[i].normalised, _layout.getStride(), (const void*)offset);
 			// increase the offset for the next element to begin
 			offset += elements[i].count * VertexBufferElement::getSizeOfType(elements[i].type);

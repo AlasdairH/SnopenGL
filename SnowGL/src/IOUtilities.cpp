@@ -156,7 +156,7 @@ namespace SnowGL
 					{
 						// vertex already exists
 						// get the position in the vector of vertices
-						unsigned int pos = std::distance(_mesh.vertices.begin(), std::find(_mesh.vertices.begin(), _mesh.vertices.end(), vert));
+						unsigned int pos = (unsigned int)std::distance(_mesh.vertices.begin(), std::find(_mesh.vertices.begin(), _mesh.vertices.end(), vert));
 						// push that position back as an index for the indices vector
 						_mesh.indices.push_back(pos);
 					}
