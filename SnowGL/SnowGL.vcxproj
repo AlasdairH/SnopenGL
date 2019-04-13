@@ -319,7 +319,7 @@
     <ClInclude Include="include\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\shaders\GeometryFeedback.frag" />
+    <None Include="resources\shaders\collision_detection\GeometryFeedback.frag" />
     <None Include="resources\shaders\depth_test\DepthMap.frag" />
     <None Include="resources\shaders\depth_test\DepthMap.vert" />
     <None Include="resources\shaders\depth_test\DepthMapFBO.frag" />
@@ -330,11 +330,11 @@
     <None Include="resources\shaders\particle\transform_feedback\tf_particle.vert" />
     <None Include="resources\shaders\particle\transform_feedback\tf_particle.frag" />
     <None Include="resources\shaders\BlockColour.frag" />
-    <None Include="resources\shaders\GeometryFeedback.vert" />
+    <None Include="resources\shaders\collision_detection\GeometryFeedback.vert" />
     <None Include="resources\shaders\post_processing\PostProcFrag.frag" />
     <None Include="resources\shaders\post_processing\PostProcVert.vert" />
-    <None Include="resources\shaders\Render.frag" />
-    <None Include="resources\shaders\Render.vert" />
+    <None Include="resources\shaders\rendering\Render.frag" />
+    <None Include="resources\shaders\rendering\Render.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,6 @@
 FILETYPE RENDERABLE
-SHADER_VERT resources/shaders/GeometryFeedback.vert
-SHADER_FRAG resources/shaders/GeometryFeedback.frag
+SHADER_VERT resources/shaders/collision_detection/GeometryFeedback.vert
+SHADER_FRAG resources/shaders/collision_detection/GeometryFeedback.frag
 TFB_VARYING out_worldSpacePosition
 MESH resources/models/Debug_Plane_Collision.obj
 TRANSFORM 0 0 0 0 0 0 1 1 1

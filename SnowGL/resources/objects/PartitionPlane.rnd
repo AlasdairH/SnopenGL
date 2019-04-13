@@ -1,6 +1,6 @@
 FILETYPE RENDERABLE
-SHADER_VERT resources/shaders/Render.vert
-SHADER_FRAG resources/shaders/Render.frag
+SHADER_VERT resources/shaders/rendering/Render.vert
+SHADER_FRAG resources/shaders/rendering/Render.frag
 TEXTURE mk2_diffuse resources/textures/Grass.png
 MESH resources/models/Plane.obj
 TRANSFORM 0 0 0 0 0 0 1 1 1
