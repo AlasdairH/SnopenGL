@@ -26,6 +26,6 @@ namespace SnowGL
 		glm::vec4 positionBL;			// the position of the bottom left corner
 		glm::vec4 binSize;				// individual bin size
 
-		//int bin[SSBO_MAX_INT_ARRAY];	//- this is manually allocated on the GPU as creating it on the stack causes issues
+		// bins are manually allocated on the GPU as creating it on the stack causes issues
 	};
 }

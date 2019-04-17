@@ -119,6 +119,9 @@ namespace SnowGL
 		std::shared_ptr<VertexBuffer>		m_accumulationSSBO;			/**< SSBO version of the accumulation data */
 		GPU_SSBO_accumulationPartition		m_SSBO_AccumulationData;	/**< SSBO version of the accumulation data */
 
+		std::shared_ptr<VertexBuffer>		m_windFieldSSBO;			/**< SSBO version of the accumulation data */
+		GPU_SSBO_accumulationPartition		m_SSBO_windFieldData;		/**< SSBO version of the accumulation data */
+
 		std::shared_ptr<ShaderProgram>		m_tfShader;					/**< The particle transform feedback shader */
 		std::shared_ptr<ShaderProgram>		m_renderShader;				/**< The particle rendering shader */
 		GLuint								m_wsGeomArrayBuffer;

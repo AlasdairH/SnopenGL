@@ -147,6 +147,24 @@ namespace SnowGL
 
 		CONSOLE_MESSAGE("Created buffers for collision data");
 
+		// setup wind field SSBO
+		m_SSBO_windFieldData.dimensions = glm::vec4(m_settings->domainSize, 0);
+		m_SSBO_windFieldData.position = glm::vec4(m_settings->domainPosition, 1.0f);
+		m_SSBO_windFieldData.resolution = glm::vec4(2, 2, 2, 0);
+		// pre compute
+		m_SSBO_windFieldData.positionBL = m_SSBO_windFieldData.position - (m_SSBO_windFieldData.dimensions / 2.0f);
+		m_SSBO_windFieldData.binSize = m_SSBO_windFieldData.dimensions / m_SSBO_windFieldData.resolution;
+
+		m_windFieldSSBO = std::make_shared<VertexBuffer>(BUFFER_SHADER_STORAGE);
+		// allocate the memory on the GPU for the partition (data preceding bins + bins)
+		m_windFieldSSBO->allocate(sizeof(GPU_SSBO_accumulationPartition) + (sizeof(glm::vec4) * m_SSBO_windFieldData.resolution.x * m_SSBO_windFieldData.resolution.y * m_SSBO_windFieldData.resolution.z));
+		// load the data that precedes the bin array
+		m_windFieldSSBO->loadSubData(&m_SSBO_windFieldData, 0, sizeof(GPU_SSBO_accumulationPartition), 0);
+		// link the uniform buffer to the binding point
+		m_windFieldSSBO->bindBase(BUFFER_SHADER_STORAGE, SHADER_BINDPOINT_WINDFIELD_PARTITION);
+
+		CONSOLE_MESSAGE("Created buffers for wind field data");
+
 		return true;
 	}
 
@@ -224,20 +242,20 @@ namespace SnowGL
 			Transform transform;
 
 			glm::vec3 binSize;
-			binSize = m_SSBO_AccumulationData.dimensions / m_SSBO_AccumulationData.resolution;
+			binSize = m_SSBO_windFieldData.dimensions / m_SSBO_windFieldData.resolution;
 
 			transform.setScale(glm::vec3(binSize.x, binSize.y, binSize.z));
 
-			for (float x = (m_SSBO_AccumulationData.position.x - (m_SSBO_AccumulationData.dimensions.x / 2.0f)) + binSize.x / 2; 
-				x <= (m_SSBO_AccumulationData.position.x + (m_SSBO_AccumulationData.dimensions.x / 2.0f)) - binSize.x / 2; 
+			for (float x = (m_SSBO_windFieldData.position.x - (m_SSBO_windFieldData.dimensions.x / 2.0f)) + binSize.x / 2; 
+				x <= (m_SSBO_windFieldData.position.x + (m_SSBO_windFieldData.dimensions.x / 2.0f)) - binSize.x / 2; 
 				x += binSize.x)
 			{
-				for (float y = (m_SSBO_AccumulationData.position.y - (m_SSBO_AccumulationData.dimensions.y / 2.0f)) + binSize.y / 2; 
-					y <= (m_SSBO_AccumulationData.position.y + (m_SSBO_AccumulationData.dimensions.y / 2.0f)) - binSize.y / 2; 
+				for (float y = (m_SSBO_windFieldData.position.y - (m_SSBO_windFieldData.dimensions.y / 2.0f)) + binSize.y / 2; 
+					y <= (m_SSBO_windFieldData.position.y + (m_SSBO_windFieldData.dimensions.y / 2.0f)) - binSize.y / 2; 
 					y += binSize.y)
 				{
-					for (float z = (m_SSBO_AccumulationData.position.z - (m_SSBO_AccumulationData.dimensions.z / 2.0f)) + binSize.z / 2;
-						z <= (m_SSBO_AccumulationData.position.z + (m_SSBO_AccumulationData.dimensions.z / 2.0f)) - binSize.z / 2;
+					for (float z = (m_SSBO_windFieldData.position.z - (m_SSBO_windFieldData.dimensions.z / 2.0f)) + binSize.z / 2;
+						z <= (m_SSBO_windFieldData.position.z + (m_SSBO_windFieldData.dimensions.z / 2.0f)) - binSize.z / 2;
 						z += binSize.z)
 					{
 						transform.setPosition(glm::vec3(x, y, z));

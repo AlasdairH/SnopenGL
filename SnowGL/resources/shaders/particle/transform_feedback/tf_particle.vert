@@ -10,14 +10,27 @@ layout (std140) uniform u_camera_data
 // vec4 is used here for padding
 layout (std430, binding = 1) buffer buffer_accumulation
 {
-	vec4 dimensions;			// the size of the spatial partition			
-	vec4 resolution;			// the number of partitions in the width, height and depth
-	vec4 position;				// the position of the spatial partition
+	vec4 ac_dimensions;			// the size of the spatial partition			
+	vec4 ac_resolution;			// the number of partitions in the width, height and depth
+	vec4 ac_position;				// the position of the spatial partition
 	// pre compute
-	vec4 positionBL;			// the bottom left position of the spatial partition (used to offset for always positive values
-	vec4 binSize;				// the position of the spatial partition
+	vec4 ac_positionBL;			// the bottom left position of the spatial partition (used to offset for always positive values
+	vec4 ac_binSize;				// the size of an individual bin
 	// data
-	int bin[];				// the array of bins
+	int bin[];					// the array of bins
+};
+
+// vec4 is used here for padding
+layout (std430, binding = 2) buffer buffer_windField
+{
+	vec4 wf_dimensions;			// the size of the spatial partition			
+	vec4 wf_resolution;			// the number of partitions in the width, height and depth
+	vec4 wf_position;			// the position of the spatial partition
+	// pre compute
+	vec4 wf_positionBL;			// the bottom left position of the spatial partition (used to offset for always positive values
+	vec4 wf_binSize;			// the size of an individual bin
+	// data
+	vec4 wf_bin[];				// the array of bins
 };
 
 uniform int u_triangleCount;
@@ -121,14 +134,50 @@ vec3 reflect_vector(vec3 v, vec3 n)
 	return v - 2.0 * dot(v, n) * n;
 }
 
-int toIndex(vec3 _pos)
+int toIndexAc(vec3 _pos)
 {
 	int index = -1;
 	// get the position in partition space
-	vec3 psPos = _pos - vec3(positionBL);
-	ivec3 bin3d = ivec3(floor(psPos / vec3(binSize)));
+	vec3 psPos = _pos - vec3(ac_positionBL);
 
-	index = (bin3d.z * int(resolution.x) * int(resolution.y)) + (bin3d.y * int(resolution.x)) + bin3d.x;
+	if(psPos.x < 0 || psPos.x > ac_dimensions.x)
+	{
+		if(psPos.y < 0 || psPos.y > ac_dimensions.y)
+		{
+			if(psPos.z < 0 || psPos.z > ac_dimensions.z)
+			{
+				return 0;
+			}
+			return 0;
+		}
+		return 0;
+	}
+	ivec3 bin3d = ivec3(floor(psPos / vec3(ac_binSize)));
+	index = (bin3d.z * int(ac_resolution.x) * int(ac_resolution.y)) + (bin3d.y * int(ac_resolution.x)) + bin3d.x;
+
+	return index;
+}
+
+int toIndexWf(vec3 _pos)
+{
+	int index = -1;
+	// get the position in partition space
+	vec3 psPos = _pos - vec3(wf_positionBL);
+
+	if(psPos.x < 0 || psPos.x > wf_dimensions.x)
+	{
+		if(psPos.y < 0 || psPos.y > wf_dimensions.y)
+		{
+			if(psPos.z < 0 || psPos.z > wf_dimensions.z)
+			{
+				return 0;
+			}
+			return 0;
+		}
+		return 0;
+	}
+	ivec3 bin3d = ivec3(floor(psPos / vec3(wf_binSize)));
+	index = (bin3d.z * int(wf_resolution.x) * int(wf_resolution.y)) + (bin3d.y * int(wf_resolution.x)) + bin3d.x;
 
 	return index;
 }
@@ -142,6 +191,11 @@ void main()
 	out_mass = in_mass;
 	out_startTime = in_startTime;
     out_lifetime = in_lifetime;
+
+	for(int i = 0; i < 12; ++i)
+	{
+		wf_bin[i] = vec4(0.2f, 0, 0, 1.0f);
+	}
 
 	if(u_simTime >= in_startTime)
 	{
@@ -173,7 +227,11 @@ void main()
 		else
 		{
 			// if we got here the particle is alive and well so update it
-			out_velocity += (u_globalWind * u_deltaTime);
+			int index = toIndexWf(out_position.xyz);
+			vec4 wind = wf_bin[index];
+
+			//out_velocity += (u_globalWind * u_deltaTime);
+			out_velocity += (vec3(wind) * u_deltaTime);
 			out_position = vec4(in_position.xyz + (out_velocity * u_deltaTime), out_position.w);
 
 			float agePerc = age / in_lifetime;
@@ -194,7 +252,7 @@ void main()
 					//vec3 n = normalize(cross(v1 - v0, v2 - v0));
 					out_position = vec4(point.xyz, i);
 					out_velocity = vec3(0, 0, 0);
-					int index = toIndex(out_position.xyz);
+					int index = toIndexAc(out_position.xyz);
 					atomicAdd(bin[index], 1);
 				}
 			}
