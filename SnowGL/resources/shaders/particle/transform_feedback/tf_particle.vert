@@ -192,11 +192,6 @@ void main()
 	out_startTime = in_startTime;
     out_lifetime = in_lifetime;
 
-	for(int i = 0; i < 12; ++i)
-	{
-		wf_bin[i] = vec4(0.2f, 0, 0, 1.0f);
-	}
-
 	if(u_simTime >= in_startTime)
 	{
 		float age = u_simTime - in_startTime;

@@ -36,8 +36,8 @@ layout (location = 9) out float frag_snowPerc;
 // max snow depth
 uniform float u_maxSnowDepth = 0.2f;			// the max offset of a position for snow (the offset when u_maxSnowBinValue is reached)
 uniform int u_maxSnowBinValue = 300;			// the max value a bin of snow can hold (the value will go higher but will be clamped on use)
-uniform float u_snowAccumulationSpeed = 1.0f;
-uniform float u_snowColourChangeSpeed = 3.0f;
+uniform float u_snowAccumulationSpeed = 0.5f;
+uniform float u_snowColourChangeSpeed = 5.0f;
 uniform bool u_useSnowTexture = true;
 uniform bool u_useSnowOffset = true;
 

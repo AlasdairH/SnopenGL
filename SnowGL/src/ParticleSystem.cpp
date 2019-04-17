@@ -150,18 +150,34 @@ namespace SnowGL
 		// setup wind field SSBO
 		m_SSBO_windFieldData.dimensions = glm::vec4(m_settings->domainSize, 0);
 		m_SSBO_windFieldData.position = glm::vec4(m_settings->domainPosition, 1.0f);
-		m_SSBO_windFieldData.resolution = glm::vec4(2, 2, 2, 0);
+		m_SSBO_windFieldData.resolution = glm::vec4(10, 10, 10, 0);
 		// pre compute
 		m_SSBO_windFieldData.positionBL = m_SSBO_windFieldData.position - (m_SSBO_windFieldData.dimensions / 2.0f);
 		m_SSBO_windFieldData.binSize = m_SSBO_windFieldData.dimensions / m_SSBO_windFieldData.resolution;
 
 		m_windFieldSSBO = std::make_shared<VertexBuffer>(BUFFER_SHADER_STORAGE);
 		// allocate the memory on the GPU for the partition (data preceding bins + bins)
-		m_windFieldSSBO->allocate(sizeof(GPU_SSBO_accumulationPartition) + (sizeof(glm::vec4) * m_SSBO_windFieldData.resolution.x * m_SSBO_windFieldData.resolution.y * m_SSBO_windFieldData.resolution.z));
+		int numBins = m_SSBO_windFieldData.resolution.x * m_SSBO_windFieldData.resolution.y * m_SSBO_windFieldData.resolution.z;
+		m_windFieldSSBO->allocate(sizeof(GPU_SSBO_accumulationPartition) + (sizeof(glm::vec4) * numBins));
 		// load the data that precedes the bin array
 		m_windFieldSSBO->loadSubData(&m_SSBO_windFieldData, 0, sizeof(GPU_SSBO_accumulationPartition), 0);
 		// link the uniform buffer to the binding point
 		m_windFieldSSBO->bindBase(BUFFER_SHADER_STORAGE, SHADER_BINDPOINT_WINDFIELD_PARTITION);
+		// bind the buffer to the array buffer binding point
+		m_windFieldSSBO->bind(BUFFER_ARRAY);
+		// get a pointer to the wind field buffer on the GPU
+		glm::vec4 *windFieldBuffer = (glm::vec4 *)glMapBuffer(BUFFER_ARRAY, GL_WRITE_ONLY);
+		// offset the pointer to the start of the bin data
+		windFieldBuffer += 5;
+		// set a range for the random wind value
+		float randRange = 0.01f;
+		// loop through each bin
+		for (int index = 0; index < numBins; ++index)
+		{
+			windFieldBuffer[index] = glm::vec4(Utils::randFloat(-randRange, randRange), Utils::randFloat(-randRange, randRange), Utils::randFloat(-randRange, randRange), 1);
+		}
+
+		glUnmapBuffer(BUFFER_ARRAY);
 
 		CONSOLE_MESSAGE("Created buffers for wind field data");
 
