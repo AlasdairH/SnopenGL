@@ -10,6 +10,8 @@ layout (std140) uniform u_camera_data
 layout (points) in;
 layout (triangle_strip, max_vertices = 4) out;
 
+in float mass[1];
+
 uniform float particle_size = 0.02f;
 uniform float particle_size2 = 0.03f;
 uniform mat4 u_modelMatrix;
@@ -20,7 +22,8 @@ void main()
 {
 	vec4 position = gl_in[0].gl_Position;
 	// TODO: ?Randomise? particle size
-	float activeParticleSize = particle_size2;
+	float activeParticleSize = position.w;
+	position.w = 1.0;
 
 	// a: left-bottom 
 	vec2 va = position.xy + vec2(-0.5, -0.5) * activeParticleSize;

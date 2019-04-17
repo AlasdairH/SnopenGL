@@ -50,7 +50,7 @@ namespace SnowGL
 		tfFrag.load("resources/shaders/particle/transform_feedback/tf_particle.frag");
 		m_tfShader->attachShader(tfFrag);
 		// compile and link
-		std::vector<std::string> tfVaryings{ "out_position", "out_startPosition", "out_velocity", "out_startTime", "out_lifetime"};
+		std::vector<std::string> tfVaryings{ "out_position", "out_startPosition", "out_velocity", "out_mass", "out_startTime", "out_lifetime"};
 		m_tfShader->setTransformFeedbackVarying(tfVaryings);
 		m_tfShader->link();
 
@@ -70,7 +70,7 @@ namespace SnowGL
 		m_renderShader->attachShader(renderFrag);
 		// compile and link
 		m_renderShader->link();
-
+		// load the texture for a snowflake
 		m_snowflakeTexture = std::make_shared<Texture>();
 		m_snowflakeTexture->load("Snowflake", "resources/textures/snowflake.png");
 		
@@ -83,7 +83,8 @@ namespace SnowGL
 		layout.push<glm::vec4>(1);	// position (w = is active)
 		layout.push<glm::vec4>(1);	// start position
 		layout.push<glm::vec3>(1);	// velocity
-		layout.push<float>(1);		// delay
+		layout.push<float>(1);		// mass
+		layout.push<float>(1);		// delay to start time
 		layout.push<float>(1);		// lifetime
 
 		// create 2 buffers for pingpong
@@ -109,6 +110,7 @@ namespace SnowGL
 				buffer[j].currentPosition = glm::vec4(Utils::randFloat(m_settings->domainSize.x, -m_settings->domainSize.x) / 2, m_settings->domainSize.y / 2, Utils::randFloat(m_settings->domainSize.z, -m_settings->domainSize.z) / 2, -1) + glm::vec4(m_settings->domainPosition, 0.0f);
 				buffer[j].startPosition = buffer[j].currentPosition;
 				buffer[j].velocity = m_settings->initialVelocity;
+				buffer[j].mass = Utils::randFloat(0.02f, 0.05f);
 				buffer[j].delay = (j / (float)m_numParticles) * m_settings->lifetimeMax;
 				buffer[j].lifetime = Utils::randFloat(m_settings->lifetimeMin, m_settings->lifetimeMax);
 			}

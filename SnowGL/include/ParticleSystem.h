@@ -27,6 +27,7 @@ namespace SnowGL
 		glm::vec4	currentPosition;	/**< The particle position */
 		glm::vec4	startPosition;		/**< The particle position */
 		glm::vec3	velocity;			/**< The particle velocity */
+		float		mass;				/**< The particle mass */
 		float		delay		= -1;	/**< The particles delay from the start of the simulation to when it is created */
 		float		lifetime	= -1;	/**< The particles lifetime */
 	};

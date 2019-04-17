@@ -24,18 +24,20 @@ uniform int u_triangleCount;
 layout(binding = 0) uniform samplerBuffer geometry_tbo;
 
 // transform feedback inputs
-layout (location = 0) in vec4 in_position;
-in vec4 in_startPosition;
-in vec3 in_velocity;
-in float in_startTime;
-in float in_lifetime;
+layout (location = 0) in vec4	in_position;
+layout (location = 1) in vec4	in_startPosition;
+layout (location = 2) in vec3	in_velocity;
+layout (location = 3) in float	in_mass;
+layout (location = 4) in float	in_startTime;
+layout (location = 5) in float	in_lifetime;
 
 // transform feedback outputs
-out vec4 out_position;
-out vec4 out_startPosition;
-out vec3 out_velocity;
-out float out_startTime;
-out float out_lifetime;
+out vec4	out_position;
+out vec4	out_startPosition;
+out vec3	out_velocity;
+out float	out_mass;
+out float	out_startTime;
+out float	out_lifetime;
 
 // rendering
 uniform mat4 u_modelMatrix;
@@ -137,6 +139,7 @@ void main()
 	out_position = in_position;
 	out_startPosition = in_startPosition;
 	out_velocity = in_velocity;
+	out_mass = in_mass;
 	out_startTime = in_startTime;
     out_lifetime = in_lifetime;
 
