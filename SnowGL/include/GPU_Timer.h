@@ -21,6 +21,8 @@ namespace SnowGL
 		void start();
 		void end();
 
+		inline bool isRunning() { return m_started; }
+
 		unsigned int getDuration();
 
 	protected:

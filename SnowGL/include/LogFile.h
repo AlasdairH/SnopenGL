@@ -2,7 +2,6 @@
 
 // cstdlib
 
-
 // external libs
 
 // program
@@ -12,15 +11,18 @@
 
 namespace SnowGL
 {
+	enum LogType { LOG_TEXT, LOG_CSV };
+
 	class LogFile
 	{
 	public:
-		LogFile(const std::string &_filepath);
+		LogFile(const std::string &_filepath, const LogType &_type);
 		~LogFile();
 
 		void write(const std::string &_line);
 
 	protected:
-		std::ofstream m_file;
+		std::ofstream	m_file;
+		LogType			m_type = LOG_TEXT;
 	};
 }

@@ -15,6 +15,7 @@
 #include "ParticleSystem.h"
 #include "GUI.h"
 #include "Texture.h"
+#include "FrameBenchmark.h"
 
 #undef main
 
@@ -130,6 +131,7 @@ int main()
 	
 	// fps counter variables
 	int frames = 0;
+	int currentFrame = 0;
 	float fps = 0.0f;
 	Timer runtime;
 	float startTime = runtime.getDuration().count();
@@ -139,9 +141,13 @@ int main()
 	CONSOLE_MESSAGE("Scene vertex count: " << vertexCount);
 	CONSOLE_MESSAGE("Scene triangle count: " << triangleCount);
 
+#ifdef COMPILE_RELEASE_LOGGING
 	// in-app performance benchmarking
-	LogFile		glLogger("benchmarks/GL_Log.txt");
-	GPU_Timer	transformFeedbackTimer;
+	LogFile			glLogger("benchmarks/GL_Log.txt", LOG_TEXT);
+	LogFile			glLoggerCSV("benchmarks/GL_LogCSV.csv", LOG_CSV);
+	FrameBenchmark	frameBenchmark;
+	glLoggerCSV.write(frameBenchmark.getCSVHeaders().str());
+#endif
 
 	while (state.isRunning)
 	{
@@ -160,6 +166,8 @@ int main()
 			state.deltaTime = ((float)(timepassed - lastTime));
 			lastTime = timepassed;
 		}
+		++currentFrame;
+		frameBenchmark.frame = currentFrame;
 
 		// START INPUT
 		SDL_Event incomingEvent;
@@ -254,10 +262,15 @@ int main()
 		glStencilMask(1);
 		renderer.setStencilBufferActive(true);
 
+#ifdef COMPILE_RELEASE_LOGGING
+		frameBenchmark.shadowMapping.start();
+#endif
 		// 1st pass: render to depth FBO
 		renderer.bindDepthFrameBuffer();
 		{
+
 			glClear(GL_DEPTH_BUFFER_BIT);
+
 
 			depthCamera.updateCameraUniform();
 			cameraDataUniformBuffer->loadData(&depthCamera.getCameraUniformData(), 0, sizeof(GPU_UB_CameraData));
@@ -268,12 +281,17 @@ int main()
 			renderer.renderToDepthBuffer(sceneObject2);
 		}
 		renderer.unBindDepthFrameBuffer();
+#ifdef COMPILE_RELEASE_LOGGING
+		frameBenchmark.shadowMapping.end();
+#endif
 
 		// switch camera back to main
 		Camera::activeCamera->updateCameraUniform();
 		cameraDataUniformBuffer->loadData(&Camera::activeCamera->getCameraUniformData(), 0, sizeof(GPU_UB_CameraData));
 
-
+#ifdef COMPILE_RELEASE_LOGGING
+		frameBenchmark.collisionDetectionTransformFeedback.start();
+#endif
 		// render with transform feedback going to world space geometry texture buffer
 		GLuint tf_vao = vaoGeometry.getGLID();
 		GLuint tf_vbo = vboGeometry.getGLID();
@@ -283,11 +301,12 @@ int main()
 			
 		groundPlane_COLLISION.m_shader->bind();
 
+
 		glBeginTransformFeedback(GL_TRIANGLES);
 		// begin collision mesh transform feedback
 			glEnable(GL_RASTERIZER_DISCARD);
 
-			transformFeedbackTimer.start();
+
 
 			// table
 			sceneObject_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject.transform.getModelMatrix());
@@ -299,11 +318,17 @@ int main()
 			groundPlane_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
 			renderer.render(groundPlane_COLLISION);
 
-			transformFeedbackTimer.end();
-
 			glDisable(GL_RASTERIZER_DISCARD);
 		// end collision mesh transform feedback
 		glEndTransformFeedback();
+
+#ifdef COMPILE_RELEASE_LOGGING
+		frameBenchmark.collisionDetectionTransformFeedback.end();
+#endif
+
+#ifdef COMPILE_RELEASE_LOGGING
+		frameBenchmark.visuals.start();
+#endif
 			
 		// 2nd pass: rendering to frame buffer
 		renderer.bindFrameBuffer();
@@ -329,12 +354,20 @@ int main()
 			renderer.render(groundPlane);
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+#ifdef COMPILE_RELEASE_LOGGING
+			frameBenchmark.visuals.end();
+			frameBenchmark.particleSimulation.start();
+#endif
 
 			// update and render snow
 			if (state.deltaTime < 0.02f)
 				snow.updateParticles(state.deltaTime, triangleCount);
 		}
 		renderer.unBindFrameBuffer();
+
+#ifdef COMPILE_RELEASE_LOGGING
+		frameBenchmark.particleSimulation.end();
+#endif
 
 		if (state.getSceneMode() == MODE_VIEW)
 		{
@@ -352,9 +385,10 @@ int main()
 
 		window.swapBuffer();
 
-		std::stringstream ss_transformFeedbackTimer;
-		ss_transformFeedbackTimer << "Transform Feedback: " << transformFeedbackTimer.getDuration() << "ns";
-		glLogger.write(ss_transformFeedbackTimer.str());
+#ifdef COMPILE_RELEASE_LOGGING
+		glLogger.write(frameBenchmark.getDataSS().str());
+		glLoggerCSV.write(frameBenchmark.getDataCSV().str());
+#endif
 	}
 
 	return 0;
