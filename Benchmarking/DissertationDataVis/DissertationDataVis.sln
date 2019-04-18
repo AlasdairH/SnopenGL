@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "DissertationDataVis", "DissertationDataVis\DissertationDataVis.pyproj", "{18BD8AA2-8A0D-43BE-9B47-46762D12BCAB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{18BD8AA2-8A0D-43BE-9B47-46762D12BCAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18BD8AA2-8A0D-43BE-9B47-46762D12BCAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D17BBD3C-D026-4B8A-85D1-C5BAC90DF59F}
+	EndGlobalSection
+EndGlobal

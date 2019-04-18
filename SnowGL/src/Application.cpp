@@ -386,8 +386,11 @@ int main()
 		window.swapBuffer();
 
 #ifdef COMPILE_RELEASE_LOGGING
-		glLogger.write(frameBenchmark.getDataSS().str());
-		glLoggerCSV.write(frameBenchmark.getDataCSV().str());
+		if (currentFrame >= 1000 && currentFrame <= 3000)
+		{
+			glLogger.write(frameBenchmark.getDataSS().str());
+			glLoggerCSV.write(frameBenchmark.getDataCSV().str());
+		}
 #endif
 	}
 
