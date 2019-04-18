@@ -127,8 +127,6 @@ int main()
 	SceneMode mode = MODE_VIEW;
 
 	float cameraMoveSpeed;
-
-	//SDL_ShowCursor(SDL_DISABLE);
 	
 	// fps counter variables
 	int frames = 0;
@@ -141,7 +139,9 @@ int main()
 	CONSOLE_MESSAGE("Scene vertex count: " << vertexCount);
 	CONSOLE_MESSAGE("Scene triangle count: " << triangleCount);
 
-	GPU_Timer transformFeedbackTimer;
+	// in-app performance benchmarking
+	LogFile		glLogger("benchmarks/GL_Log.txt");
+	GPU_Timer	transformFeedbackTimer;
 
 	while (state.isRunning)
 	{
@@ -352,11 +352,10 @@ int main()
 
 		window.swapBuffer();
 
-		CONSOLE_MESSAGE_RELEASE(transformFeedbackTimer.getDuration() << "ns");
+		std::stringstream ss_transformFeedbackTimer;
+		ss_transformFeedbackTimer << "Transform Feedback: " << transformFeedbackTimer.getDuration() << "ns";
+		glLogger.write(ss_transformFeedbackTimer.str());
 	}
-
-	std::cout << "Hello World!" << std::endl;
-
 
 	return 0;
 }

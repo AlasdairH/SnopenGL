@@ -29,6 +29,8 @@
 #include "IOUtilities.h"
 #include "CompileSettings.h"
 #include "Debug.h"
+// benchmarking
+#include "LogFile.h"
 #include "Timer.h"
 #include "GPU_Timer.h"
 

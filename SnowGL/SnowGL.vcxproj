@@ -258,6 +258,7 @@
     <ClCompile Include="src\GUI.cpp" />
     <ClCompile Include="src\InitManager.cpp" />
     <ClCompile Include="src\IOUtilities.cpp" />
+    <ClCompile Include="src\LogFile.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\Renderable.cpp" />
     <ClCompile Include="src\Scene.cpp" />
@@ -299,6 +300,7 @@
     <ClInclude Include="include\GUI.h" />
     <ClInclude Include="include\InitManager.h" />
     <ClInclude Include="include\IOUtilities.h" />
+    <ClInclude Include="include\LogFile.h" />
     <ClInclude Include="include\Mesh.h" />
     <ClInclude Include="include\ParticleSettings.h" />
     <ClInclude Include="include\Renderable.h" />
