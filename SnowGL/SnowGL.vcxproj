@@ -254,6 +254,7 @@
     <ClCompile Include="src\Debug.cpp" />
     <ClCompile Include="src\FrameBuffer.cpp" />
     <ClCompile Include="src\GPU_Mesh.cpp" />
+    <ClCompile Include="src\GPU_Timer.cpp" />
     <ClCompile Include="src\GUI.cpp" />
     <ClCompile Include="src\InitManager.cpp" />
     <ClCompile Include="src\IOUtilities.cpp" />
@@ -294,6 +295,7 @@
     <ClInclude Include="include\external\stb_truetype.h" />
     <ClInclude Include="include\FrameBuffer.h" />
     <ClInclude Include="include\GPU_Mesh.h" />
+    <ClInclude Include="include\GPU_Timer.h" />
     <ClInclude Include="include\GUI.h" />
     <ClInclude Include="include\InitManager.h" />
     <ClInclude Include="include\IOUtilities.h" />

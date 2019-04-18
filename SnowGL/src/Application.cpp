@@ -141,6 +141,8 @@ int main()
 	CONSOLE_MESSAGE("Scene vertex count: " << vertexCount);
 	CONSOLE_MESSAGE("Scene triangle count: " << triangleCount);
 
+	GPU_Timer transformFeedbackTimer;
+
 	while (state.isRunning)
 	{
 		// calculate FPS
@@ -285,6 +287,8 @@ int main()
 		// begin collision mesh transform feedback
 			glEnable(GL_RASTERIZER_DISCARD);
 
+			transformFeedbackTimer.start();
+
 			// table
 			sceneObject_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject.transform.getModelMatrix());
 			renderer.render(sceneObject_COLLISION);
@@ -294,6 +298,8 @@ int main()
 			// grass
 			groundPlane_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
 			renderer.render(groundPlane_COLLISION);
+
+			transformFeedbackTimer.end();
 
 			glDisable(GL_RASTERIZER_DISCARD);
 		// end collision mesh transform feedback
@@ -345,6 +351,8 @@ int main()
 		gui.onRender();
 
 		window.swapBuffer();
+
+		CONSOLE_MESSAGE_RELEASE(transformFeedbackTimer.getDuration() << "ns");
 	}
 
 	std::cout << "Hello World!" << std::endl;

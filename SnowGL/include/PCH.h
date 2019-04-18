@@ -30,6 +30,7 @@
 #include "CompileSettings.h"
 #include "Debug.h"
 #include "Timer.h"
+#include "GPU_Timer.h"
 
 #ifdef COMPILE_DEBUG
 #define CONSOLE_MESSAGE(_text) std::cout << "MESSAGE: " << _text << std::endl;
