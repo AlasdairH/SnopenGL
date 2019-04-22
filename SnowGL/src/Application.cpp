@@ -93,6 +93,10 @@ int main()
 	vertexCount += groundPlane_COLLISION.getVertexCount();
 	vertexCount += sceneObject_COLLISION.getVertexCount();
 	vertexCount += sceneObject2_COLLISION.getVertexCount();
+#ifdef COMPILE_RELEASE_LOGGING
+	vertexCount += (sceneObject_COLLISION.getVertexCount() * (COLLISION_BENCHMARK_ITERATIONS - 1));
+#endif
+
 	int triangleCount = vertexCount / 3;
 
 	Renderer renderer;
@@ -102,11 +106,7 @@ int main()
 	ParticleSettings settings;
 	settings.lifetimeMin = 10.0f;
 	settings.lifetimeMax = 10.0f;
-	settings.particlesPerSecond = 20000;
-	// colour
-	settings.colourStart = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	settings.colourEnd = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	settings.collisionDebugColour = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+	settings.particlesPerSecond = 10000;
 	// physics
 	settings.globalWind = glm::vec3(0.0f, 0.0f, 0.0f);
 	settings.initialVelocity = glm::vec3(0, -1.0f, 0);
@@ -121,7 +121,6 @@ int main()
 	ParticleSystem snow(settings);
 	snow.initialise();
 	snow.setWsGeometryBuffer(vboGeometry.getTextureGLID(), vboGeometry.getGLID());
-	snow.setPointSize(2);
 	gui.setSelectedParticleSystem(std::make_shared<ParticleSystem>(snow));
 
 	bool quit = false;
@@ -131,7 +130,6 @@ int main()
 	
 	// fps counter variables
 	int frames = 0;
-	int currentFrame = 0;
 	float fps = 0.0f;
 	Timer runtime;
 	float startTime = runtime.getDuration().count();
@@ -143,9 +141,14 @@ int main()
 
 #ifdef COMPILE_RELEASE_LOGGING
 	// in-app performance benchmarking
-	LogFile			glLogger("benchmarks/GL_Log.txt", LOG_TEXT);
-	LogFile			glLoggerCSV("benchmarks/GL_LogCSV.csv", LOG_CSV);
+	LogFile			glLogger("benchmarks/GL_Log.txt", LOG_TEXT, LOG_APPEND);
+	LogFile			glLoggerCSV("benchmarks/GL_LogCSV.csv", LOG_CSV, LOG_FRESH);
+	LogFile			glLoggerOverallCSV("benchmarks/GL_LogCSV_Settings.csv", LOG_CSV, LOG_FRESH);
 	FrameBenchmark	frameBenchmark;
+
+	float avgParticleSimTime = 0;
+	float avgFPS = 0;
+
 	glLoggerCSV.write(frameBenchmark.getCSVHeaders().str());
 #endif
 
@@ -157,6 +160,7 @@ int main()
 		if (timepassed - startTime > 0.25 && frames > 10)
 		{
 			state.framesPerSecond = (float)frames / (timepassed - startTime);
+			avgFPS += state.framesPerSecond;
 			startTime = timepassed;
 			frames = 0;
 		}
@@ -166,8 +170,8 @@ int main()
 			state.deltaTime = ((float)(timepassed - lastTime));
 			lastTime = timepassed;
 		}
-		++currentFrame;
-		frameBenchmark.frame = currentFrame;
+		++state.currentFrame;
+		frameBenchmark.frame = state.currentFrame;
 
 		// START INPUT
 		SDL_Event incomingEvent;
@@ -309,8 +313,16 @@ int main()
 
 
 			// table
+#ifdef COMPILE_RELEASE_LOGGING
+			for (int i = 0; i < COLLISION_BENCHMARK_ITERATIONS; ++i)
+			{
+				sceneObject_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject.transform.getModelMatrix());
+				renderer.render(sceneObject_COLLISION);
+			}
+#else
 			sceneObject_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject.transform.getModelMatrix());
 			renderer.render(sceneObject_COLLISION);
+#endif
 			// bin
 			sceneObject2_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject2.transform.getModelMatrix());
 			renderer.render(sceneObject2_COLLISION);
@@ -360,7 +372,7 @@ int main()
 #endif
 
 			// update and render snow
-			if (state.deltaTime < 0.02f)
+			if (runtime.getDuration().count() > 5.0f)
 				snow.updateParticles(state.deltaTime, triangleCount);
 		}
 		renderer.unBindFrameBuffer();
@@ -386,10 +398,26 @@ int main()
 		window.swapBuffer();
 
 #ifdef COMPILE_RELEASE_LOGGING
-		if (currentFrame >= 1000 && currentFrame <= 3000)
+		if (state.currentFrame >= 1000 && state.currentFrame <= 3000)
 		{
 			glLogger.write(frameBenchmark.getDataSS().str());
 			glLoggerCSV.write(frameBenchmark.getDataCSV().str());
+
+			avgParticleSimTime += frameBenchmark.particleSimulation.getDuration() / 1000000;
+		}
+		if (state.currentFrame == 3000)
+		{
+			SceneDump dump;
+			dump.particleCount = settings.getMaxParticles();
+			dump.triangleCount = triangleCount;
+			dump.simulatedFrames = state.currentFrame;
+			dump.avgParticleSimTime = avgParticleSimTime / 2000.0f;
+			dump.avgFPS = avgFPS / 200.0f;
+
+			glLoggerOverallCSV.write(dump.getCSVHeaders().str());
+			glLoggerOverallCSV.write(dump.getDataCSV().str());
+
+			state.isRunning = false;
 		}
 #endif
 	}

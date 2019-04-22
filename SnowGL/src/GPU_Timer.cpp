@@ -10,7 +10,12 @@ namespace SnowGL
 
 	GPU_Timer::~GPU_Timer()
 	{
-
+		if (m_started)
+		{
+			CONSOLE_WARNING("GPU_Timer destoryed before timer stopped")
+			glEndQuery(GL_TIME_ELAPSED);
+		}
+		glDeleteQueries(1, &m_query);
 	}
 
 	void GPU_Timer::start()

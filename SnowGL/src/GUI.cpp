@@ -106,6 +106,7 @@ namespace SnowGL
 			ImGui::Separator();
 			//ImGui::Text("Delta Time: %fms", m_state->deltaTime * 1000.0f);
 			ImGui::Text("Delta Time: %fms", m_state->deltaTime);
+			ImGui::Text("Current Frame: %i", m_state->currentFrame);
 
 			if (ImGui::Button("Toggle Pause"))
 			{

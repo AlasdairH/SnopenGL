@@ -46,6 +46,7 @@ namespace SnowGL
 		// performance
 		float deltaTime;			/**< The delta time between frames */
 		float framesPerSecond;		/**< The frames per second */
+		int currentFrame = 0;		/**< The current frame */
 
 		// input
 		glm::vec2 mousePosition;									/**< The current mouse position */

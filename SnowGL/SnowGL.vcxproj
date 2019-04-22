@@ -261,6 +261,7 @@
     <ClCompile Include="src\IOUtilities.cpp" />
     <ClCompile Include="src\LogFile.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\SceneDump.cpp" />
     <ClCompile Include="src\Renderable.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\ParticleSystem.cpp" />
@@ -304,6 +305,7 @@
     <ClInclude Include="include\IOUtilities.h" />
     <ClInclude Include="include\LogFile.h" />
     <ClInclude Include="include\Mesh.h" />
+    <ClInclude Include="include\SceneDump.h" />
     <ClInclude Include="include\ParticleSettings.h" />
     <ClInclude Include="include\Renderable.h" />
     <ClInclude Include="include\Scene.h" />

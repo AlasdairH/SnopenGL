@@ -31,6 +31,7 @@
 #include "Debug.h"
 // benchmarking
 #include "LogFile.h"
+#include "SceneDump.h"
 #include "Timer.h"
 #include "GPU_Timer.h"
 
@@ -46,6 +47,8 @@
 #define CONSOLE_MESSAGE_RELEASE(_text) std::cout << "MESSAGE: " << _text << std::endl;
 #define CONSOLE_WARNING(_text) std::cout << "WARNING: " << _text << std::endl;
 #define CONSOLE_ERROR(_text) std::cout << "ERROR: " << _text << std::endl;
+
+#define COLLISION_BENCHMARK_ITERATIONS 13
 #endif
 
 #ifdef COMPILE_RELEASE

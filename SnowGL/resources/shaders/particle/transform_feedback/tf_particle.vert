@@ -244,11 +244,12 @@ void main()
 				
 				if (intersect(in_position.xyz, (in_position.xyz - out_position.xyz) * u_collisionMultiplier, v0, v1, v2, point))
 				{
-					//vec3 n = normalize(cross(v1 - v0, v2 - v0));
 					out_position = vec4(point.xyz, i);
 					out_velocity = vec3(0, 0, 0);
 					int index = toIndexAc(out_position.xyz);
 					atomicAdd(bin[index], 1);
+					// continue as no point checking other triangles if we've already collided
+					break;
 				}
 			}
 		}
