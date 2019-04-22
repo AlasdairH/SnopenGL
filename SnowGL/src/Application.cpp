@@ -160,7 +160,6 @@ int main()
 		if (timepassed - startTime > 0.25 && frames > 10)
 		{
 			state.framesPerSecond = (float)frames / (timepassed - startTime);
-			avgFPS += state.framesPerSecond;
 			startTime = timepassed;
 			frames = 0;
 		}
@@ -404,6 +403,7 @@ int main()
 			glLoggerCSV.write(frameBenchmark.getDataCSV().str());
 
 			avgParticleSimTime += frameBenchmark.particleSimulation.getDuration() / 1000000;
+			avgFPS += state.framesPerSecond;
 		}
 		if (state.currentFrame == 3000)
 		{
@@ -412,7 +412,7 @@ int main()
 			dump.triangleCount = triangleCount;
 			dump.simulatedFrames = state.currentFrame;
 			dump.avgParticleSimTime = avgParticleSimTime / 2000.0f;
-			dump.avgFPS = avgFPS / 200.0f;
+			dump.avgFPS = avgFPS / 2000.0f;
 
 			glLoggerOverallCSV.write(dump.getCSVHeaders().str());
 			glLoggerOverallCSV.write(dump.getDataCSV().str());

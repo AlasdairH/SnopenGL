@@ -249,7 +249,8 @@ void main()
 					int index = toIndexAc(out_position.xyz);
 					atomicAdd(bin[index], 1);
 					// continue as no point checking other triangles if we've already collided
-					break;
+					//break;
+					// SEE: https://devtalk.nvidia.com/default/topic/526793/opengl/glsl-loop-39-break-39-instruction-not-executed/
 				}
 			}
 		}
