@@ -225,8 +225,8 @@ void main()
 			int index = toIndexWf(out_position.xyz);
 			vec4 wind = wf_bin[index];
 
-			//out_velocity += (u_globalWind * u_deltaTime);
-			out_velocity += (vec3(wind) * u_deltaTime);
+			out_velocity += (u_globalWind * u_deltaTime);
+			//ut_velocity += (vec3(wind) * u_deltaTime);
 			out_position = vec4(in_position.xyz + (out_velocity * u_deltaTime), out_position.w);
 
 			float agePerc = age / in_lifetime;

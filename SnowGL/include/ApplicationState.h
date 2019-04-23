@@ -30,9 +30,10 @@ namespace SnowGL
 			return instance;
 		}
 
-		bool isRunning			= true;		/**< The running state of the program */
-		bool isUIHidden			= false;	/**< Whether the UI is hidden or not */
-		bool isPaused			= false;	/**< The paused state of the simulation */
+		bool isRunning				= true;		/**< The running state of the program */
+		bool isUIHidden				= false;	/**< Whether the UI is hidden or not */
+		bool isRenderingParticles	= true;		/**< Whether to render particles */
+		bool isPaused				= false;	/**< The paused state of the simulation */
 
 		// window
 		glm::vec2 windowSize;	/**< The current window size */

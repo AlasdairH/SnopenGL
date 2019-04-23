@@ -106,7 +106,7 @@ int main()
 	ParticleSettings settings;
 	settings.lifetimeMin = 10.0f;
 	settings.lifetimeMax = 10.0f;
-	settings.particlesPerSecond = 10000;
+	settings.particlesPerSecond = 20000;
 	// physics
 	settings.globalWind = glm::vec3(0.0f, 0.0f, 0.0f);
 	settings.initialVelocity = glm::vec3(0, -1.0f, 0);
@@ -170,7 +170,9 @@ int main()
 			lastTime = timepassed;
 		}
 		++state.currentFrame;
+#ifdef COMPILE_RELEASE_LOGGING
 		frameBenchmark.frame = state.currentFrame;
+#endif
 
 		// START INPUT
 		SDL_Event incomingEvent;
@@ -371,7 +373,7 @@ int main()
 #endif
 
 			// update and render snow
-			if (runtime.getDuration().count() > 5.0f)
+			if (runtime.getDuration().count() > 3.0f && state.isRenderingParticles)
 				snow.updateParticles(state.deltaTime, triangleCount);
 		}
 		renderer.unBindFrameBuffer();

@@ -48,7 +48,7 @@
 #define CONSOLE_WARNING(_text) std::cout << "WARNING: " << _text << std::endl;
 #define CONSOLE_ERROR(_text) std::cout << "ERROR: " << _text << std::endl;
 
-#define COLLISION_BENCHMARK_ITERATIONS 5
+#define COLLISION_BENCHMARK_ITERATIONS 1
 #endif
 
 #ifdef COMPILE_RELEASE

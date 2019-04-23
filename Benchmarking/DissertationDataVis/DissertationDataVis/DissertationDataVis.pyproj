@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>18bd8aa2-8a0d-43be-9b47-46762d12bcab</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>FPSDataVis.py</StartupFile>
+    <StartupFile>DissertationDataVis.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>

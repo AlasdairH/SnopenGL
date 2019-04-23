@@ -196,6 +196,13 @@ namespace SnowGL
 					m_selectedParticleSystem->getSettingsPtr()->drawPartition = !m_selectedParticleSystem->getSettingsPtr()->drawPartition;
 				}
 
+				ImGui::Separator();
+
+				if (ImGui::Button("Start/Stop Particles"))
+				{
+					state.isRenderingParticles = !state.isRenderingParticles;
+				}
+
 				ImGui::End();
 			}
 		}
