@@ -53,8 +53,7 @@ def parseData(_files):
                     data_avgColDetTFB[_files[i]].append(data_ColDetTFB[_files[i]][-1] / total)
                     data_avgVisuals[_files[i]].append(data_visuals[_files[i]][-1] / total)
                     data_avgParticleSim[_files[i]].append(data_particleSim[_files[i]][-1] / total)
-
-                    
+             
 
                 lineCount += 1
     rawAvgData = { "orangeBars": data_avgShadowMap[_files[0]], "blueBars": data_avgColDetTFB[_files[0]], "greenBars": data_avgVisuals[_files[0]], "redBars": data_avgParticleSim[_files[0]] }
@@ -63,7 +62,8 @@ def parseData(_files):
     print("Parsed " + str(lineCount) + " records")
 
     figure1 = plt.figure(figsize = (16, 9), dpi = 100)
-    for i in range(6, 7):
+    renderPlot = 4
+    for i in range(renderPlot, renderPlot + 1):
         axes = figure1.add_subplot(1, 1, 1)
         axes.set_xlabel("Frame")
         axes.set_ylabel("Time (milliseconds )")
@@ -92,10 +92,9 @@ def parseData(_files):
                 #plot = axes.plot(np.arange(1000, 1000 + len(avg), 1).tolist(), avg, "m");
         if(i == 5):
             axes.set_title("Particle Collision Detection")
+           
             
-            avg = running_mean(data_particleSim[_files[j]], 50).tolist()
-            
-            plot = axes.plot(data_frame[_files[0]], data_avgParticleSim[_files[0]], colours[0], label = _files[j]);
+            plot = axes.plot(data_frame[_files[0]], data_particleSim[_files[0]], colours[j], label = _files[j]);
             #plot = axes.plot(np.arange(1000, 1000 + len(avg), 1).tolist(), avg, "m");
 
         if(i == 6):
@@ -114,7 +113,7 @@ def parseData(_files):
         axes.legend()
 
         axes.xaxis.set_ticks(np.arange(math.floor(startX), math.ceil(endX) + 1, 100))
-        axes.yaxis.set_ticks(np.arange(startY, endY, 0.05))
+        axes.yaxis.set_ticks(np.arange(startY, endY, 0.5))
 
     figure1.subplots_adjust(hspace = 0.8)
     plt.show()

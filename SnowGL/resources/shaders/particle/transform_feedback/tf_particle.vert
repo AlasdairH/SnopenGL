@@ -12,10 +12,10 @@ layout (std430, binding = 1) buffer buffer_accumulation
 {
 	vec4 ac_dimensions;			// the size of the spatial partition			
 	vec4 ac_resolution;			// the number of partitions in the width, height and depth
-	vec4 ac_position;				// the position of the spatial partition
+	vec4 ac_position;			// the position of the spatial partition
 	// pre compute
-	vec4 ac_positionBL;			// the bottom left position of the spatial partition (used to offset for always positive values
-	vec4 ac_binSize;				// the size of an individual bin
+	vec4 ac_positionBL;			// the bottom left position of the spatial partition (used to offset for always positive values)
+	vec4 ac_binSize;			// the size of an individual bin
 	// data
 	int bin[];					// the array of bins
 };

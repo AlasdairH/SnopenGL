@@ -157,7 +157,7 @@ int main()
 		// calculate FPS
 		float timepassed = runtime.getDuration().count();
 		frames++;
-		if (timepassed - startTime > 0.25 && frames > 10)
+		if (timepassed - startTime > 0.25f && frames > 10)
 		{
 			state.framesPerSecond = (float)frames / (timepassed - startTime);
 			startTime = timepassed;

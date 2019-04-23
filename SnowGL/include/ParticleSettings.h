@@ -11,10 +11,10 @@ namespace SnowGL
 {
 	struct ParticleSettings
 	{
-		float		particlesPerSecond;		// The number of particles emitted per second
-		float		lifetimeMin;			// min lifetime in seconds
-		float		lifetimeMax;			// max lifetime in seconds
-		float		collisionMultiplier;	// max lifetime in seconds
+		float		particlesPerSecond		= 0;			// The number of particles emitted per second
+		float		lifetimeMin				= 0.0f;			// min lifetime in seconds
+		float		lifetimeMax				= 0.0f;			// max lifetime in seconds
+		float		collisionMultiplier		= 0.0f;			// max lifetime in seconds
 
 		glm::vec3	globalWind;
 
