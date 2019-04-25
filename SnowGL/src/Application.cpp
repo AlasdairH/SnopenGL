@@ -34,14 +34,19 @@ int main()
 
 	Window window("SnopenGL");
 
-
+	// initalise OpenGL 
 	InitManager::initOpenGL();
 
+	// create the main scene camera
 	Camera camera((int)state.windowSize.x, (int)state.windowSize.y, PROJECTION_PERSPECTIVE);
+	// translate to the starting position
 	camera.transform.translate(glm::vec3(0, 3, 18));
 
+	// create a camera for rendering the depth buffer used to generate shadows
 	Camera depthCamera(1024, 1024, PROJECTION_ORTHOGRAPHIC);
+	// transform to an above position 
 	depthCamera.transform.translate(glm::vec3(0, 5, 0));
+	// set the camera looking downwards
 	depthCamera.setPitch(-89.9f);
 
 	// create a camera data uniform buffer
@@ -51,9 +56,7 @@ int main()
 	// load the data to the uniform buffer
 	cameraDataUniformBuffer->loadData(&camera.getCameraUniformData(), 0, sizeof(GPU_UB_CameraData));
 
-	// create shader
-	//ShaderProgram outlineShader("resources/shaders/Basic.vert", "resources/shaders/BlockColour.frag");
-
+	// create a transform for the centre of the scene
 	Transform zeroTransform;
 
 	// create a ground plane (grass)
@@ -62,7 +65,7 @@ int main()
 	Renderable groundPlane_COLLISION;
 	IOUtilities::loadRenderable(groundPlane_COLLISION, "resources/objects/Plane_Collision.rnd");
 
-	// create a scene object
+	// create a scene object (park bench)
 	Renderable sceneObject;
 	IOUtilities::loadRenderable(sceneObject, "resources/objects/Table.rnd");
 	sceneObject.transform.translate(glm::vec3(1.5f, 0, 0));
@@ -71,7 +74,7 @@ int main()
 	sceneObject.m_shader->setUniform1i("u_useSnowOffset", 1);
 	Renderable sceneObject_COLLISION;
 	IOUtilities::loadRenderable(sceneObject_COLLISION, "resources/objects/Table_Collision.rnd");	
-	// create a scene object
+	// create a scene object (bin)
 	Renderable sceneObject2;
 	IOUtilities::loadRenderable(sceneObject2, "resources/objects/Bin.rnd");
 	sceneObject2.transform.translate(glm::vec3(-1, 0, 0));
@@ -94,6 +97,7 @@ int main()
 	vertexCount += sceneObject_COLLISION.getVertexCount();
 	vertexCount += sceneObject2_COLLISION.getVertexCount();
 #ifdef COMPILE_RELEASE_LOGGING
+	// create multiple instances of a scene object to test performance
 	vertexCount += (sceneObject_COLLISION.getVertexCount() * (COLLISION_BENCHMARK_ITERATIONS - 1));
 #endif
 
@@ -123,7 +127,6 @@ int main()
 	snow.setWsGeometryBuffer(vboGeometry.getTextureGLID(), vboGeometry.getGLID());
 	gui.setSelectedParticleSystem(std::make_shared<ParticleSystem>(snow));
 
-	bool quit = false;
 	SceneMode mode = MODE_VIEW;
 
 	float cameraMoveSpeed;
@@ -201,14 +204,17 @@ int main()
 		}
 
 		const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
+		// increase camera move speed on shift hold
 		if (keyboardState[SDL_SCANCODE_LSHIFT])
 		{
 			cameraMoveSpeed = 10;
 		}
+		// decrease camera move speed on ctrl hold
 		else if (keyboardState[SDL_SCANCODE_LCTRL])
 		{
 			cameraMoveSpeed = 1;
 		}
+		// default camera move speed
 		else
 		{
 			cameraMoveSpeed = 5;
@@ -248,7 +254,6 @@ int main()
 			}
 			if (incomingEvent.type == SDL_KEYDOWN)
 			{
-				
 				//Select surfaces based on key press
 				switch (incomingEvent.key.keysym.sym)
 				{
@@ -337,9 +342,7 @@ int main()
 
 #ifdef COMPILE_RELEASE_LOGGING
 		frameBenchmark.collisionDetectionTransformFeedback.end();
-#endif
 
-#ifdef COMPILE_RELEASE_LOGGING
 		frameBenchmark.visuals.start();
 #endif
 			
@@ -375,12 +378,12 @@ int main()
 			// update and render snow
 			if (runtime.getDuration().count() > 3.0f && state.isRenderingParticles)
 				snow.updateParticles(state.deltaTime, triangleCount);
-		}
-		renderer.unBindFrameBuffer();
 
 #ifdef COMPILE_RELEASE_LOGGING
-		frameBenchmark.particleSimulation.end();
+			frameBenchmark.particleSimulation.end();
 #endif
+		}
+		renderer.unBindFrameBuffer();
 
 		if (state.getSceneMode() == MODE_VIEW)
 		{
@@ -407,6 +410,7 @@ int main()
 			avgParticleSimTime += frameBenchmark.particleSimulation.getDuration() / 1000000;
 			avgFPS += state.framesPerSecond;
 		}
+		// automatically close application at 3000 frames
 		if (state.currentFrame == 3000)
 		{
 			SceneDump dump;
