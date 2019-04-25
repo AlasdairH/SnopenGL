@@ -206,7 +206,7 @@ void main()
 		else if(out_position.w >= 0.0f)
 		{
 			particleColour = u_collisionColour;
-			out_position = vec4(0, -1000, 0, out_position.w);
+			out_position = vec4(0, -1000, 0, out_position.w);	// move the particle out the way
 		}
 		// out of bounds check
 		/*
@@ -225,6 +225,8 @@ void main()
 			int index = toIndexWf(out_position.xyz);
 			vec4 wind = wf_bin[index];
 
+			// TODO: implement drag
+
 			out_velocity += (u_globalWind * u_deltaTime);
 			//ut_velocity += (vec3(wind) * u_deltaTime);
 			out_position = vec4(in_position.xyz + (out_velocity * u_deltaTime), out_position.w);
@@ -241,7 +243,6 @@ void main()
 				v0 = texelFetch(geometry_tbo, i * 3).xyz;
 				v1 = texelFetch(geometry_tbo, i * 3 + 1).xyz;
 				v2 = texelFetch(geometry_tbo, i * 3 + 2).xyz;
-				
 				if (intersect(in_position.xyz, (in_position.xyz - out_position.xyz) * u_collisionMultiplier, v0, v1, v2, point))
 				{
 					out_position = vec4(point.xyz, i);

@@ -43,7 +43,7 @@
 #endif
 
 #ifdef COMPILE_RELEASE_LOGGING
-#define CONSOLE_MESSAGE(_text) std::cout << "MESSAGE: " << _text << "\n" << std::flush;
+#define CONSOLE_MESSAGE(_text) std::cout << "MESSAGE: " << __FILE__ << ": " << _text << "\n" << std::flush;
 #define CONSOLE_MESSAGE_RELEASE(_text) std::cout << "MESSAGE: " << _text << std::endl;
 #define CONSOLE_WARNING(_text) std::cout << "WARNING: " << _text << std::endl;
 #define CONSOLE_ERROR(_text) std::cout << "ERROR: " << _text << std::endl;

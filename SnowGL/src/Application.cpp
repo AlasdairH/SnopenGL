@@ -320,6 +320,7 @@ int main()
 
 			// table
 #ifdef COMPILE_RELEASE_LOGGING
+			// draw multiple for performance testing
 			for (int i = 0; i < COLLISION_BENCHMARK_ITERATIONS; ++i)
 			{
 				sceneObject_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject.transform.getModelMatrix());
