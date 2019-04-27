@@ -29,6 +29,7 @@
 #include "IOUtilities.h"
 #include "CompileSettings.h"
 #include "Debug.h"
+#include "Log.h"
 // benchmarking
 #include "LogFile.h"
 #include "SceneDump.h"

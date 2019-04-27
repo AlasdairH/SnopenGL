@@ -187,7 +187,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\$(ProjectName)\include;$(SolutionDir)\SDKs\Include;$(SolutionDir)\$(ProjectName);$(SolutionDir)\$(ProjectName)\src\external</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>COMPILE_RELEASE_LOGGING;%(PreprocessorDefinitions);GLEW_STATIC;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>COMPILE_RELEASE_LOGGING;COMPILE_INCLUDE_LOGGING;%(PreprocessorDefinitions);GLEW_STATIC;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -232,7 +232,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\$(ProjectName)\include;$(SolutionDir)\SDKs\Include;$(SolutionDir)\$(ProjectName);$(SolutionDir)\$(ProjectName)\src\external</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>COMPILE_RELEASE_LOGGING;%(PreprocessorDefinitions);GLEW_STATIC;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>COMPILE_RELEASE_LOGGING;COMPILE_INCLUDE_LOGGING;%(PreprocessorDefinitions);GLEW_STATIC;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -259,6 +259,7 @@
     <ClCompile Include="src\GUI.cpp" />
     <ClCompile Include="src\InitManager.cpp" />
     <ClCompile Include="src\IOUtilities.cpp" />
+    <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\LogFile.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\SceneDump.cpp" />
@@ -303,6 +304,7 @@
     <ClInclude Include="include\GUI.h" />
     <ClInclude Include="include\InitManager.h" />
     <ClInclude Include="include\IOUtilities.h" />
+    <ClInclude Include="include\Log.h" />
     <ClInclude Include="include\LogFile.h" />
     <ClInclude Include="include\Mesh.h" />
     <ClInclude Include="include\SceneDump.h" />

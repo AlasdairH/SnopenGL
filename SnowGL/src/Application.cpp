@@ -23,8 +23,10 @@ using namespace SnowGL;
 
 int main()
 {
-	CONSOLE_MESSAGE(sizeof(unsigned int));
-	CONSOLE_MESSAGE(sizeof(const void*));
+//#define ENABLE_BENCHMARK
+
+	LOG(LOG_DEBUG) << (sizeof(unsigned int));
+	LOG(LOG_DEBUG) << (sizeof(const void*));
 
 	srand(1);
 
@@ -96,7 +98,7 @@ int main()
 	vertexCount += groundPlane_COLLISION.getVertexCount();
 	vertexCount += sceneObject_COLLISION.getVertexCount();
 	vertexCount += sceneObject2_COLLISION.getVertexCount();
-#ifdef COMPILE_RELEASE_LOGGING
+#ifdef ENABLE_BENCHMARK
 	// create multiple instances of a scene object to test performance
 	vertexCount += (sceneObject_COLLISION.getVertexCount() * (COLLISION_BENCHMARK_ITERATIONS - 1));
 #endif
@@ -139,10 +141,10 @@ int main()
 	float lastTime = 0;
 	float deltaTime = 0;
 
-	CONSOLE_MESSAGE("Scene vertex count: " << vertexCount);
-	CONSOLE_MESSAGE("Scene triangle count: " << triangleCount);
+	LOG(LOG_DEBUG) << "Scene vertex count: " << vertexCount;
+	LOG(LOG_DEBUG) << "Scene triangle count: " << triangleCount;
 
-#ifdef COMPILE_RELEASE_LOGGING
+#ifdef ENABLE_BENCHMARK
 	// in-app performance benchmarking
 	LogFile			glLogger("benchmarks/GL_Log.txt", LOG_TEXT, LOG_APPEND);
 	LogFile			glLoggerCSV("benchmarks/GL_LogCSV.csv", LOG_CSV, LOG_FRESH);
@@ -173,7 +175,7 @@ int main()
 			lastTime = timepassed;
 		}
 		++state.currentFrame;
-#ifdef COMPILE_RELEASE_LOGGING
+#ifdef ENABLE_BENCHMARK
 		frameBenchmark.frame = state.currentFrame;
 #endif
 
@@ -272,7 +274,7 @@ int main()
 		glStencilMask(1);
 		renderer.setStencilBufferActive(true);
 
-#ifdef COMPILE_RELEASE_LOGGING
+#ifdef ENABLE_BENCHMARK
 		frameBenchmark.shadowMapping.start();
 #endif
 		// 1st pass: render to depth FBO
@@ -291,7 +293,7 @@ int main()
 			renderer.renderToDepthBuffer(sceneObject2);
 		}
 		renderer.unBindDepthFrameBuffer();
-#ifdef COMPILE_RELEASE_LOGGING
+#ifdef ENABLE_BENCHMARK
 		frameBenchmark.shadowMapping.end();
 #endif
 
@@ -299,7 +301,7 @@ int main()
 		Camera::activeCamera->updateCameraUniform();
 		cameraDataUniformBuffer->loadData(&Camera::activeCamera->getCameraUniformData(), 0, sizeof(GPU_UB_CameraData));
 
-#ifdef COMPILE_RELEASE_LOGGING
+#ifdef ENABLE_BENCHMARK
 		frameBenchmark.collisionDetectionTransformFeedback.start();
 #endif
 		// render with transform feedback going to world space geometry texture buffer
@@ -319,7 +321,7 @@ int main()
 
 
 			// table
-#ifdef COMPILE_RELEASE_LOGGING
+#ifdef ENABLE_BENCHMARK
 			// draw multiple for performance testing
 			for (int i = 0; i < COLLISION_BENCHMARK_ITERATIONS; ++i)
 			{
@@ -341,7 +343,7 @@ int main()
 		// end collision mesh transform feedback
 		glEndTransformFeedback();
 
-#ifdef COMPILE_RELEASE_LOGGING
+#ifdef ENABLE_BENCHMARK
 		frameBenchmark.collisionDetectionTransformFeedback.end();
 
 		frameBenchmark.visuals.start();
@@ -371,7 +373,7 @@ int main()
 			renderer.render(groundPlane);
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-#ifdef COMPILE_RELEASE_LOGGING
+#ifdef ENABLE_BENCHMARK
 			frameBenchmark.visuals.end();
 			frameBenchmark.particleSimulation.start();
 #endif
@@ -380,7 +382,7 @@ int main()
 			if (runtime.getDuration().count() > 3.0f && state.isRenderingParticles)
 				snow.updateParticles(state.deltaTime, triangleCount);
 
-#ifdef COMPILE_RELEASE_LOGGING
+#ifdef ENABLE_BENCHMARK
 			frameBenchmark.particleSimulation.end();
 #endif
 		}
@@ -402,7 +404,7 @@ int main()
 
 		window.swapBuffer();
 
-#ifdef COMPILE_RELEASE_LOGGING
+#ifdef ENABLE_BENCHMARK
 		if (state.currentFrame >= 1000 && state.currentFrame <= 3000)
 		{
 			glLogger.write(frameBenchmark.getDataSS().str());
