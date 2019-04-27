@@ -15,7 +15,7 @@ namespace SnowGL
 
 	bool ParticleSystem::initialise()
 	{
-		CONSOLE_MESSAGE("Initialising Snowfall Particle System");
+		LOG(LOG_DEBUG) << "Initialising Snowfall Particle System";
 
 		glPointSize(m_pointSize);
 
@@ -126,7 +126,7 @@ namespace SnowGL
 		// particle system setup
 		applySettingsToShader();
 
-		CONSOLE_MESSAGE("Created " << m_numParticles << " particles on the GPU");
+		LOG(LOG_DEBUG) << "Created " << m_numParticles << " particles on the GPU";
 
 		// setup accumulation SSBO
 		m_SSBO_AccumulationData.dimensions = glm::vec4(m_settings->domainSize.x, 1.75f, m_settings->domainSize.z, 0);
@@ -145,7 +145,7 @@ namespace SnowGL
 		// link the uniform buffer to the binding point
 		m_accumulationSSBO->bindBase(BUFFER_SHADER_STORAGE, SHADER_BINDPOINT_ACCUMULATION_PARTITION);
 
-		CONSOLE_MESSAGE("Created buffers for collision data");
+		LOG(LOG_DEBUG) << "Created buffers for collision data";
 
 		// setup wind field SSBO
 		m_SSBO_windFieldData.dimensions = glm::vec4(m_settings->domainSize, 0);
@@ -179,7 +179,7 @@ namespace SnowGL
 
 		glUnmapBuffer(BUFFER_ARRAY);
 
-		CONSOLE_MESSAGE("Created buffers for wind field data");
+		LOG(LOG_DEBUG) << "Created buffers for wind field data";
 
 		return true;
 	}
@@ -194,7 +194,7 @@ namespace SnowGL
 		m_tfShader->setUniform3f("u_globalWind", m_settings->globalWind);
 		m_tfShader->setUniform1f("u_collisionMultiplier", m_settings->collisionMultiplier);
 		m_tfShader->setUniform3f("u_initialVelocity", m_settings->initialVelocity);
-		CONSOLE_MESSAGE("Particle settings applied to shader");
+		LOG(LOG_DEBUG) << "Particle settings applied to shader";
 
 		m_domainTransform.setPosition(m_settings->domainPosition);
 	}

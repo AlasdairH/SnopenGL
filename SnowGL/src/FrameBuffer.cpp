@@ -7,7 +7,7 @@ namespace SnowGL
 	{
 		m_width = _width;
 		m_height = _height;
-		CONSOLE_MESSAGE("Creating Frame Buffer with resolution: " << m_width << ", " << m_height);
+		LOG(LOG_DEBUG) << "Creating Frame Buffer with resolution: " << m_width << ", " << m_height;
 
 		// create VAO
 		m_arrayBuffer = new VertexArray;
@@ -52,7 +52,7 @@ namespace SnowGL
 
 	void FrameBuffer::attach(std::shared_ptr<Texture> _texture, FrameBufferTextureType _type)
 	{
-		CONSOLE_MESSAGE("Attaching texture " << _texture->getGLID() << " to frame buffer " << m_frameBufferID);
+		LOG(LOG_DEBUG) << "Attaching texture " << _texture->getGLID() << " to frame buffer " << m_frameBufferID;
 		m_texture = _texture;
 		bind();
 		_texture->bind();
@@ -91,12 +91,12 @@ namespace SnowGL
 		GLenum status;
 		if ((status = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE)
 		{
-			CONSOLE_ERROR("Unable to verify frame buffer " << m_frameBufferID << ": " << status);
+			LOG(LOG_ERROR) << "Unable to verify frame buffer " << m_frameBufferID << ": " << status;
 			return false;
 		}
 		else
 		{
-			CONSOLE_MESSAGE("Verified Frame Buffer with ID: " << m_frameBufferID);
+			LOG(LOG_DEBUG) << "Verified Frame Buffer with ID: " << m_frameBufferID;
 			return true;
 		}
 		unBind();

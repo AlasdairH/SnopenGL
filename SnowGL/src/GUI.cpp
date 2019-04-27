@@ -61,12 +61,12 @@ namespace SnowGL
 					if (ImGui::MenuItem("Orthographic Mode"))
 					{
 						Camera::activeCamera->setProjectionMode(PROJECTION_ORTHOGRAPHIC);
-						CONSOLE_MESSAGE("Set camera to PROJECTION_ORTHOGRAPHIC")
+						LOG(LOG_DEBUG) << "Set camera to PROJECTION_ORTHOGRAPHIC";
 					}
 					if (ImGui::MenuItem("Perspective Mode"))
 					{
 						Camera::activeCamera->setProjectionMode(PROJECTION_PERSPECTIVE);
-						CONSOLE_MESSAGE("Set camera to PROJECTION_PERSPECTIVE")
+						LOG(LOG_DEBUG) << "Set camera to PROJECTION_PERSPECTIVE";
 					}
 					ImGui::EndMenu();
 				}

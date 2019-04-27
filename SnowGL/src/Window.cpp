@@ -38,7 +38,7 @@ namespace SnowGL
 
 		// TODO: RESIZE
 
-		CONSOLE_MESSAGE("Window resized to: " << m_width << ", " << m_height);
+		LOG(LOG_DEBUG) << "Window resized to: " << m_width << ", " << m_height;
 
 	}
 }

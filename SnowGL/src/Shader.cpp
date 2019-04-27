@@ -21,15 +21,15 @@ namespace SnowGL
 		m_shaderID = glCreateShader(m_shaderType);
 		if (m_shaderType == SHADER_VERTEX)
 		{
-			CONSOLE_MESSAGE("Created Vertex Shader with ID " << m_shaderID);
+			LOG(LOG_DEBUG) << "Created Vertex Shader with ID " << m_shaderID;
 		}
 		else if (m_shaderType == SHADER_GEOMETRY)
 		{
-			CONSOLE_MESSAGE("Created Geometry Shader with ID " << m_shaderID);
+			LOG(LOG_DEBUG) << "Created Geometry Shader with ID " << m_shaderID;
 		}
 		else if (m_shaderType == SHADER_FRAGMENT)
 		{
-			CONSOLE_MESSAGE("Created Fragment Shader with ID " << m_shaderID);
+			LOG(LOG_DEBUG) << "Created Fragment Shader with ID " << m_shaderID;
 		}
 	}
 
@@ -65,7 +65,7 @@ namespace SnowGL
 			return false;
 		}
 		m_verified = true;
-		CONSOLE_MESSAGE("Shader " << m_shaderID << " Successfully Verified");
+		LOG(LOG_DEBUG) << "Shader " << m_shaderID << " Successfully Verified";
 		return true;
 	}
 }

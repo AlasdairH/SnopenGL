@@ -5,12 +5,12 @@ namespace SnowGL
 {
 	void InitManager::initSDL()
 	{
-		CONSOLE_MESSAGE("Initialising SDL");
+		LOG(LOG_DEBUG) << "Initialising SDL";
 		// attempt to initialise openGL
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0)
 		{
 			// something went wrong, exit program
-			CONSOLE_ERROR("Unable to Initialise SDL");
+			LOG(LOG_ERROR) << "Unable to Initialise SDL";
 		}
 
 		// set OpenGL 4.3
@@ -25,37 +25,37 @@ namespace SnowGL
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
 
-		CONSOLE_MESSAGE("SDL Initialised");
+		LOG(LOG_DEBUG) << "SDL Initialised";
 	}
 
 	void InitManager::initOpenGL()
 	{
-		CONSOLE_MESSAGE("Initialising OpenGL");
+		LOG(LOG_DEBUG) << "Initialising OpenGL";
 
 		glewExperimental = GL_TRUE;
 
 		GLenum err = glewInit();
 		if (GLEW_OK != err)
 		{
-			CONSOLE_ERROR("GLEW failed to initialise ");
+			LOG(LOG_ERROR) << "GLEW failed to initialise ";
 			return;
 		}
 
-		CONSOLE_MESSAGE("Using GLEW " << glewGetString(GLEW_VERSION));
+		LOG(LOG_DEBUG) << "Using GLEW " << glewGetString(GLEW_VERSION);
 
-		CONSOLE_MESSAGE("OpenGL Vendor: " << glGetString(GL_VENDOR));
-		CONSOLE_MESSAGE("OpenGL Renderer: " << glGetString(GL_RENDERER));
-		CONSOLE_MESSAGE("OpenGL Version: " << glGetString(GL_VERSION));
-		CONSOLE_MESSAGE("OpenGL Shading Language Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION));
+		LOG(LOG_DEBUG) << "OpenGL Vendor: " << glGetString(GL_VENDOR);
+		LOG(LOG_DEBUG) << "OpenGL Renderer: " << glGetString(GL_RENDERER);
+		LOG(LOG_DEBUG) << "OpenGL Version: " << glGetString(GL_VERSION);
+		LOG(LOG_DEBUG) << "OpenGL Shading Language Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION);
 
 		int maxTexBufferSize;
 		glGetIntegerv(GL_MAX_TEXTURE_BUFFER_SIZE, &maxTexBufferSize);
-		CONSOLE_MESSAGE("Max Texture Buffer Size: " << maxTexBufferSize);
+		LOG(LOG_DEBUG) << "Max Texture Buffer Size: " << maxTexBufferSize;
 		int maxSSBOSize;
 		glGetIntegerv(GL_MAX_SHADER_STORAGE_BLOCK_SIZE, &maxSSBOSize);
-		CONSOLE_MESSAGE("Max SSBO Size: " << maxSSBOSize);
+		LOG(LOG_DEBUG) << "Max SSBO Size: " << maxSSBOSize;
 
-		CONSOLE_MESSAGE("OpenGL Initialised");
+		LOG(LOG_DEBUG) << "OpenGL Initialised";
 	}
 }
 

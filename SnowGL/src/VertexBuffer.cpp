@@ -19,7 +19,7 @@ namespace SnowGL
 	VertexBuffer::~VertexBuffer()
 	{
 		glDeleteBuffers(1, &m_vertexBufferID);
-		CONSOLE_MESSAGE("Vertex Buffer Object with ID: " << m_vertexBufferID << " Deleted");
+		LOG(LOG_DEBUG) << "Vertex Buffer Object with ID: " << m_vertexBufferID << " Deleted";
 	}
 
 	void VertexBuffer::init()
@@ -50,12 +50,12 @@ namespace SnowGL
 			
 			glBindTexture(GL_TEXTURE_BUFFER, m_vertexBufferTextureID);
 			glTextureBuffer(m_vertexBufferTextureID, GL_RGBA32F, m_vertexBufferID);
-			CONSOLE_MESSAGE("Created buffer texture with ID: " << m_vertexBufferTextureID)
+			LOG(LOG_DEBUG) << "Created buffer texture with ID: " << m_vertexBufferTextureID;
 
 			m_vertexBufferType = BUFFER_ARRAY;
 		}
 
-		CONSOLE_MESSAGE("Vertex Buffer Object with ID: " << m_vertexBufferID << " Created");
+		LOG(LOG_DEBUG) << "Vertex Buffer Object with ID: " << m_vertexBufferID << " Created";
 	}
 
 	void VertexBuffer::allocate(GLuint _size)
@@ -90,12 +90,12 @@ namespace SnowGL
 
 	void VertexBuffer::addTextureBuffer(GLenum _format, unsigned int _size)
 	{
-		CONSOLE_MESSAGE("Adding texture buffer");
+		LOG(LOG_DEBUG) << "Adding texture buffer";
 		glBindBuffer(GL_TEXTURE_BUFFER, m_vertexBufferID);
 		glBufferData(GL_TEXTURE_BUFFER, _size, NULL, GL_DYNAMIC_COPY);
 
 		glGenTextures(1, &m_vertexBufferTextureID);
-		CONSOLE_MESSAGE("Created texture with GLID " << m_vertexBufferTextureID)
+		LOG(LOG_DEBUG) << "Created texture with GLID " << m_vertexBufferTextureID;
 		glBindTexture(GL_TEXTURE_BUFFER, m_vertexBufferTextureID);
 		glTexBuffer(GL_TEXTURE_BUFFER, _format, m_vertexBufferID);
 	}

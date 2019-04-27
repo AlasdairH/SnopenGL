@@ -23,7 +23,7 @@ namespace SnowGL
 
 	Texture::~Texture()
 	{
-		CONSOLE_MESSAGE("Destroyed Texture with ID: " << m_textureID);
+		LOG(LOG_DEBUG) << "Destroyed Texture with ID: " << m_textureID;
 		glDeleteTextures(1, &m_textureID);
 	}
 
@@ -54,7 +54,7 @@ namespace SnowGL
 		// give OpenGL the data
 		glTexImage2D(GL_TEXTURE_2D, 0, _type, m_width, m_height, 0, _type, _pixelDataFormat, NULL);
 		unBind();
-		CONSOLE_MESSAGE("Created blank Texture with ID: " << m_textureID);
+		LOG(LOG_DEBUG) << "Created blank Texture with ID: " << m_textureID;
 	}
 
 	void Texture::load(const std::string &_name, const std::string &_filepath)
@@ -62,7 +62,7 @@ namespace SnowGL
 		// load the image
 		stbi_set_flip_vertically_on_load(true);
 		m_localBuffer = stbi_load(_filepath.c_str(), &m_width, &m_height, &m_BPP, 4);
-		CONSOLE_MESSAGE("Loaded File: " << _filepath);
+		LOG(LOG_DEBUG) << "Loaded File: " << _filepath;
 
 		m_type = TEXTURE_RGBA;
 		m_pixelDataType = TEXTURE_PIXEL_UBYTE;
@@ -91,7 +91,7 @@ namespace SnowGL
 			stbi_image_free(m_localBuffer);
 		}
 
-		CONSOLE_MESSAGE("Created Texture with ID: " << m_textureID);
+		LOG(LOG_DEBUG) << "Created Texture with ID: " << m_textureID;
 	}
 
 	void Texture::bind(GLuint _slot) const

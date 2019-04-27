@@ -6,13 +6,13 @@ namespace SnowGL
 	VertexArray::VertexArray()
 	{
 		glGenVertexArrays(1, &m_vertexArrayID);
-		CONSOLE_MESSAGE("Vertex Array Object with ID: " << m_vertexArrayID << " Created");
+		LOG(LOG_DEBUG) << "Vertex Array Object with ID: " << m_vertexArrayID << " Created";
 	}
 
 	VertexArray::~VertexArray()
 	{
 		glDeleteVertexArrays(1, &m_vertexArrayID);
-		CONSOLE_MESSAGE("Vertex Array Object with ID: " << m_vertexArrayID << " Deleted");
+		LOG(LOG_DEBUG) << "Vertex Array Object with ID: " << m_vertexArrayID << " Deleted";
 	}
 
 	void VertexArray::reset()

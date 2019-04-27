@@ -12,7 +12,7 @@ namespace SnowGL
 
 			if ((inFile.rdstate() & std::ifstream::failbit) != 0)
 			{
-				CONSOLE_ERROR("Failed to Open File: " << _filepath);
+				LOG(LOG_ERROR) << "Failed to Open File: " << _filepath;
 				return std::string("ERROR");
 			}
 
@@ -22,7 +22,7 @@ namespace SnowGL
 			// store the string
 			std::string str = strStream.str();
 
-			CONSOLE_MESSAGE("Loaded File: " << _filepath);
+			LOG(LOG_DEBUG) << "Loaded File: " << _filepath;
 			return str;
 		}
 	}
@@ -39,11 +39,11 @@ namespace SnowGL
 		std::string objFile = loadText(_filepath);
 		if (objFile == "ERROR")
 		{
-			CONSOLE_ERROR("Unable to load .obj file");
+			LOG(LOG_ERROR) << "Unable to load .obj file";
 			return;
 		}
 
-		CONSOLE_MESSAGE("Parsing mesh file: " << _filepath);
+		LOG(LOG_DEBUG) << "Parsing mesh file: " << _filepath;
 
 		unsigned int cursor = 0;
 
@@ -176,12 +176,12 @@ namespace SnowGL
 		_mesh.layout = Vertex::getLayout();
 		// return the mesh
 
-		CONSOLE_MESSAGE("Loaded " << _mesh.vertices.size() << " vertices | " << parsedLines << " lines parsed | Took " << timer.getDuration().count() << "s");
+		LOG(LOG_DEBUG) << "Loaded " << _mesh.vertices.size() << " vertices | " << parsedLines << " lines parsed | Took " << timer.getDuration().count() << "s";
 	}
 
 	void IOUtilities::loadRenderable(Renderable &_renderable, const std::string &_filepath)
 	{
-		CONSOLE_MESSAGE("Loading renderable " << _filepath);
+		LOG(LOG_DEBUG) << "Loading renderable " << _filepath;
 
 		int parsedLines = 0;
 		bool filetypeVerified = false;
@@ -273,7 +273,7 @@ namespace SnowGL
 		_renderable.setShader(shader);
 		_renderable.setTexture(texture);
 
-		CONSOLE_MESSAGE("Finished loading renderable " << _filepath);
+		LOG(LOG_DEBUG) << "Finished loading renderable " << _filepath;
 	}
 
 	std::vector<std::string> IOUtilities::split(const std::string & _s, char _delimiter)

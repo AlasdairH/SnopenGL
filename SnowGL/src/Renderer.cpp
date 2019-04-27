@@ -56,7 +56,7 @@ namespace SnowGL
 
 		m_snowTexture = std::make_shared<Texture>("Snow", "resources/textures/snow.png");
 
-		CONSOLE_MESSAGE("Finished creating renderer");
+		LOG(LOG_DEBUG) << "Finished creating renderer";
 	}
 
 	void Renderer::render(const GPU_Mesh &_mesh, ShaderProgram &_shaderProgram, const Transform &_transform)
