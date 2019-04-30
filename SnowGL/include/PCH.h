@@ -36,22 +36,8 @@
 #include "Timer.h"
 #include "GPU_Timer.h"
 
-#ifdef COMPILE_DEBUG
-#define LOG(LOG_DEBUG) << _text) std::cout << "MESSAGE: " << _text << std::endl;
-#define LOG(LOG_DEBUG) << (_text) std::cout << "MESSAGE: " << _text << std::endl;
-#define LOG(LOG_WARNING) << _text) std::cout << "WARNING: " << _text << std::endl;
-#define LOG(LOG_ERROR) << _text) std::cout << "ERROR: " << _text << std::endl;
-#endif
-
 #ifdef ENABLE_BENCHMARK
 #define COLLISION_BENCHMARK_ITERATIONS 1
-#endif
-
-#ifdef COMPILE_RELEASE
-#define LOG(LOG_DEBUG) << _text);
-#define LOG(LOG_DEBUG) << (_text) std::cout << "MESSAGE: " << _text << std::endl;
-#define LOG(LOG_WARNING) << _text) std::cout << "WARNING: " << _text << std::endl;
-#define LOG(LOG_ERROR) << _text) std::cout << "ERROR: " << _text << std::endl;
 #endif
 
 #define TICK_INTERVAL 30

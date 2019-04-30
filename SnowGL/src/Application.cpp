@@ -25,9 +25,6 @@ int main()
 {
 //#define ENABLE_BENCHMARK
 
-	LOG(LOG_DEBUG) << (sizeof(unsigned int));
-	LOG(LOG_DEBUG) << (sizeof(const void*));
-
 	srand(1);
 
 	ApplicationState &state = ApplicationState::getInstance();
