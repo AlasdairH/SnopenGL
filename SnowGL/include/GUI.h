@@ -50,13 +50,11 @@ namespace SnowGL
 		inline void setSelectedParticleSystem(std::shared_ptr<ParticleSystem> _system) { m_selectedParticleSystem = _system; }
 
 	protected:
-		SDL_Window				*m_window;		/**< The SDL window to render to */
-		ApplicationState		*m_state;		/**< The state of the application */
+		SDL_Window				*m_window;							/**< The SDL window to render to */
+		ApplicationState		*m_state;							/**< The state of the application */
 
-		float f1, f2, f3 = 0.0f;
+		std::array<float, 50>	m_fpsValues;						/**< An array containing the last 50 fps values */
 
-		std::array<float, 50>	m_fpsValues;
-
-		std::shared_ptr<ParticleSystem> m_selectedParticleSystem;
+		std::shared_ptr<ParticleSystem> m_selectedParticleSystem;	/**< A pointer to the currently active particle system (used to get and set the settings) */
 	};
 }

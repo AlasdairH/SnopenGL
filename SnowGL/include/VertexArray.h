@@ -45,6 +45,16 @@ namespace SnowGL
 		*/
 		void addBuffer(const VertexBuffer &_vertexBuffer, const VertexBufferLayout &_layout);
 
+		/** @brief Manually set the attribute array
+		*	@param _index Specifies the index of the generic vertex attribute to be modified.
+		*	@param _size Specifies the number of components per generic vertex attribute.
+		*	@param _type Specifies the data type of each component in the array.
+		*	@param _normalised Specifies whether fixed-point data values should be normalized.
+		*	@param _stride Specifies the byte offset between consecutive generic vertex attributes.
+		*	@param _pointer Specifies a offset of the first component of the first generic vertex attribute.
+		*
+		*	Manually set the attribute array.
+		*/
 		void setAttribArray(GLuint _index, GLint _size, GLenum _type, GLboolean _normalised, GLsizei _stride, const GLvoid *_pointer);
 
 		/** @brief VertexArray Dtor

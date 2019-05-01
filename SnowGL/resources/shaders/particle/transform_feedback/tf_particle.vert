@@ -56,10 +56,6 @@ out float	out_lifetime;
 uniform mat4 u_modelMatrix;
 
 // particle system
-// colour
-uniform vec4 u_startColour = vec4(1.0f, 0.07f, 0.58f, 1.0f);
-uniform vec4 u_endColour = vec4(1.0f, 0.07f, 0.58f, 1.0f);
-uniform vec4 u_collisionColour = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 // environment
 uniform vec3 u_globalWind = vec3(0.0f, 0.0f, 0.0f);
 // movement
@@ -205,7 +201,6 @@ void main()
 		// if the collision index of the particle isn't -1 (if it's stuck to something)
 		else if(out_position.w >= 0.0f)
 		{
-			particleColour = u_collisionColour;
 			out_position = vec4(0, -1000, 0, out_position.w);	// move the particle out the way
 		}
 		// out of bounds check
@@ -215,7 +210,6 @@ void main()
 		|| out_position.z > u_domainWidth + u_domainPosition.z || out_position.z < -u_domainWidth + u_domainPosition.z
 		)
 		{
-			particleColour = vec4(0.0, 1.0, 0.0, 0.0);
 			out_position = vec4(0.0, 0.0, 0.0, 0.0);
 		}
 		*/
@@ -232,7 +226,6 @@ void main()
 			out_position = vec4(in_position.xyz + (out_velocity * u_deltaTime), out_position.w);
 
 			float agePerc = age / in_lifetime;
-			particleColour = mix(u_startColour, u_endColour, agePerc);
 
 			// ------------------------- intersection test -------------------------
 			vec3 v0, v1, v2;

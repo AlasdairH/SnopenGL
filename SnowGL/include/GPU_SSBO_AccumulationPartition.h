@@ -18,13 +18,13 @@ namespace SnowGL
 	*/
 	struct GPU_SSBO_accumulationPartition
 	{
-		glm::vec4 dimensions;			// the size of the spatial partition			
-		glm::vec4 resolution;			// the number of partitions in the width, height and depth
-		glm::vec4 position;				// the position of the spatial partition
+		glm::vec4 dimensions;			/**< The size of the spatial partition */
+		glm::vec4 resolution;			/**< The number of partitions in the width, height and depth */
+		glm::vec4 position;				/**< The position of the spatial partition */
 
 		// pre compute
-		glm::vec4 positionBL;			// the position of the bottom left corner
-		glm::vec4 binSize;				// individual bin size
+		glm::vec4 positionBL;			/**< The position of the bottom left corner */
+		glm::vec4 binSize;				/**< The individual bin size */
 
 		// bins are manually allocated on the GPU as creating it on the stack causes issues
 	};

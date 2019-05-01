@@ -1,0 +1,14 @@
+/*! \mainpage SnopenGL - Level 6 Dissertation
+
+\section sec_intro Introduction
+
+Test Intro
+
+\section sec_running Install
+
+1. Clone from https://github.com/AlasdairH/SnopenGL
+2. Ensure x64 and Release are selected for build
+3. Build the project
+4. Run! 
+ 
+*/

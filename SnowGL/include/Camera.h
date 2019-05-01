@@ -124,7 +124,7 @@ namespace SnowGL
 		*/
 		inline void setPitch(const float &_pitch) { m_pitch = _pitch; }
 		/** @brief Sets the camera yaw
-		*	@param _pitch The yaw to set
+		*	@param _yaw The yaw to set
 		*
 		*	Sets the camera yaw
 		*/

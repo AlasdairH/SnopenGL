@@ -9,7 +9,7 @@
 
 namespace SnowGL
 {
-	/*! @class Initialiser
+	/*! @class InitManager
 	*	@brief Initialisation for external libraries.
 	*
 	*	This class handles the initialisation and uninitialisation of external libraries such as SDL and OpenGL (GLEW).
@@ -17,8 +17,6 @@ namespace SnowGL
 	class InitManager
 	{
 	public:
-		InitManager() { }
-
 		/** @brief SDL Initialisation
 		*
 		*	Initialises SDL.

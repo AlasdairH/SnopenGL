@@ -38,6 +38,12 @@ namespace SnowGL
 		*/
 		~FrameBuffer();
 
+		/** @brief Attaches a texture to the framebuffer
+		*	@param _texture The texture to attach to the framebuffer
+		*	@param _type The texture type
+		*
+		*	Attaches a texture to the framebuffer. This could for example be colour or depth.
+		*/
 		void attach(std::shared_ptr<Texture> _texture, FrameBufferTextureType _type);
 
 		/** @brief Sets the colour buffer to draw into and read from
@@ -95,7 +101,5 @@ namespace SnowGL
 			
 		std::shared_ptr<Texture>		m_texture;					/**< The OpenGL ID of the FrameBuffer Texture Attachment */
 		GLuint							m_depthRenderBufferID;		/**< The OpenGL ID of the FrameBuffer Depth RenderBuffer Attachment */
-
-		int								m_colourBufferCount = 0;	// TODO: Use
 	};
 }

@@ -11,11 +11,15 @@ namespace SnowGL
 {
 	enum TransformMode { TRANSFORM_LOCAL, TRANSFORM_WORLD };
 
+	/*! @class Transform
+	*	@brief A transform containing the data for drawing an object in the correct place
+	*
+	*	The transform class holds the positional data for an object in 3D space. It also holds
+	*	the methods for getting a model matrix for drawing in the correct location.
+	*/
 	class Transform
 	{
 	public:
-		Transform();
-
 		/** @brief Gets the combined model matrix
 		*	@return The model matrix
 		*

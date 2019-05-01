@@ -155,31 +155,6 @@ namespace SnowGL
 
 				ImGui::Separator();
 
-				ImGui::Text("Start Colour");
-				glm::vec4 &colStart = m_selectedParticleSystem->getSettingsPtr()->colourStart;
-				float colStartF4[4] = { colStart.x, colStart.y, colStart.z, colStart.w };
-				ImGui::PushItemWidth(80);
-				ImGui::ColorEdit4("Start Colour", colStartF4);
-				colStart = glm::vec4(colStartF4[0], colStartF4[1], colStartF4[2], colStartF4[3]);
-
-				ImGui::Text("End Colour");
-				glm::vec4 &colEnd = m_selectedParticleSystem->getSettingsPtr()->colourEnd;
-				float colEndF4[4] = { colEnd.x, colEnd.y, colEnd.z, colEnd.w };
-				ImGui::PushItemWidth(80);
-				ImGui::ColorEdit4("End Colour", colEndF4);
-				colEnd = glm::vec4(colEndF4[0], colEndF4[1], colEndF4[2], colEndF4[3]);
-
-				ImGui::Separator();
-
-				ImGui::Text("Collision Colour");
-				glm::vec4 &colCollision = m_selectedParticleSystem->getSettingsPtr()->collisionDebugColour;
-				float colCollisionF4[4] = { colCollision.x, colCollision.y, colCollision.z, colCollision.w };
-				ImGui::PushItemWidth(80);
-				ImGui::ColorEdit4("Collision Colour", colCollisionF4);
-				colCollision = glm::vec4(colCollisionF4[0], colCollisionF4[1], colCollisionF4[2], colCollisionF4[3]);
-
-				ImGui::Separator();
-
 				ImGui::SliderFloat("Collision Multiplier", &m_selectedParticleSystem->getSettingsPtr()->collisionMultiplier, 1.0f, 100.0f);
 
 				ImGui::Separator();

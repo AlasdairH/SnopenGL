@@ -24,15 +24,15 @@ namespace SnowGL
 	*/
 	struct Particle
 	{
-		glm::vec4	currentPosition;	/**< The particle position */
-		glm::vec4	startPosition;		/**< The particle position */
+		glm::vec4	currentPosition;	/**< The particle's current position */
+		glm::vec4	startPosition;		/**< The particle's start position */
 		glm::vec3	velocity;			/**< The particle velocity */
 		float		mass;				/**< The particle mass */
 		float		delay		= -1;	/**< The particles delay from the start of the simulation to when it is created */
 		float		lifetime	= -1;	/**< The particles lifetime */
 	};
 
-	/*! @class SnowfallSystem
+	/*! @class ParticleSystem
 	*	@brief The management system for simulating snowfall
 	*
 	*	The snowfall system simulates particles through Transform Feedback with OpenGL.
@@ -114,7 +114,7 @@ namespace SnowGL
 		std::shared_ptr<VertexArray>		m_tfVAO[2];					/**< The Vertex Arrays for particle data */
 		std::shared_ptr<VertexBuffer>		m_tfVBO[2];					/**< The Vertex Buffers for particle data */
 
-		std::shared_ptr<Texture>			m_snowflakeTexture;
+		std::shared_ptr<Texture>			m_snowflakeTexture;			/**< Texture used for rendering the snowflakes */
 
 		std::shared_ptr<VertexBuffer>		m_accumulationSSBO;			/**< SSBO version of the accumulation data */
 		GPU_SSBO_accumulationPartition		m_SSBO_AccumulationData;	/**< SSBO version of the accumulation data */
@@ -124,8 +124,8 @@ namespace SnowGL
 
 		std::shared_ptr<ShaderProgram>		m_tfShader;					/**< The particle transform feedback shader */
 		std::shared_ptr<ShaderProgram>		m_renderShader;				/**< The particle rendering shader */
-		GLuint								m_wsGeomArrayBuffer;
-		GLuint								m_wsGeomTextureBuffer;
+		GLuint								m_wsGeomArrayBuffer;		/**< The GLID of the worldspace geometry array buffer */
+		GLuint								m_wsGeomTextureBuffer;		/**< The GLID of the worldspace geometry texture buffer */
 
 		int									m_numParticles;				/**< The number of particles */
 

@@ -9,26 +9,27 @@
 
 namespace SnowGL
 {
+	/*! @class ParticleSettings
+	*	@brief Contains the data for setting the options of a particle system
+	*
+	*	This struct holds the data required to configure a particle system.
+	*/
 	struct ParticleSettings
 	{
-		float		particlesPerSecond		= 0;			// The number of particles emitted per second
-		float		lifetimeMin				= 0.0f;			// min lifetime in seconds
-		float		lifetimeMax				= 0.0f;			// max lifetime in seconds
-		float		collisionMultiplier		= 0.0f;			// max lifetime in seconds
+		float		particlesPerSecond		= 0;			/**< The number of particles to emit per second */
+		float		lifetimeMin				= 0.0f;			/**< The minimum amount of time a particle will live */
+		float		lifetimeMax				= 0.0f;			/**< The maximum amount of time a particle will live */
+		float		collisionMultiplier		= 0.0f;			/**< How far ahead of the particle to look for collisions (OLD) */
 
-		glm::vec3	globalWind;
+		glm::vec3	globalWind;								/**< Direction of the global wind modifier */
 
-		glm::vec4	colourStart;			// the start colour in RGBA
-		glm::vec4	colourEnd;				// the end colour in RGBA
-		glm::vec4	collisionDebugColour;	// colour of any particles colliding
+		glm::vec3	initialVelocity = glm::vec3(0.0f);		/**< The initial velocity given to the particles when they spawn */
 
-		glm::vec3	initialVelocity = glm::vec3(0.0f);	// the end colour in RGBA
+		glm::vec3	domainPosition = glm::vec3(0.0f);		/**< The position of the particle domain in 3D space */
+		glm::vec3	domainSize = glm::vec3(5.0f);			/**< The size of the particle domain */
 
-		glm::vec3	domainPosition = glm::vec3(0.0f);			// domain position
-		glm::vec3	domainSize = glm::vec3(5.0f);
-
-		bool		drawDomain = false;
-		bool		drawPartition = false;
+		bool		drawDomain = false;						/**< A flag stating whether to draw the particle domain */
+		bool		drawPartition = false;					/**< A flag stating whether to draw the partitions for accumulation simulation */
 
 		/** @brief Required particle count getter
 		*	@return The maxiumum number of particles that would be required for the system

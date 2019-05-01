@@ -36,7 +36,7 @@ namespace SnowGL
 		ShaderProgram();		
 		/** @brief Program Ctor
 		*	@param _vert The vertex shader to load
-		*	@param _vert The fragment shader to load
+		*	@param _frag The fragment shader to load
 		*
 		*	Creates a shader program and loads the vertex and fragment shader provided
 		*/
@@ -79,6 +79,11 @@ namespace SnowGL
 		*/
 		void unBind() const;
 
+		/** @brief Gets the OpenGL ID of the shader program
+		*	@return The GLID of the program
+		*
+		*	Gets the OpenGL ID of the shader program
+		*/
 		inline GLuint getProgramID() { return m_programID; }
 
 		/** @brief Gets the location of the specified Uniform in a shader
@@ -99,7 +104,7 @@ namespace SnowGL
 		int getAttributeLocation(const std::string &_name);
 
 		/** @brief Sets a single float uniform
-		*	@param _varyings An array of count zero-terminated strings specifying the names of the varying variables to use for transform feedback
+		*	@param _varying An array of count zero-terminated strings specifying the names of the varying variables to use for transform feedback
 		*
 		*	Uses the getUniformLocation method to get the uniform location and set it to the given value.
 		*/

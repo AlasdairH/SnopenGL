@@ -3,11 +3,6 @@
 
 namespace SnowGL
 {
-	Transform::Transform()
-	{
-		
-	}
-
 	glm::mat4 Transform::getModelMatrix() const
 	{
 		glm::mat4 modelMatrix = m_mat_position * m_mat_rotation * m_mat_scale;

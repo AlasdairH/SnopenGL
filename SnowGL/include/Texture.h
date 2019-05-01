@@ -31,6 +31,7 @@ namespace SnowGL
 		*/
 		Texture();
 		/** @brief Texture Ctor
+		*	@param _name A name to assign the texture
 		*	@param _filepath The path to the image to be loaded
 		*
 		*	Loads an image file using stb_image and loads it into OpenGL
