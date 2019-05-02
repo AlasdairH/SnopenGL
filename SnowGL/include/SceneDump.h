@@ -16,11 +16,11 @@ namespace SnowGL
 	*/
 	struct SceneDump
 	{
-		int simulatedFrames = -1;			/**< The number of simulated frames */
-		int triangleCount = -1;				/**< The scenes triangle count */
-		int particleCount = -1;				/**< How many particles were simulated */
-		float avgParticleSimTime = -1;		/**< The average time taken to simulate the particle step */
-		float avgFPS = -1;					/**< The average FPS during the simulation */
+		int simulatedFrames = 0;			/**< The number of simulated frames */
+		int triangleCount = 0;				/**< The scenes triangle count */
+		int particleCount = 0;				/**< How many particles were simulated */
+		float avgParticleSimTime = 0;		/**< The average time taken to simulate the particle step */
+		float avgFPS = 0;					/**< The average FPS during the simulation */
 
 		/** @brief Gets the data in string form
 		*	@return A string stream containing the data in a standard string form

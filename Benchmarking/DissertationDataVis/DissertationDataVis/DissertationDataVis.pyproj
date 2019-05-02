@@ -22,7 +22,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DissertationDataVis.py" />
-    <Compile Include="FPSDataVis.py">
+    <Compile Include="FPS_Particles_DataVis.py" />
+    <Compile Include="FPS_Tris_DataVis.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
