@@ -47,6 +47,7 @@ namespace SnowGL
 		// performance
 		float deltaTime;			/**< The delta time between frames */
 		float framesPerSecond;		/**< The frames per second */
+		float currentTime = 0;		/**< The time since the start of the program */
 		int currentFrame = 0;		/**< The current frame */
 
 		// input

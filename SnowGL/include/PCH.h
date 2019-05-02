@@ -36,8 +36,4 @@
 #include "Timer.h"
 #include "GPU_Timer.h"
 
-#ifdef ENABLE_BENCHMARK
-#define COLLISION_BENCHMARK_ITERATIONS 1
-#endif
-
 #define TICK_INTERVAL 30

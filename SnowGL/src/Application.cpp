@@ -23,8 +23,6 @@ using namespace SnowGL;
 
 int main()
 {
-//#define ENABLE_BENCHMARK
-
 	srand(1);
 
 	ApplicationState &state = ApplicationState::getInstance();
@@ -144,8 +142,8 @@ int main()
 #ifdef ENABLE_BENCHMARK
 	// in-app performance benchmarking
 	LogFile			glLogger("benchmarks/GL_Log.txt", LOG_TEXT, LOG_APPEND);
-	LogFile			glLoggerCSV("benchmarks/GL_LogCSV.csv", LOG_CSV, LOG_FRESH);
-	LogFile			glLoggerOverallCSV("benchmarks/GL_LogCSV_Settings.csv", LOG_CSV, LOG_FRESH);
+	LogFile			glLoggerCSV("benchmarks/GL_LogCSV.csv", LOG_CSV, LOG_APPEND);
+	LogFile			glLoggerOverallCSV("benchmarks/GL_LogCSV_Settings.csv", LOG_CSV, LOG_APPEND);
 	FrameBenchmark	frameBenchmark;
 
 	float avgParticleSimTime = 0;
@@ -158,6 +156,7 @@ int main()
 	{
 		// calculate FPS
 		float timepassed = runtime.getDuration().count();
+		state.currentTime = timepassed;
 		frames++;
 		if (timepassed - startTime > 0.25f && frames > 10)
 		{
@@ -402,7 +401,7 @@ int main()
 		window.swapBuffer();
 
 #ifdef ENABLE_BENCHMARK
-		if (state.currentFrame >= 1000 && state.currentFrame <= 3000)
+		if (state.currentTime >= 5.0f && state.currentTime <= 15.0f)
 		{
 			glLogger.write(frameBenchmark.getDataSS().str());
 			glLoggerCSV.write(frameBenchmark.getDataCSV().str());
@@ -410,8 +409,8 @@ int main()
 			avgParticleSimTime += frameBenchmark.particleSimulation.getDuration() / 1000000;
 			avgFPS += state.framesPerSecond;
 		}
-		// automatically close application at 3000 frames
-		if (state.currentFrame == 3000)
+		// automatically close application after 15 seconds
+		if (state.currentFrame == 15.0f)
 		{
 			SceneDump dump;
 			dump.particleCount = settings.getMaxParticles();
