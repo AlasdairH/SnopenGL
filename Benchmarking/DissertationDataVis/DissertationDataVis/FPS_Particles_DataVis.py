@@ -45,6 +45,7 @@ def parseData(_files):
     axes.set_title("Particle Count vs Frames per Second")
 
     #plot = axes.plot(data_particleCount[_files[0]], data_simTime[_files[0]], "b", label = "Particle Processing Time");
+    #plot = axes.plot(data_particleCount[_files[0]], data_simTime[_files[0]], "r", label = "Milliseconds", zorder = 1);
     plot = axes.plot(data_particleCount[_files[0]], data_FPS[_files[0]], "r", label = "Frames per Second", zorder = 1);
 
     startX, endX = axes.get_xlim()
