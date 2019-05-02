@@ -107,7 +107,7 @@ int main()
 	ParticleSettings settings;
 	settings.lifetimeMin = 10.0f;
 	settings.lifetimeMax = 10.0f;
-	settings.particlesPerSecond = 1000;
+	settings.particlesPerSecond = 20000;
 	// physics
 	settings.globalWind = glm::vec3(0.0f, 0.0f, 0.0f);
 	settings.initialVelocity = glm::vec3(0, -1.0f, 0);
@@ -410,11 +410,13 @@ int main()
 		window.swapBuffer();
 
 #ifdef ENABLE_BENCHMARK
-		if (state.currentTime >= benchmarkStartFrame && state.currentTime <= benchmarkEndTime)
+		if (state.currentTime > benchmarkStartTime && state.currentTime < benchmarkEndTime)
 		{
 			if (firstBenchmarkFrame == true)
 			{
+				LOG(LOG_DEBUG) << "Starting Benchmark";
 				benchmarkStartFrame = state.currentFrame;
+				firstBenchmarkFrame = false;
 			}
 
 			glLogger.write(frameBenchmark.getDataSS().str());
@@ -429,11 +431,11 @@ int main()
 			SceneDump dump;
 			dump.particleCount = settings.getMaxParticles();
 			dump.triangleCount = triangleCount;
-			dump.simulatedFrames = state.currentFrame;
-			dump.avgParticleSimTime = avgParticleSimTime / (dump.simulatedFrames - benchmarkStartFrame);
-			dump.avgFPS = avgFPS / (dump.simulatedFrames - benchmarkStartFrame);
+			dump.simulatedFrames = state.currentFrame - benchmarkStartFrame;
+			dump.avgParticleSimTime = avgParticleSimTime / dump.simulatedFrames;
+			dump.avgFPS = avgFPS / dump.simulatedFrames;
 
-			glLoggerOverallCSV.write(dump.getCSVHeaders().str());
+			//glLoggerOverallCSV.write(dump.getCSVHeaders().str());
 			glLoggerOverallCSV.write(dump.getDataCSV().str());
 
 			state.isRunning = false;

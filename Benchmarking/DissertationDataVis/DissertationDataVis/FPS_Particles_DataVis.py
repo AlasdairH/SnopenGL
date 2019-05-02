@@ -18,7 +18,7 @@ def parseData(_files):
 
     colours = { 0: "b", 1: "r", 2: "g", 3: "c", 4: "m", 5: "k", 6: "y" }
 
-    data_tris           = defaultdict(list)
+    data_particleCount  = defaultdict(list)
     data_simTime        = defaultdict(list)
     data_FPS            = defaultdict(list)
 
@@ -30,7 +30,7 @@ def parseData(_files):
                 if(lineCount == 0):
                     print("Read Headings")
                 else:
-                    data_tris[_files[i]].append(int(row[0]))
+                    data_particleCount[_files[i]].append(int(row[0]))
                     data_simTime[_files[i]].append(float(row[1]))
                     data_FPS[_files[i]].append(float(row[2]))
                 lineCount += 1
@@ -39,21 +39,23 @@ def parseData(_files):
     figure1 = plt.figure(figsize = (16, 9), dpi = 100)
 
     axes = figure1.add_subplot(1, 1, 1)
-    axes.set_xlabel("Triangle Count")
-    axes.set_ylabel("Time (milliseconds )")
+    axes.set_xlabel("Particle Count")
+    axes.set_ylabel("Frames per Second")
 
-    axes.set_title("Particle Simulation Time")
+    axes.set_title("Particle Count vs Frames per Second")
 
-    plot = axes.plot(data_tris[_files[0]], data_simTime[_files[0]], "b", label = "Particle Processing Time");
-    plot = axes.plot(data_tris[_files[0]], data_FPS[_files[0]], "r", label = "Frames per Second");
+    #plot = axes.plot(data_particleCount[_files[0]], data_simTime[_files[0]], "b", label = "Particle Processing Time");
+    plot = axes.plot(data_particleCount[_files[0]], data_FPS[_files[0]], "r", label = "Frames per Second", zorder = 1);
 
     startX, endX = axes.get_xlim()
     startY, endY = axes.get_ylim()
 
     axes.legend()
 
-    axes.xaxis.set_ticks(np.arange(math.floor(startX), math.ceil(endX) + 1, 1000.0))
-    axes.yaxis.set_ticks(np.arange(math.floor(startY), math.ceil(endY) + 1, 5.0))
+    axes.xaxis.set_ticks(np.arange(0, 1100000, 100000.0))
+    axes.yaxis.set_ticks(np.arange(0, 800, 100.0))
+
+    axes.axhline(y = 60, label = "60FPS", linestyle = "--", zorder = 0)
 
     #figure1.subplots_adjust(hspace = 0.8)
     plt.show()

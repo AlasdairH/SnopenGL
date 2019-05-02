@@ -135,6 +135,7 @@
     <Link>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;OpenGL32.lib;glu32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)SDKs\Lib64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -151,6 +152,7 @@
     <Link>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;OpenGL32.lib;glu32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)SDKs\Lib64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -171,7 +173,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;OpenGL32.lib;glu32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)SDKs\Lib64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>NotSet</SubSystem>
+      <SubSystem>Console</SubSystem>
       <StackReserveSize>
       </StackReserveSize>
       <StackCommitSize>
@@ -196,6 +198,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;OpenGL32.lib;glu32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)SDKs\Lib64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -216,7 +219,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;OpenGL32.lib;glu32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)SDKs\Lib64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>NotSet</SubSystem>
+      <SubSystem>Console</SubSystem>
       <StackReserveSize>
       </StackReserveSize>
       <StackCommitSize>
@@ -241,6 +244,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;OpenGL32.lib;glu32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)SDKs\Lib64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
