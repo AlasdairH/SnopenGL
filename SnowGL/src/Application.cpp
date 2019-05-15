@@ -93,6 +93,7 @@ int main()
 	vertexCount += groundPlane_COLLISION.getVertexCount();
 	vertexCount += sceneObject_COLLISION.getVertexCount();
 	vertexCount += sceneObject2_COLLISION.getVertexCount();
+
 #ifdef ENABLE_BENCHMARK
 	// create multiple instances of a scene object to test performance
 	vertexCount += (sceneObject_COLLISION.getVertexCount() * (COLLISION_BENCHMARK_ITERATIONS - 1));
@@ -105,19 +106,7 @@ int main()
 	GUI gui(window.getWindowPtr());
 
 	ParticleSettings settings;
-	settings.lifetimeMin = 10.0f;
-	settings.lifetimeMax = 10.0f;
-	settings.particlesPerSecond = 20000;
-	// physics
-	settings.globalWind = glm::vec3(0.0f, 0.0f, 0.0f);
-	settings.initialVelocity = glm::vec3(0, -1.0f, 0);
-	// debug
-	settings.collisionMultiplier = 2.0f;
-	// domain
-	settings.domainPosition = glm::vec3(0, 2, 0);
-	settings.domainSize = glm::vec3(10, 6, 6);
-	settings.drawDomain = true;
-	settings.drawPartition = false;
+	settings.fromSettingsFile("ParticleSettings.ini");
 
 	ParticleSystem snow(settings);
 	snow.initialise();

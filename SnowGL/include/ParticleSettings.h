@@ -37,5 +37,12 @@ namespace SnowGL
 		*	Calculagtes the maxiumum number of particles that would be required for the system
 		*/
 		inline int getMaxParticles() const { return (int)ceil(lifetimeMax) * (int)particlesPerSecond; }
+
+		/** @brief Loads the settings from a .ini file
+		*	@param _filename The settings file to load
+		*
+		*	Loads and parses a settings file for particle settings
+		*/
+		void fromSettingsFile(const std::string &_filename);
 	};
 }
