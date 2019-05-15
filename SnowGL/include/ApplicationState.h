@@ -35,6 +35,7 @@ namespace SnowGL
 		bool isRenderingParticles	= true;		/**< Whether to render particles */
 		bool isPaused				= false;	/**< The paused state of the simulation */
 		bool isTutorialOpen			= true;		/**< Is the tutorial open (starts open by default) */
+		bool renderWireframe		= false;	/**< Whether to render in wireframe */
 
 		// window
 		glm::vec2 windowSize;	/**< The current window size */

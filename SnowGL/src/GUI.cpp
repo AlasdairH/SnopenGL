@@ -49,7 +49,7 @@ namespace SnowGL
 					{
 						m_state->isPaused = !m_state->isPaused;
 					}
-					if (ImGui::MenuItem("Switch Camera"))
+					if (ImGui::MenuItem("Switch Scene Mode"))
 					{
 						// switch mode between view and edit
 						state.switchSceneMode();
@@ -163,7 +163,7 @@ namespace SnowGL
 
 				ImGui::Separator();
 
-				if (ImGui::Button("Start/Stop Particles"))
+				if (ImGui::Button("Show/Hide Particles"))
 				{
 					state.isRenderingParticles = !state.isRenderingParticles;
 				}

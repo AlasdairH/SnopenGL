@@ -360,9 +360,9 @@ int main()
 			groundPlane.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
 			groundPlane.m_shader->setUniformMat4f("u_depthSpaceMatrix", depthCamera.getCameraUniformData().viewProjectionMatrix);
 			groundPlane.m_texture->bind(0);
-			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			
 			renderer.render(groundPlane);
-			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 
 #ifdef ENABLE_BENCHMARK
 			frameBenchmark.visuals.end();
@@ -379,16 +379,8 @@ int main()
 		}
 		renderer.unBindFrameBuffer();
 
-		if (state.getSceneMode() == MODE_VIEW)
-		{
-			renderer.drawFrameBuffer();
-		}
-		else
-		{
-			renderer.drawDepthFrameBuffer();
-		}
+		renderer.drawFrameBuffer();
 		
-
 		// GUI
 		gui.onUpdate();
 		gui.onRender();
