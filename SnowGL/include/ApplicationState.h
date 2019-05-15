@@ -34,6 +34,7 @@ namespace SnowGL
 		bool isUIHidden				= false;	/**< Whether the UI is hidden or not */
 		bool isRenderingParticles	= true;		/**< Whether to render particles */
 		bool isPaused				= false;	/**< The paused state of the simulation */
+		bool isTutorialOpen			= true;		/**< Is the tutorial open (starts open by default) */
 
 		// window
 		glm::vec2 windowSize;	/**< The current window size */

@@ -39,6 +39,7 @@ namespace SnowGL
 			{
 				if (ImGui::BeginMenu("File"))
 				{
+					if (ImGui::MenuItem("Show Tutorial", "")) { m_state->isTutorialOpen = true; }
 					if (ImGui::MenuItem("Exit", "Esc")) { m_state->isRunning = false; }
 					ImGui::EndMenu();
 				}
@@ -78,14 +79,6 @@ namespace SnowGL
 						ImGui::EndMenu();
 					}
 				}
-				else
-				{
-					if (ImGui::BeginMenu("View Mode"))
-					{
-						if (ImGui::MenuItem("Exit")) { m_state->isRunning = false; }
-						ImGui::EndMenu();
-					}
-				}
 
 				ImGui::EndMainMenuBar();
 			}
@@ -119,10 +112,6 @@ namespace SnowGL
 			// OpenGL
 			//ImGui::SetNextWindowPos(ImVec2(0, 200));
 			ImGui::Begin("OpenGL", open, ImGuiWindowFlags_AlwaysAutoResize);
-
-			float pointSize = m_selectedParticleSystem->getPointSize();
-			ImGui::SliderFloat("Point Size", &pointSize, 1.0f, 10.0f);
-			m_selectedParticleSystem->setPointSize(pointSize);
 
 			if (ImGui::Button("Toggle VSync"))
 			{
@@ -177,6 +166,34 @@ namespace SnowGL
 				if (ImGui::Button("Start/Stop Particles"))
 				{
 					state.isRenderingParticles = !state.isRenderingParticles;
+				}
+
+				ImGui::End();
+			}
+
+			// Tutorial
+			if (state.isTutorialOpen)
+			{
+				// remain paused while tutorial is open
+				state.isPaused = true;
+
+				ImGui::SetNextWindowPos(ImVec2(state.windowSize.x / 2 - 100, state.windowSize.y / 2 - 100));
+				ImGui::Begin("Tutorial", open, ImGuiWindowFlags_AlwaysAutoResize);
+
+				ImGui::Text("Welcome to SnopenGL!");
+				ImGui::Separator();
+				ImGui::Text("Controls:");
+				ImGui::Text("W, S, A, D - Move Camera in view direction");
+				ImGui::Text("Q, E - Move Camera up or down");
+				ImGui::Text("Right Mouse Button (hold) - Rotate camera direction");
+				ImGui::Text("Space - Hide UI");
+				ImGui::Separator();
+				ImGui::Text("You can bring this tutorial back from the File menu");
+
+				if (ImGui::Button("Close and Run"))
+				{
+					state.isTutorialOpen = false;
+					state.isPaused = false;
 				}
 
 				ImGui::End();
