@@ -311,9 +311,6 @@ int main()
 		glBeginTransformFeedback(GL_TRIANGLES);
 		// begin collision mesh transform feedback
 			glEnable(GL_RASTERIZER_DISCARD);
-
-
-
 			// table
 #ifdef ENABLE_BENCHMARK
 			// draw multiple for performance testing
