@@ -76,13 +76,13 @@ int main()
 	Transform secondBench;
 	secondBench.setPosition(glm::vec3(-2.5f, 0, 1.5f));
 	// create a scene object (bin)
-	Renderable sceneObject2;
-	IOUtilities::loadRenderable(sceneObject2, "resources/objects/Bin.rnd");
-	sceneObject2.transform.translate(glm::vec3(-1, 0, 0));
-	sceneObject2.m_shader->setUniform1i("u_useSnow", 1);
-	sceneObject2.m_shader->setUniform1i("u_useSnowOffset", 1);
-	Renderable sceneObject2_COLLISION;
-	IOUtilities::loadRenderable(sceneObject2_COLLISION, "resources/objects/Bin_Collision.rnd");	
+	Renderable sceneObject_bin;
+	IOUtilities::loadRenderable(sceneObject_bin, "resources/objects/Bin.rnd");
+	sceneObject_bin.transform.translate(glm::vec3(-1, 0, 0));
+	sceneObject_bin.m_shader->setUniform1i("u_useSnow", 1);
+	sceneObject_bin.m_shader->setUniform1i("u_useSnowOffset", 1);
+	Renderable sceneObject_bin_COLLISION;
+	IOUtilities::loadRenderable(sceneObject_bin_COLLISION, "resources/objects/Bin_Collision.rnd");	
 	// create a scene object (signpost)
 	Renderable sceneObject_sign;
 	IOUtilities::loadRenderable(sceneObject_sign, "resources/objects/Sign.rnd");
@@ -106,7 +106,7 @@ int main()
 	vertexCount += sceneObject_parkBench_COLLISION.getVertexCount();
 	vertexCount += sceneObject_parkBench_COLLISION.getVertexCount();
 	vertexCount += sceneObject_sign_COLLISION.getVertexCount();
-	vertexCount += sceneObject2_COLLISION.getVertexCount();
+	vertexCount += sceneObject_bin_COLLISION.getVertexCount();
 
 #ifdef ENABLE_BENCHMARK
 	// create multiple instances of a scene object to test performance
@@ -306,7 +306,7 @@ int main()
 			renderer.renderToDepthBuffer(sceneObject_parkBench);
 			renderer.renderToDepthBuffer(sceneObject_parkBench, secondBench);
 			renderer.renderToDepthBuffer(sceneObject_sign);
-			renderer.renderToDepthBuffer(sceneObject2);
+			renderer.renderToDepthBuffer(sceneObject_bin);
 		}
 		renderer.unBindDepthFrameBuffer();
 #ifdef ENABLE_BENCHMARK
@@ -353,8 +353,8 @@ int main()
 			sceneObject_sign_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject_sign.transform.getModelMatrix());
 			renderer.render(sceneObject_sign_COLLISION);
 			// bin
-			sceneObject2_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject2.transform.getModelMatrix());
-			renderer.render(sceneObject2_COLLISION);
+			sceneObject_bin_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject_bin.transform.getModelMatrix());
+			renderer.render(sceneObject_bin_COLLISION);
 			// grass
 			groundPlane_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
 			renderer.render(groundPlane_COLLISION);
@@ -384,10 +384,10 @@ int main()
 			sceneObject_parkBench.m_shader->setUniformMat4f("u_modelMatrix", secondBench.getModelMatrix());
 			renderer.render(sceneObject_parkBench);
 			// bin
-			sceneObject2.m_shader->setUniformMat4f("u_modelMatrix", sceneObject2.transform.getModelMatrix());
-			sceneObject2.m_shader->setUniformMat4f("u_depthSpaceMatrix", depthCamera.getCameraUniformData().viewProjectionMatrix);
-			sceneObject2.m_texture->bind(0);
-			renderer.render(sceneObject2);			
+			sceneObject_bin.m_shader->setUniformMat4f("u_modelMatrix", sceneObject_bin.transform.getModelMatrix());
+			sceneObject_bin.m_shader->setUniformMat4f("u_depthSpaceMatrix", depthCamera.getCameraUniformData().viewProjectionMatrix);
+			sceneObject_bin.m_texture->bind(0);
+			renderer.render(sceneObject_bin);			
 			// sign
 			sceneObject_sign.m_shader->setUniformMat4f("u_modelMatrix", sceneObject_sign.transform.getModelMatrix());
 			sceneObject_sign.m_shader->setUniformMat4f("u_depthSpaceMatrix", depthCamera.getCameraUniformData().viewProjectionMatrix);
