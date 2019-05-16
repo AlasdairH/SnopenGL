@@ -1,5 +1,6 @@
 # SnopenGL
 Documentation: https://alasdairh.github.io/SnopenGL/
+
 A snow simulation in OpenGL
 
 Current state as of 16/05/2019
