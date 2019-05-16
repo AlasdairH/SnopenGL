@@ -101,6 +101,21 @@ namespace SnowGL
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
+	void Renderer::renderToDepthBuffer(const Renderable & _renderable, const Transform &_transform)
+	{
+		// set stencil buffer
+		glStencilFunc(m_sencilFunc, 1, 0xFF);
+		glStencilMask(m_stencilBufferInt);
+
+		m_shaderDepthTest->bind();
+		m_shaderDepthTest->setUniformMat4f("u_modelMatrix", _transform.getModelMatrix());
+		_renderable.m_texture->bind(0);
+
+		_renderable.m_mesh->m_VAO->bind();
+		_renderable.m_mesh->m_IBO->bind();
+
+		glDrawElements(GL_TRIANGLES, _renderable.m_mesh->m_IBO->getCount(), GL_UNSIGNED_INT, 0);
+	}
 	void Renderer::renderToDepthBuffer(const Renderable & _renderable)
 	{
 		// set stencil buffer

@@ -46,6 +46,15 @@ namespace SnowGL
 		void render(const Renderable &_renderable);
 		/** @brief Renders an object to the screen with the shader overridden with a specified parameter
 		*	@param _renderable The renderable to render
+		*	@param _transform The transform to render the renderable with
+		*
+		*	Renders the GPU_Mesh with the shader program and transform. GPU_Mesh protected variables
+		*	are accessible through the "friend" class. The object is drawn with the provided shader instead 
+		*	of the shader on the renderable.
+		*/
+		void renderToDepthBuffer(const Renderable &_renderable, const Transform &_transform);
+		/** @brief Renders an object to the screen with the shader overridden with a specified parameter
+		*	@param _renderable The renderable to render
 		*
 		*	Renders the GPU_Mesh with the shader program and transform. GPU_Mesh protected variables
 		*	are accessible through the "friend" class. The object is drawn with the provided shader instead 
