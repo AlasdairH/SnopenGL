@@ -79,11 +79,19 @@ int main()
 	Renderable sceneObject2;
 	IOUtilities::loadRenderable(sceneObject2, "resources/objects/Bin.rnd");
 	sceneObject2.transform.translate(glm::vec3(-1, 0, 0));
-	//sceneObject2.transform.rotate(45, glm::vec3(0, 1, 0));
 	sceneObject2.m_shader->setUniform1i("u_useSnow", 1);
 	sceneObject2.m_shader->setUniform1i("u_useSnowOffset", 1);
 	Renderable sceneObject2_COLLISION;
-	IOUtilities::loadRenderable(sceneObject2_COLLISION, "resources/objects/Bin_Collision.rnd");
+	IOUtilities::loadRenderable(sceneObject2_COLLISION, "resources/objects/Bin_Collision.rnd");	
+	// create a scene object (signpost)
+	Renderable sceneObject_sign;
+	IOUtilities::loadRenderable(sceneObject_sign, "resources/objects/Sign.rnd");
+	sceneObject_sign.transform.translate(glm::vec3(-2.5, 0, -1.5f));
+	sceneObject_sign.transform.setScale(glm::vec3(0.5f, 0.5f, 0.5f));
+	sceneObject_sign.m_shader->setUniform1i("u_useSnow", 1);
+	sceneObject_sign.m_shader->setUniform1i("u_useSnowOffset", 1);
+	Renderable sceneObject_sign_COLLISION;
+	IOUtilities::loadRenderable(sceneObject_sign_COLLISION, "resources/objects/Sign_Collision.rnd");
 
 	// create a texture buffer to contain collidable world space geometry
 	VertexBuffer vboGeometry(BUFFER_ARRAY);
@@ -97,6 +105,7 @@ int main()
 	vertexCount += groundPlane_COLLISION.getVertexCount();
 	vertexCount += sceneObject_COLLISION.getVertexCount();
 	vertexCount += sceneObject_COLLISION.getVertexCount();
+	vertexCount += sceneObject_sign_COLLISION.getVertexCount();
 	vertexCount += sceneObject2_COLLISION.getVertexCount();
 
 #ifdef ENABLE_BENCHMARK
@@ -220,28 +229,34 @@ int main()
 		{
 			cameraMoveSpeed = 5;
 		}
+		// forward
 		if (keyboardState[SDL_SCANCODE_W]) 
 		{
 			Camera::activeCamera->transform.translate(camera.getFront() * cameraMoveSpeed * state.deltaTime);
 		}
+		// back
 		if (keyboardState[SDL_SCANCODE_S])
 		{
 			Camera::activeCamera->transform.translate(-camera.getFront() * cameraMoveSpeed * state.deltaTime);
 		}
+		// left
 		if (keyboardState[SDL_SCANCODE_A])
 		{
 			glm::vec3 leftVector = glm::cross(glm::vec3(0, 1, 0), camera.getFront());
 			Camera::activeCamera->transform.translate(leftVector * cameraMoveSpeed * state.deltaTime);
 		}
+		// right
 		if (keyboardState[SDL_SCANCODE_D])
 		{
 			glm::vec3 rightVector = glm::cross(camera.getFront(), glm::vec3(0, 1, 0));
 			Camera::activeCamera->transform.translate(rightVector * cameraMoveSpeed * state.deltaTime);
 		}		
+		// up
 		if (keyboardState[SDL_SCANCODE_E])
 		{
 			Camera::activeCamera->transform.translate(glm::vec3(0, 1, 0) * cameraMoveSpeed * state.deltaTime);
-		}		
+		}
+		// down
 		if (keyboardState[SDL_SCANCODE_Q])
 		{
 			Camera::activeCamera->transform.translate(glm::vec3(0, -1, 0) * cameraMoveSpeed * state.deltaTime);
@@ -249,6 +264,7 @@ int main()
 
 		while (SDL_PollEvent(&incomingEvent))
 		{
+			// if close button pressed
 			if (incomingEvent.type == SDL_QUIT)
 			{
 				state.isRunning = false;
@@ -289,6 +305,7 @@ int main()
 			renderer.renderToDepthBuffer(groundPlane);
 			renderer.renderToDepthBuffer(sceneObject);
 			renderer.renderToDepthBuffer(sceneObject, secondBench);
+			renderer.renderToDepthBuffer(sceneObject_sign);
 			renderer.renderToDepthBuffer(sceneObject2);
 		}
 		renderer.unBindDepthFrameBuffer();
@@ -297,7 +314,7 @@ int main()
 #endif
 
 		// switch camera back to main
-		Camera::activeCamera->updateCameraUniform();
+		camera.updateCameraUniform();
 		cameraDataUniformBuffer->loadData(&Camera::activeCamera->getCameraUniformData(), 0, sizeof(GPU_UB_CameraData));
 
 #ifdef ENABLE_BENCHMARK
@@ -312,7 +329,7 @@ int main()
 			
 		groundPlane_COLLISION.m_shader->bind();
 
-
+		// 2nd pass: collision geometry transform feedback
 		glBeginTransformFeedback(GL_TRIANGLES);
 		// begin collision mesh transform feedback
 			glEnable(GL_RASTERIZER_DISCARD);
@@ -325,11 +342,16 @@ int main()
 				renderer.render(sceneObject_COLLISION);
 			}
 #else
+			// table
 			sceneObject_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject.transform.getModelMatrix());
 			renderer.render(sceneObject_COLLISION);
+			// table 2
 			sceneObject_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", secondBench.getModelMatrix());
 			renderer.render(sceneObject_COLLISION);
 #endif
+			// sign
+			sceneObject_sign_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject_sign.transform.getModelMatrix());
+			renderer.render(sceneObject_sign_COLLISION);
 			// bin
 			sceneObject2_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject2.transform.getModelMatrix());
 			renderer.render(sceneObject2_COLLISION);
@@ -347,7 +369,7 @@ int main()
 		frameBenchmark.visuals.start();
 #endif
 			
-		// 2nd pass: rendering to frame buffer
+		// 3nd pass: rendering to frame buffer
 		renderer.bindFrameBuffer();
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -358,13 +380,19 @@ int main()
 			sceneObject.m_shader->setUniformMat4f("u_depthSpaceMatrix", depthCamera.getCameraUniformData().viewProjectionMatrix);
 			sceneObject.m_texture->bind(0);
 			renderer.render(sceneObject);
+			// table 2
 			sceneObject.m_shader->setUniformMat4f("u_modelMatrix", secondBench.getModelMatrix());
 			renderer.render(sceneObject);
 			// bin
 			sceneObject2.m_shader->setUniformMat4f("u_modelMatrix", sceneObject2.transform.getModelMatrix());
 			sceneObject2.m_shader->setUniformMat4f("u_depthSpaceMatrix", depthCamera.getCameraUniformData().viewProjectionMatrix);
 			sceneObject2.m_texture->bind(0);
-			renderer.render(sceneObject2);
+			renderer.render(sceneObject2);			
+			// sign
+			sceneObject_sign.m_shader->setUniformMat4f("u_modelMatrix", sceneObject_sign.transform.getModelMatrix());
+			sceneObject_sign.m_shader->setUniformMat4f("u_depthSpaceMatrix", depthCamera.getCameraUniformData().viewProjectionMatrix);
+			sceneObject_sign.m_texture->bind(0);
+			renderer.render(sceneObject_sign);
 			// ground plane
 			groundPlane.m_shader->setUniformMat4f("u_modelMatrix", groundPlane.transform.getModelMatrix());
 			groundPlane.m_shader->setUniformMat4f("u_depthSpaceMatrix", depthCamera.getCameraUniformData().viewProjectionMatrix);

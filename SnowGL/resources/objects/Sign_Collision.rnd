@@ -1,0 +1,6 @@
+FILETYPE RENDERABLE
+SHADER_VERT resources/shaders/collision_detection/GeometryFeedback.vert
+SHADER_FRAG resources/shaders/collision_detection/GeometryFeedback.frag
+TFB_VARYING out_worldSpacePosition
+MESH resources/models/Sign_Collision.obj
+TRANSFORM 0 0 0 0 0 0 1 1 1
