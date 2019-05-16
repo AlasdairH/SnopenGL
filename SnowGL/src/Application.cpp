@@ -56,6 +56,7 @@ int main()
 	// create a transform for the centre of the scene
 	Transform zeroTransform;
 
+	// ------------------------------------------------------------ 3D Scene ------------------------------------------------------------
 	// create a ground plane (grass)
 	Renderable groundPlane;
 	IOUtilities::loadRenderable(groundPlane, "resources/objects/Plane.rnd");
