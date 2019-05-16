@@ -64,14 +64,14 @@ int main()
 	IOUtilities::loadRenderable(groundPlane_COLLISION, "resources/objects/Plane_Collision.rnd");
 
 	// create a scene object (park bench)
-	Renderable sceneObject;
-	IOUtilities::loadRenderable(sceneObject, "resources/objects/Table.rnd");
-	sceneObject.transform.translate(glm::vec3(1.5f, 0, 0));
-	sceneObject.transform.rotate(-45, glm::vec3(0, 1, 0));
-	sceneObject.m_shader->setUniform1i("u_useSnowTexture", 1);
-	sceneObject.m_shader->setUniform1i("u_useSnowOffset", 1);
-	Renderable sceneObject_COLLISION;
-	IOUtilities::loadRenderable(sceneObject_COLLISION, "resources/objects/Table_Collision.rnd");	
+	Renderable sceneObject_parkBench;
+	IOUtilities::loadRenderable(sceneObject_parkBench, "resources/objects/Table.rnd");
+	sceneObject_parkBench.transform.translate(glm::vec3(1.5f, 0, 0));
+	sceneObject_parkBench.transform.rotate(-45, glm::vec3(0, 1, 0));
+	sceneObject_parkBench.m_shader->setUniform1i("u_useSnowTexture", 1);
+	sceneObject_parkBench.m_shader->setUniform1i("u_useSnowOffset", 1);
+	Renderable sceneObject_parkBench_COLLISION;
+	IOUtilities::loadRenderable(sceneObject_parkBench_COLLISION, "resources/objects/Table_Collision.rnd");
 	// 2nd park bench (only transform required, will draw from the first bench shader and model)
 	Transform secondBench;
 	secondBench.setPosition(glm::vec3(-2.5f, 0, 1.5f));
@@ -103,8 +103,8 @@ int main()
 
 	int vertexCount = 0;
 	vertexCount += groundPlane_COLLISION.getVertexCount();
-	vertexCount += sceneObject_COLLISION.getVertexCount();
-	vertexCount += sceneObject_COLLISION.getVertexCount();
+	vertexCount += sceneObject_parkBench_COLLISION.getVertexCount();
+	vertexCount += sceneObject_parkBench_COLLISION.getVertexCount();
 	vertexCount += sceneObject_sign_COLLISION.getVertexCount();
 	vertexCount += sceneObject2_COLLISION.getVertexCount();
 
@@ -303,8 +303,8 @@ int main()
 
 			// render all objects
 			renderer.renderToDepthBuffer(groundPlane);
-			renderer.renderToDepthBuffer(sceneObject);
-			renderer.renderToDepthBuffer(sceneObject, secondBench);
+			renderer.renderToDepthBuffer(sceneObject_parkBench);
+			renderer.renderToDepthBuffer(sceneObject_parkBench, secondBench);
 			renderer.renderToDepthBuffer(sceneObject_sign);
 			renderer.renderToDepthBuffer(sceneObject2);
 		}
@@ -343,11 +343,11 @@ int main()
 			}
 #else
 			// table
-			sceneObject_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject.transform.getModelMatrix());
-			renderer.render(sceneObject_COLLISION);
+			sceneObject_parkBench_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject_parkBench.transform.getModelMatrix());
+			renderer.render(sceneObject_parkBench_COLLISION);
 			// table 2
-			sceneObject_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", secondBench.getModelMatrix());
-			renderer.render(sceneObject_COLLISION);
+			sceneObject_parkBench_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", secondBench.getModelMatrix());
+			renderer.render(sceneObject_parkBench_COLLISION);
 #endif
 			// sign
 			sceneObject_sign_COLLISION.m_shader->setUniformMat4f("u_modelMatrix", sceneObject_sign.transform.getModelMatrix());
@@ -376,13 +376,13 @@ int main()
 
 			// render visuals for objects
 			// table
-			sceneObject.m_shader->setUniformMat4f("u_modelMatrix", sceneObject.transform.getModelMatrix());
-			sceneObject.m_shader->setUniformMat4f("u_depthSpaceMatrix", depthCamera.getCameraUniformData().viewProjectionMatrix);
-			sceneObject.m_texture->bind(0);
-			renderer.render(sceneObject);
+			sceneObject_parkBench.m_shader->setUniformMat4f("u_modelMatrix", sceneObject_parkBench.transform.getModelMatrix());
+			sceneObject_parkBench.m_shader->setUniformMat4f("u_depthSpaceMatrix", depthCamera.getCameraUniformData().viewProjectionMatrix);
+			sceneObject_parkBench.m_texture->bind(0);
+			renderer.render(sceneObject_parkBench);
 			// table 2
-			sceneObject.m_shader->setUniformMat4f("u_modelMatrix", secondBench.getModelMatrix());
-			renderer.render(sceneObject);
+			sceneObject_parkBench.m_shader->setUniformMat4f("u_modelMatrix", secondBench.getModelMatrix());
+			renderer.render(sceneObject_parkBench);
 			// bin
 			sceneObject2.m_shader->setUniformMat4f("u_modelMatrix", sceneObject2.transform.getModelMatrix());
 			sceneObject2.m_shader->setUniformMat4f("u_depthSpaceMatrix", depthCamera.getCameraUniformData().viewProjectionMatrix);
