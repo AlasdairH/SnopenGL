@@ -2,13 +2,23 @@
 
 \section sec_intro Introduction
 
-Test Intro
+Welcome to the SnopenGL documentation page!
 
-\section sec_running Install
+\section sec_install Install
 
 1. Clone from https://github.com/AlasdairH/SnopenGL
 2. Ensure x64 and Release are selected for build
 3. Build the project
-4. Run! 
+4. Copy the SDL2.dll file from SDKs/Lib64/ to the executable directory
+5. Run the executable
+
+\section sec_use Use
+
+On start of the program a tutorial will appear. Read this carefully to understand the controls. Once
+you have read and understand the tutorial, press the Close and Run button to continue.
+
+If you wish, you can alter wind or other options in the GUI before closing the tutorial.
+
+Wireframe mode can be activaed from the "Scene" menu.
  
 */
